@@ -1,33 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Header from './components/common/Header'
+import Footer from './components/common/Footer'
+import ChatbotButton from './components/common/ChatbotButton'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
+    
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header /> 
+      <main style={{ minHeight: 'calc(100vh - 100px)', padding: '20px' }}>
+          {/* 임시 콘텐츠: 푸터를 아래로 밀어내기 위해 min-height를 설정했습니다. */}
+          <h1>웹페이지 콘텐츠 영역</h1>
+          <p>푸터가 하단에 고정되었는지 확인해주세요.</p>
+      </main>
+       
+      <Footer />
+      <ChatbotButton />
     </>
   )
 }
