@@ -3,7 +3,7 @@ import { Card, Container, Row, Col, Image } from "react-bootstrap";
 
 const TalkDetail = ({ talk }) => {
   return (
-    <Container fluid className="min-vh-100">
+    
       <Row className="h-100 justify-content-center align-items-center">
         <Col xs={12} sm={10} md={8} lg={6}>
           <Card>
@@ -55,7 +55,7 @@ const TalkDetail = ({ talk }) => {
           </Card>
         </Col>
       </Row>
-    </Container>
+
   );
 };
 
