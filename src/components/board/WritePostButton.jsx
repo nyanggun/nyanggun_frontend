@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
+import { Button, Image } from "react-bootstrap";
 
 import "./write-post-button.css";
-import PlusImage from "../../assets/plus.svg";
+import WritingButtonImage from "../../assets/writing-button-image.svg";
 
 const WritePostButton = (props) => {
 	const handleClick = () => {
@@ -10,9 +10,12 @@ const WritePostButton = (props) => {
 	};
 
 	return (
-		<Button variant="primary" className="btn add-post border-0 rounded-circle" onClick={handleClick}>
-			<img src={PlusImage}></img>
-		</Button>
+		<Image
+			variant="primary"
+			className="btn add-post border-1 rounded-circle border-light p-0"
+			onClick={handleClick}
+			src={WritingButtonImage}
+		></Image>
 	);
 };
 

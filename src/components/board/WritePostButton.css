@@ -1,0 +1,17 @@
+.btn.add-post {
+	border: 1px solid white;
+	bottom: 20px;
+	right: 20px;
+	z-index: 100000;
+	position: fixed;
+}
+
+.btn.add-post img {
+	/* 인라인 요소의 여백 문제를 해결하기 위해 block으로 변경 */
+	display: block;
+
+	/* 이미지가 버튼 크기보다 클 경우를 대비 (선택 사항) */
+	/* 버튼 크기에 맞춰 이미지 크기를 조절할 수 있습니다. */
+
+	height: auto;
+}

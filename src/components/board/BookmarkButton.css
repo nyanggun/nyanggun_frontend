@@ -1,3 +1,10 @@
 .bookmark-btn {
+<<<<<<< HEAD
+	border-color: #343a40 !important;
+}
+.bookmark-btn-img {
+	height: 1.5rem;
+=======
   border-color: #343a40 !important;
+>>>>>>> main
 }

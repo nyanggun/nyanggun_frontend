@@ -1,24 +1,24 @@
 import React from "react";
-import BookmarkImage from "../../assets/bookmark.svg";
+import MemberIcon from "../../assets/user-icon.svg";
 import { Button } from "react-bootstrap";
-import "./BookmarkButton.css";
+import "./MemberButton.css";
 
-const BookmarkButton = (props) => {
+const MemberButton = (props) => {
 	// bookmark 관련 로직
 	const handleClick = () => {};
 
 	return (
 		<Button
 			variant=""
-			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center"
+			className="member-btn border-0 btn rounded-4 d-flex justify-content-center align-itmes-center"
 			size="sm"
 			onClick={handleClick}
 		>
-			<img className="member-button-img" src={BookmarkImage}></img>
+			<img className="member-button-img" src={MemberIcon}></img>
 			{/* props.count로 북마크 수를 가져와 출력 */}
 			<span>&nbsp;{props.count}</span>
 		</Button>
 	);
 };
 
-export default BookmarkButton;
+export default MemberButton;

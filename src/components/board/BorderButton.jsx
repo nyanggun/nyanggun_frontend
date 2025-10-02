@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import React from "react";
-import "./border-button.css";
+import "./BorderButton.css";
 
 // 테두리가 있고 비어 있는 작은 버튼
 // 버튼 사용 방법 : props로 아래와 같이 보내면 된다.
@@ -8,16 +8,11 @@ import "./border-button.css";
 // <CompleteButton btnName="등록" type="submit" />
 // <CompleteButton btnName="취소" clickBtn={handleCancel} />
 const BorderButton = ({ btnName, clickBtn, type = "button", buttonColor }) => {
-  return (
-    <Button
-      size="lm"
-      className={`border-btn px-4 ${buttonColor}`}
-      onClick={clickBtn}
-      type={type}
-    >
-      <strong>{btnName}버 튼</strong>
-    </Button>
-  );
+	return (
+		<Button size="lm" className={`border-btn px-4 ${buttonColor}`} onClick={clickBtn} type={type}>
+			<strong>{btnName}버 튼</strong>
+		</Button>
+	);
 };
 
 export default BorderButton;
