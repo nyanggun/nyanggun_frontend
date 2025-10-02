@@ -1,11 +1,12 @@
+//부메뉴바 입니다.
 import React from "react";
 import "./Menu.css";
-import NavigationBar from "./NavigationBar";
+import NavigationBar from "../navigationbar/NavigationBar";
 import { Col, Row } from "react-bootstrap";
 const Menu = () => {
   return (
     <Row>
-      <Col md={6} xs={12} className="menu-col">
+      <Col className="menu-col">
         <div>
           <div className="menu-tab">
             <p>문화재 탐방기</p>
