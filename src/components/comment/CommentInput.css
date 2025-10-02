@@ -3,8 +3,9 @@
   border: 1px solid #343a40;
   border-radius: 30px;
   padding: 7px;
-  font-size: 10px;
+  font-size: 14px;
   width: 100%;
+  padding-left: 20px;
 }
 
 .comment-input-btn {
@@ -15,7 +16,7 @@
   border: 1px solid #343a40;
   border-radius: 30px;
   padding: 7px;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .comment-input.no-focus:focus {

@@ -1,16 +1,38 @@
 //부메뉴바 입니다.
-import React from "react";
+import React, { useState } from "react";
 import "./Menu.css";
 import NavigationBar from "../navigationbar/NavigationBar";
 import { Col, Row } from "react-bootstrap";
-const Menu = () => {
+const Menu = ({ menuOne, menuTwo }) => {
+  //메뉴 1번의 상태입니다.
+  //기본적으로 선택되어 있습니다.
+  const [isMenuOneClick, setMenuOneClick] = useState(true);
+  //메뉴 2번의 상태입니다.
+  const [isMenuTwoClick, setMenuTwoClick] = useState(false);
+
   return (
     <div>
       <div className="menu-col">
         <div>
           <div className="menu-tab">
-            <p>문화재 탐방기</p>
-            <p>문화재 담소</p>
+            <p
+              className={`menu-btn ${isMenuOneClick ? "active" : ""}`}
+              onClick={() => {
+                setMenuOneClick(true);
+                setMenuTwoClick(false);
+              }}
+            >
+              {menuOne}
+            </p>
+            <p
+              className={`menu-btn ${isMenuTwoClick ? "active" : ""}`}
+              onClick={() => {
+                setMenuOneClick(false);
+                setMenuTwoClick(true);
+              }}
+            >
+              {menuTwo}
+            </p>
           </div>
           <div className="menu-lines">
             <hr className="line green"></hr>

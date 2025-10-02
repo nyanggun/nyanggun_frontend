@@ -4,8 +4,8 @@ import "./CommentInput.css";
 
 const CommentInput = () => {
   return (
-    <Row>
-      <Col>
+    <div>
+      <div>
         <div className="comment-input-group">
           <Form.Control
             placeholder="댓글을 입력하세요"
@@ -13,8 +13,8 @@ const CommentInput = () => {
           ></Form.Control>
           <Button className="comment-input-btn">댓글쓰기</Button>
         </div>
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 
