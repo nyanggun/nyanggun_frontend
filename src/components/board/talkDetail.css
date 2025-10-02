@@ -1,0 +1,10 @@
+.talk-profile {
+  text-align: center;
+}
+
+.talk-profile-pic {
+  width: 5vw;
+  height: 5vw;
+  max-width: 50px;
+  max-height: 50px;
+}
