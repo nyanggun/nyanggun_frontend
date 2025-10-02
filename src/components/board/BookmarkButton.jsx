@@ -12,7 +12,7 @@ const BookmarkButton = (props) => {
     <Button
       variant=""
       className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center"
-      size="md"
+      size="sm"
       onClick={handleClick}
     >
       <img src={BookmarkImage}></img>
