@@ -29,101 +29,105 @@ const NavigationBar = () => {
   const [isClickPictureButton, setClickPictureButton] = useState(false);
   const [isClickTalkButton, setClickTalkButton] = useState(false);
   return (
-    <Navbar fixed="bottom">
-      <Nav className="navBar">
-        <Nav.Link
-          className={`navBtn ${isClickHomeButton ? "active" : ""}`}
-          onMouseEnter={() => setHomeHover(true)}
-          onMouseLeave={() => setHomeHover(false)}
-          onClick={() => {
-            setClickHomeButton(true);
-            setClickBookButton(false);
-            setClickBadgeButton(false);
-            setClickPictureButton(false);
-            setClickTalkButton(false);
-          }}
-        >
-          {isHomeHover || isClickHomeButton ? (
-            <HouseFill width={40} height={40}></HouseFill>
-          ) : (
-            <House width={40} height={40}></House>
-          )}
-          <div>홈</div>
-        </Nav.Link>
-        <Nav.Link
-          className={`navBtn ${isClickBookButton ? "active" : ""}`}
-          onMouseEnter={() => setBookHover(true)}
-          onMouseLeave={() => setBookHover(false)}
-          onClick={() => {
-            setClickHomeButton(false);
-            setClickBookButton(true);
-            setClickBadgeButton(false);
-            setClickPictureButton(false);
-            setClickTalkButton(false);
-          }}
-        >
-          {isBookHover || isClickBookButton ? (
-            <BookFill width={40} height={40}></BookFill>
-          ) : (
-            <Book width={40} height={40}></Book>
-          )}
-          <div>문화재 도감</div>
-        </Nav.Link>
-        <Nav.Link
-          className={`navBtn ${isClickBadgeButton ? "active" : ""}`}
-          onMouseEnter={() => setBadgeHover(true)}
-          onMouseLeave={() => setBadgeHover(false)}
-          onClick={() => {
-            setClickHomeButton(false);
-            setClickBookButton(false);
-            setClickBadgeButton(true);
-            setClickPictureButton(false);
-            setClickTalkButton(false);
-          }}
-        >
-          <YinYang width={40} height={40}></YinYang>
-          <div>사냥꾼 증표</div>
-        </Nav.Link>
-        <Nav.Link
-          className={`navBtn ${isClickPictureButton ? "active" : ""}`}
-          onMouseEnter={() => setPictureHover(true)}
-          onMouseLeave={() => setPictureHover(false)}
-          onClick={() => {
-            setClickHomeButton(false);
-            setClickBookButton(false);
-            setClickBadgeButton(false);
-            setClickPictureButton(true);
-            setClickTalkButton(false);
-          }}
-        >
-          {isPictureHover || isClickPictureButton ? (
-            <InboxesFill width={40} height={40}></InboxesFill>
-          ) : (
-            <Inboxes width={40} height={40}></Inboxes>
-          )}
-          <div>사진함</div>
-        </Nav.Link>
-        <Nav.Link
-          className={`navBtn ${isClickTalkButton ? "active" : ""}`}
-          onMouseEnter={() => setTalkHover(true)}
-          onMouseLeave={() => setTalkHover(false)}
-          onClick={() => {
-            setClickHomeButton(false);
-            setClickBookButton(false);
-            setClickBadgeButton(false);
-            setClickPictureButton(false);
-            setClickTalkButton(true);
-          }}
-        >
-          {isTalkHover || isClickTalkButton ? (
-            <MoonStarsFill width={40} height={40}></MoonStarsFill>
-          ) : (
-            <MoonStars width={40} height={40}></MoonStars>
-          )}
-          <div>도란도란</div>
-        </Nav.Link>
-      </Nav>
-    </Navbar>
+    <>
+      <Navbar fixed="bottom">
+        <Nav className="navBar">
+          <div
+            className={`navBtn ${isClickHomeButton ? "active" : ""}`}
+            onMouseEnter={() => setHomeHover(true)}
+            onMouseLeave={() => setHomeHover(false)}
+            onClick={() => {
+              setClickHomeButton(true);
+              setClickBookButton(false);
+              setClickBadgeButton(false);
+              setClickPictureButton(false);
+              setClickTalkButton(false);
+            }}
+          >
+            {isHomeHover || isClickHomeButton ? (
+              <HouseFill width={40} height={40}></HouseFill>
+            ) : (
+              <House width={40} height={40}></House>
+            )}
+            <div>홈</div>
+          </div>
+          <div
+            className={`navBtn ${isClickBookButton ? "active" : ""}`}
+            onMouseEnter={() => setBookHover(true)}
+            onMouseLeave={() => setBookHover(false)}
+            onClick={() => {
+              setClickHomeButton(false);
+              setClickBookButton(true);
+              setClickBadgeButton(false);
+              setClickPictureButton(false);
+              setClickTalkButton(false);
+            }}
+          >
+            {isBookHover || isClickBookButton ? (
+              <BookFill width={40} height={40}></BookFill>
+            ) : (
+              <Book width={40} height={40}></Book>
+            )}
+            <div>문화재 도감</div>
+          </div>
+          <div
+            className={`navBtn ${isClickBadgeButton ? "active" : ""}`}
+            onMouseEnter={() => setBadgeHover(true)}
+            onMouseLeave={() => setBadgeHover(false)}
+            onClick={() => {
+              setClickHomeButton(false);
+              setClickBookButton(false);
+              setClickBadgeButton(true);
+              setClickPictureButton(false);
+              setClickTalkButton(false);
+            }}
+          >
+            <YinYang width={40} height={40}></YinYang>
+            <div>사냥꾼 증표</div>
+          </div>
+          <div
+            className={`navBtn ${isClickPictureButton ? "active" : ""}`}
+            onMouseEnter={() => setPictureHover(true)}
+            onMouseLeave={() => setPictureHover(false)}
+            onClick={() => {
+              setClickHomeButton(false);
+              setClickBookButton(false);
+              setClickBadgeButton(false);
+              setClickPictureButton(true);
+              setClickTalkButton(false);
+            }}
+          >
+            {isPictureHover || isClickPictureButton ? (
+              <InboxesFill width={40} height={40}></InboxesFill>
+            ) : (
+              <Inboxes width={40} height={40}></Inboxes>
+            )}
+            <div>사진함</div>
+          </div>
+          <div
+            className={`navBtn ${isClickTalkButton ? "active" : ""}`}
+            onMouseEnter={() => setTalkHover(true)}
+            onMouseLeave={() => setTalkHover(false)}
+            onClick={() => {
+              setClickHomeButton(false);
+              setClickBookButton(false);
+              setClickBadgeButton(false);
+              setClickPictureButton(false);
+              setClickTalkButton(true);
+            }}
+          >
+            {isTalkHover || isClickTalkButton ? (
+              <MoonStarsFill width={40} height={40}></MoonStarsFill>
+            ) : (
+              <MoonStars width={40} height={40}></MoonStars>
+            )}
+            <div>도란도란</div>
+          </div>
+        </Nav>
+      </Navbar>
+      {/* 동적으로 계산된 높이만큼 Spacer */}
+      <div style={{ height: "70px" }} />
+    </>
   );
 };
 
