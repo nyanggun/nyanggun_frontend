@@ -1,35 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CommentProfile from "../../assets/comment-profile.svg";
 import CommentIcon from "../../assets/comment.svg";
+import CommentInput from "./CommentInput";
 import WarningRed from "../../assets/warning-red.svg";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import "./Comment.css";
 
-const Comment = () => {
+const Comment = ({ nickname, createdAt, content, profile }) => {
+  const [isCommentAdd, setCommentAdd] = useState(false);
+
+  //시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
+  //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
+  const [timeAgo, setTimeAgo] = useState("");
+  const formatTimeAgo = (time) => {
+    const now = new Date();
+    const past = new Date(time); // 서버에서 받은 LocalDateTime 문자열
+    const diff = Math.floor((now - past) / 1000); // 초 단위 차이
+
+    if (diff < 60) return "방금 전";
+    if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+    return `${Math.floor(diff / 86400)}일 전`;
+  };
+  useEffect(() => {
+    // 처음 렌더링 시 계산
+    setTimeAgo(formatTimeAgo(createdAt));
+
+    // 초 단위로 업데이트
+    const interval = setInterval(() => {
+      setTimeAgo(formatTimeAgo(createdAt));
+    }, 1000); // 1초마다 갱신
+
+    return () => clearInterval(interval);
+  }, [createdAt]);
+
   return (
-    <Row>
-      <Col>
-        <Col className="comment-profile">
-          <img src={CommentProfile} />
-          <div className="comment-nickname">지존헌터</div>
-          <div className="comment-time">1분 전</div>
-        </Col>
+    <div>
+      <div>
+        <div className="comment-profile">
+          {/* 프로필이 없을 경우 기본 프로필 출력 */}
+          {profile == null ? (
+            <Image
+              src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+              roundedCircle
+              className="comment-profile-pic border border-1"
+            />
+          ) : (
+            <div>이미지를 불러오면 된다.</div>
+          )}
+
+          <div className="comment-nickname">{nickname}</div>
+          <div className="comment-time">{timeAgo}</div>
+        </div>
         <Col>
-          <div className="comment-content">좋은 정보 감사합니다.</div>
+          <div className="comment-content">{content}</div>
         </Col>
 
-        <Col className="comment-profile btn">
-          <Button className="comment-btn">
-            <img src={CommentIcon}></img>
-            <span className="comment-font">답글 달기</span>
-          </Button>
-          <Button className="comment-btn">
-            <img src={WarningRed}></img>
+        <Col className="comment-profile-btn">
+          <div className="comment-btn">
+            <img src={CommentIcon} width={15}></img>
+            <span
+              className="comment-font"
+              onClick={() => {
+                setCommentAdd(!isCommentAdd);
+              }}
+            >
+              답글 달기
+            </span>
+          </div>
+          <div className="comment-btn">
+            <img src={WarningRed} width={15}></img>
             <span className="comment-font red">댓글 신고</span>
-          </Button>
+          </div>
         </Col>
-      </Col>
-    </Row>
+        {isCommentAdd ? (
+          <Col className="comment-add">
+            <CommentInput></CommentInput>
+          </Col>
+        ) : (
+          <div></div>
+        )}
+      </div>
+    </div>
   );
 };
 

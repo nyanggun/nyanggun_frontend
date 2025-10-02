@@ -9,14 +9,17 @@
 }
 .comment-time {
   font-size: 12px;
-  color: #343a40;
+  color: #868f98;
 }
 .comment-font {
   font-size: 12px;
+  margin-right: 5px;
   margin-left: 2px;
 }
-.comment-profile.btn {
-  margin-left: 20px;
+.comment-profile-btn {
+  cursor: pointer;
+  margin-left: 30px;
+  margin-bottom: 5px;
 }
 
 .comment-font.red {
@@ -24,9 +27,17 @@
 }
 
 .comment-content {
-  margin-left: 20px;
+  margin-left: 30px;
 }
 
 .comment-btn {
   all: unset;
+}
+
+.comment-profile-pic {
+  width: 25px;
+  height: 25px;
+}
+.comment-add {
+  margin: 0 30px;
 }
