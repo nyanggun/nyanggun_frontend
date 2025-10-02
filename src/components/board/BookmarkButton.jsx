@@ -11,7 +11,7 @@ const BookmarkButton = (props) => {
 	return (
 		<Button
 			variant=""
-			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-cente"
+			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center"
 			size="md"
 			onClick={handleClick}
 		>
