@@ -34,14 +34,15 @@
   margin: 0;
   padding: 0;
   background-color: black;
-  width: 50%;
+  width: 100%;
 }
+/* 
 @media (max-width: 768px) {
   .line {
     width: 100%; /* 모바일에서 Col 폭 전체 */
-  }
+/*  } 
 }
-
+ */
 .line.green {
   background-color: #54957f;
 }
