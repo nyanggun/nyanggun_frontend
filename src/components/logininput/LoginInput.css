@@ -1,4 +1,11 @@
-.comment-input {
+.Login-input-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.Login-input {
   all: unset;
   border: 1px solid #343a40;
   border-radius: 30px;
@@ -8,9 +15,17 @@
   padding-left: 20px;
 }
 
-.comment-input-btn {
+.Login-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+}
+
+.Login-input-btn {
   all: unset;
-  width: 35%;
+  width: 15%;
   display: flex;
   justify-content: center;
   border: 1px solid #343a40;
@@ -19,20 +34,13 @@
   font-size: 14px;
 }
 
-.comment-input.no-focus:focus {
+.Login-input.no-focus:focus {
   border-color: #343a40;
   box-shadow: none;
   outline: none;
 }
 
-.comment-input-btn:hover {
+.Login-input-btn:hover {
   background-color: #343a40;
   color: white;
-}
-
-.comment-input-group {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: center;
 }
