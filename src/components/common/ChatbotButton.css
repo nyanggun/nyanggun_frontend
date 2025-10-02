@@ -1,0 +1,33 @@
+/* 챗봇 플로팅 버튼 스타일 */
+.chatbot-fixed-button {
+  position: fixed;
+  /* 화면의 오른쪽 하단에 위치 */
+  bottom: 25px;
+  right: 25px;
+
+  /* 디자인 설정 */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  /* 겹침 방지를 위해 높은 z-index 설정 */
+  z-index: 10000;
+  width: 60px;
+  height: 60px;
+  outline: none;
+  box-shadow: none;
+  transition: transform 0.2s;
+}
+
+.chatbot-fixed-button:hover {
+  transform: scale(1.05);
+}
+
+/* 챗봇 아이콘 크기 설정 */
+.chatbot-icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain;
+}
