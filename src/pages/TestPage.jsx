@@ -1,16 +1,12 @@
 //컴포넌트 테스트 페이지 입니다.
 //추후 삭제합니다.
 import React, { useState } from "react";
-
-//import NavigationBar from "../components/common/navigationbar/NavigationBar";
+import NavigationBar from "../components/common/navigationbar/NavigationBar";
 import CommentInput from "../components/comment/CommentInput";
 import Comment from "../components/Comment/Comment";
 import Menu from "../components/common/menu/Menu";
 import Pagenations from "../components/common/pagination/Paginations";
-import BookmarkButton from "../components/board/BookmarkButton";
-import { Row, Col, Container } from "react-bootstrap";
-import NavigationBar from "../components/common/navigationbar/NavigationBar";
-import TalkDetail from "../components/board/TalkDetail";
+import LoginInput from "../components/LoginInput/LoginInput";
 
 const TestPage = () => {
   //페이지네이션 사용 예시
@@ -22,6 +18,14 @@ const TestPage = () => {
   };
   return (
     <>
+      <LoginInput
+        title={"이메일"}
+        placeholder={"이메일을 입력하세요"}
+      ></LoginInput>
+      <LoginInput
+        title={"아이디"}
+        placeholder={"아이디를 입력하세요"}
+      ></LoginInput>
       <CommentInput></CommentInput>
       <Comment
         nickname={"래퍼순형"}
