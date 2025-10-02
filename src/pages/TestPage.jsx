@@ -23,7 +23,7 @@ const TestPage = () => {
         placeholder={"이메일을 입력하세요"}
       ></LoginInput>
       <LoginInput
-        title={"아이디"}
+        title={"비밀번호 확인"}
         placeholder={"아이디를 입력하세요"}
       ></LoginInput>
       <CommentInput></CommentInput>
