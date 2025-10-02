@@ -1,0 +1,56 @@
+.menu-tab {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  cursor: pointer;
+  margin: 0;
+}
+.line-gap {
+  gap: 1px;
+}
+.menu-col {
+  flex-direction: column; /* 세로로 쌓기 */
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 필요하면 수직 중앙 정렬 */
+}
+.menu-tab p {
+  color: #3d253b;
+  font-size: 14px;
+  margin: 0;
+  margin-bottom: 5px;
+}
+.lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 3%;
+}
+
+.line {
+  border: none;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  width: 100%;
+}
+/* 
+@media (max-width: 768px) {
+  .line {
+    width: 100%; /* 모바일에서 Col 폭 전체 */
+/*  } 
+}
+ */
+.line.green {
+  background-color: #54957f;
+}
+
+.line.white {
+  background-color: rgb(255, 255, 255);
+}
+
+.line.red {
+  background-color: #9c283d;
+}

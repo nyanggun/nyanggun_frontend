@@ -1,0 +1,27 @@
+.navBar {
+  height: 70px;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  z-index: 1000;
+}
+
+.navBtn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 가운데 정렬 */
+  font-size: 10px;
+  color: #343a40;
+}
+.navBtn:hover {
+  color: #f2cc21;
+}
+.navBtn.active {
+  color: #f2cc21;
+}
