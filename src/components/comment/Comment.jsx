@@ -2,7 +2,7 @@ import React from "react";
 import CommentProfile from "../../assets/comment-profile.svg";
 import CommentIcon from "../../assets/comment.svg";
 import WarningRed from "../../assets/warning-red.svg";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import "./Comment.css";
 
 const Comment = () => {
@@ -10,7 +10,11 @@ const Comment = () => {
     <Row>
       <Col>
         <Col className="comment-profile">
-          <img src={CommentProfile} />
+          <Image
+            src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+            roundedCircle
+            className="comment-profile-pic border border-1"
+          />
           <div className="comment-nickname">지존헌터</div>
           <div className="comment-time">1분 전</div>
         </Col>

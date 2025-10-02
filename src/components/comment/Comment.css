@@ -18,7 +18,7 @@
 }
 .comment-profile-btn {
   cursor: pointer;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 .comment-font.red {
@@ -26,9 +26,14 @@
 }
 
 .comment-content {
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 .comment-btn {
   all: unset;
+}
+
+.comment-profile-pic {
+  width: 25px;
+  height: 25px;
 }

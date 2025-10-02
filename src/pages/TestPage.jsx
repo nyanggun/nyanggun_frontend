@@ -8,17 +8,19 @@ import Comment from "../components/Comment/Comment";
 import Menu from "../components/common/menu/Menu";
 import Pagenations from "../components/common/pagination/Paginations";
 import BookmarkButton from "../components/board/BookmarkButton";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import NavigationBar from "../components/common/navigationbar/NavigationBar";
+import TalkDetail from "../components/board/TalkDetail";
 
 const TestPage = () => {
   return (
-    <div>
+    <>
       <CommentInput></CommentInput>
       <Comment></Comment>
       <Menu></Menu>
+      <Pagenations></Pagenations>
       <NavigationBar></NavigationBar>
-    </div>
+    </>
   );
 };
 

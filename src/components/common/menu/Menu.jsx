@@ -5,8 +5,8 @@ import NavigationBar from "../navigationbar/NavigationBar";
 import { Col, Row } from "react-bootstrap";
 const Menu = () => {
   return (
-    <Row>
-      <Col className="menu-col">
+    <div>
+      <div className="menu-col">
         <div>
           <div className="menu-tab">
             <p>문화재 탐방기</p>
@@ -17,11 +17,9 @@ const Menu = () => {
             <hr className="line white"></hr>
             <hr className="line red"></hr>
           </div>
-
-          <NavigationBar></NavigationBar>
         </div>
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 export default Menu;
