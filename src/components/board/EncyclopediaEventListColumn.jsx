@@ -1,16 +1,15 @@
 import React from "react";
 import { Col, Container, Row, Image } from "react-bootstrap";
 import BookmarkButton from "./BookmarkButton";
-import "./EncyclopediaEventListColumn.css";
 import MemberButton from "./MemberButton";
 
 const EncyclopediaEventListColumn = (props) => {
 	return (
-		<Row className="column align-items-center m-0 py-1 h-25">
+		<Row className="column align-items-center m-0 pb-1 h-25">
 			<Col className="d-flex justify-content-center align-items-center m-0 p-0 h-100 bg-dark" xs={6}>
 				<Image src={props.image} fluid></Image>
 			</Col>
-			<Col className="bg-white h-100 d-flex flex-column p-1" xs={6}>
+			<Col className="bg-white h-100 d-flex flex-column" xs={6}>
 				<Row className="my-1">
 					<Col>
 						<span className="fs-5">{props.title}</span>

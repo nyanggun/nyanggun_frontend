@@ -1,17 +1,5 @@
 .btn.add-post {
-	background-color: #3d253b !important;
-	color: white !important;
-	size: 30px 30px;
-
-	/* Flexbox 설정 */
-	display: flex;
-	align-items: center; /* 수직 중앙 정렬 */
-	justify-content: center; /* 수평 중앙 정렬 */
-
-	/* 버튼의 패딩을 0으로 만들어 정렬에 방해되지 않게 합니다. */
-	/* 필요에 따라 패딩 값을 조절할 수 있습니다. */
-	padding: 1;
-
+	border: 1px solid white;
 	bottom: 20px;
 	right: 20px;
 	z-index: 100000;

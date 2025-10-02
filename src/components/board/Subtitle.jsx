@@ -10,19 +10,20 @@ const Subtitle = (props) => {
 
 	return (
 		<div className="">
-			<Row className="justify-content-center">
-				<Col className="d-flex justify-content-center p-0" xs={1}>
+			<div className="justify-content-center d-flex align-items-center border">
+				<div className="" xs={1}>
 					<Image src={SmileFace} />
-				</Col>
-				<Col className="d-flex justify-content-center align-items-center p-0 m-0" xs={3}>
+				</div>
+				<div className="">
 					<h2 className="">{props.text}</h2>
-				</Col>
-			</Row>
+				</div>
+			</div>
 			<Row className="justify-content-center">
-				<Col className="d-flex justify-content-center align-items-center m-0" xs={9}>
-					<Form.Control className="rounded-5 border-dark" />
-				</Col>
-				<Col className="d-flex justify-content-center align-items-center m-0" xs={1}>
+				<Col
+					className="d-flex justify-content-center align-items-center m-0 rounded-5 border border-dark"
+					xs={9}
+				>
+					<Form.Control className="border-0" />
 					<Image as="Button" src={FindImage} onClick={handleClick} />
 				</Col>
 			</Row>
