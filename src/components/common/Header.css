@@ -3,9 +3,9 @@
   position: sticky;
   top: 0;
   z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 설정 */
-  
+
   /* 배경은 투명, 아래쪽에 얇은 구분선 */
-  background-color: transparent;
+  background-color: white;
   box-shadow: none;
   border-bottom: 1px solid #e0e0e0;
   padding-top: 10px;
@@ -23,13 +23,13 @@
 
 /* 로고를 감싸는 Navbar.Brand에 여백을 주어 잘림을 방지합니다. */
 .navbar-brand {
-    margin-left: 5px; 
-    padding: 0;
+  margin-left: 5px;
+  padding: 0;
 }
 
 /* 로고 크기 설정 */
-.logo {
-  height: 30px; /* 로고 크기 */
+.header-logo {
+  height: 50px; /* 로고 크기 */
   width: auto;
 }
 
@@ -51,9 +51,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   /* 버튼 자체의 오른쪽 여백을 주어 잘림을 방지합니다. */
-  margin-right: 5px; 
+  margin-right: 5px;
 }
 
 /* 포커스 상태에서도 아웃라인/그림자 제거 */

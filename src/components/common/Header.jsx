@@ -14,7 +14,7 @@ const Header = () => {
           <img
             src={logo_color}
             alt="한국문화사냥꾼 로고"
-            className="logo"
+            className="header-logo"
           />
         </Navbar.Brand>
 
