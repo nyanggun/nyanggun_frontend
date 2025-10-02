@@ -1,0 +1,29 @@
+.border-btn {
+  border-radius: 20px;
+  background-color: white;
+  border-color: #343a40;
+  color: #343a40;
+}
+
+/* ${buttonColor} */
+.red {
+  border-color: #9c283d;
+  color: #9c283d;
+}
+
+.black {
+  border-color: #343a40;
+  color: #343a40;
+}
+
+.red:hover {
+  border-color: #9c283d;
+  background-color: #9c283d;
+  color: white;
+}
+
+.black:hover {
+  border-color: #343a40;
+  background-color: #343a40;
+  color: white;
+}

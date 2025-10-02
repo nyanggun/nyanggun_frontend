@@ -1,4 +1,4 @@
-import "./talkDetail.css";
+import "./talk-detail.css";
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
 
 const TalkDetail = ({ talk }) => {
