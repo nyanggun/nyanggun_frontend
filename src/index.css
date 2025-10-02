@@ -2,12 +2,12 @@
 
 :root {
   --bs-body-font-family: "Gowun Dodum", sans-serif;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   border-collapse: collapse;
 }
 
 body {
   font-family: var(--bs-body-font-family);
-  margin: 0;
-  padding: 0;
 }
