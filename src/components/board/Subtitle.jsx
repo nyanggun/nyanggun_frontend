@@ -10,7 +10,7 @@ const Subtitle = (props) => {
 
 	return (
 		<div className="">
-			<div className="justify-content-center d-flex align-items-center border">
+			<div className="justify-content-center d-flex align-items-center">
 				<div className="" xs={1}>
 					<Image src={SmileFace} />
 				</div>
