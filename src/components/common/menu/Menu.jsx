@@ -12,7 +12,7 @@ const Menu = () => {
             <p>문화재 탐방기</p>
             <p>문화재 담소</p>
           </div>
-          <div className="lines">
+          <div className="menu-lines">
             <hr className="line green"></hr>
             <hr className="line white"></hr>
             <hr className="line red"></hr>

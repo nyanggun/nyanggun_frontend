@@ -31,7 +31,7 @@ const NavigationBar = () => {
   return (
     <Navbar fixed="bottom">
       <Nav className="navBar">
-        <Nav.Link
+        <div
           className={`navBtn ${isClickHomeButton ? "active" : ""}`}
           onMouseEnter={() => setHomeHover(true)}
           onMouseLeave={() => setHomeHover(false)}
@@ -49,8 +49,8 @@ const NavigationBar = () => {
             <House width={40} height={40}></House>
           )}
           <div>홈</div>
-        </Nav.Link>
-        <Nav.Link
+        </div>
+        <div
           className={`navBtn ${isClickBookButton ? "active" : ""}`}
           onMouseEnter={() => setBookHover(true)}
           onMouseLeave={() => setBookHover(false)}
@@ -68,8 +68,8 @@ const NavigationBar = () => {
             <Book width={40} height={40}></Book>
           )}
           <div>문화재 도감</div>
-        </Nav.Link>
-        <Nav.Link
+        </div>
+        <div
           className={`navBtn ${isClickBadgeButton ? "active" : ""}`}
           onMouseEnter={() => setBadgeHover(true)}
           onMouseLeave={() => setBadgeHover(false)}
@@ -83,8 +83,8 @@ const NavigationBar = () => {
         >
           <YinYang width={40} height={40}></YinYang>
           <div>사냥꾼 증표</div>
-        </Nav.Link>
-        <Nav.Link
+        </div>
+        <div
           className={`navBtn ${isClickPictureButton ? "active" : ""}`}
           onMouseEnter={() => setPictureHover(true)}
           onMouseLeave={() => setPictureHover(false)}
@@ -102,8 +102,8 @@ const NavigationBar = () => {
             <Inboxes width={40} height={40}></Inboxes>
           )}
           <div>사진함</div>
-        </Nav.Link>
-        <Nav.Link
+        </div>
+        <div
           className={`navBtn ${isClickTalkButton ? "active" : ""}`}
           onMouseEnter={() => setTalkHover(true)}
           onMouseLeave={() => setTalkHover(false)}
@@ -121,7 +121,7 @@ const NavigationBar = () => {
             <MoonStars width={40} height={40}></MoonStars>
           )}
           <div>도란도란</div>
-        </Nav.Link>
+        </div>
       </Nav>
     </Navbar>
   );

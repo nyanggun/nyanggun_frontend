@@ -18,6 +18,12 @@
   font-size: 10px;
 }
 
+.comment-input.no-focus:focus {
+  border-color: #343a40;
+  box-shadow: none;
+  outline: none;
+}
+
 .comment-input-btn:hover {
   background-color: #343a40;
   color: white;

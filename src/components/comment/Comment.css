@@ -13,9 +13,11 @@
 }
 .comment-font {
   font-size: 12px;
+  margin-right: 5px;
   margin-left: 2px;
 }
-.comment-profile.btn {
+.comment-profile-btn {
+  cursor: pointer;
   margin-left: 20px;
 }
 

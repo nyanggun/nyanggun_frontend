@@ -18,15 +18,15 @@ const Comment = () => {
           <div className="comment-content">좋은 정보 감사합니다.</div>
         </Col>
 
-        <Col className="comment-profile btn">
-          <Button className="comment-btn">
-            <img src={CommentIcon}></img>
+        <Col className="comment-profile-btn">
+          <div className="comment-btn">
+            <img src={CommentIcon} width={15}></img>
             <span className="comment-font">답글 달기</span>
-          </Button>
-          <Button className="comment-btn">
-            <img src={WarningRed}></img>
+          </div>
+          <div className="comment-btn">
+            <img src={WarningRed} width={15}></img>
             <span className="comment-font red">댓글 신고</span>
-          </Button>
+          </div>
         </Col>
       </Col>
     </Row>

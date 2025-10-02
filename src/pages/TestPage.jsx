@@ -9,18 +9,16 @@ import Menu from "../components/common/menu/Menu";
 import Pagenations from "../components/common/pagination/Paginations";
 import BookmarkButton from "../components/board/BookmarkButton";
 import { Row, Col } from "react-bootstrap";
+import NavigationBar from "../components/common/navigationbar/NavigationBar";
 
 const TestPage = () => {
   return (
-    <Row>
-      <Col>
-        <BookmarkButton></BookmarkButton>
-        <CommentInput></CommentInput>
-        <Comment></Comment>
-        <Menu></Menu>
-        <Pagenations></Pagenations>
-      </Col>
-    </Row>
+    <div>
+      <CommentInput></CommentInput>
+      <Comment></Comment>
+      <Menu></Menu>
+      <NavigationBar></NavigationBar>
+    </div>
   );
 };
 
