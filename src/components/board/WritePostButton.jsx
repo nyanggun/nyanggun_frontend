@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Image } from "react-bootstrap";
 
-import "./write-post-button.css";
 import WritingButtonImage from "../../assets/writing-button-image.svg";
 
 const WritePostButton = (props) => {
