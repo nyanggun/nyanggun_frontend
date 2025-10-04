@@ -8,3 +8,13 @@
   max-width: 50px;
   max-height: 50px;
 }
+
+.icon-border {
+  border: 1px solid #343a40;
+  border-radius: 50px;
+}
+
+.icons {
+  height: 1.2rem;
+  border-color: #343a40;
+}
