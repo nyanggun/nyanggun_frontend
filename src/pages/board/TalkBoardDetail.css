@@ -1,0 +1,28 @@
+.comments {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.comments-list {
+  margin: 1% 0 3% 5%;
+  width: 50%;
+}
+
+.comments-input {
+  padding: 0 2% 0 2%;
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .comments-input {
+    width: 100%; /* 모바일에서 Col 폭 전체 */
+    padding: 0 4% 0 4%;
+  }
+}
+@media (max-width: 768px) {
+  .comments-list {
+    width: 100%; /* 모바일에서 Col 폭 전체 */
+  }
+}

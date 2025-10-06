@@ -1,0 +1,19 @@
+.board-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.menu-margin {
+  margin-bottom: 3%;
+}
+
+.search-margin {
+  margin-bottom: 2%;
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .search-margin {
+    width: 100%; /* 모바일에서 Col 폭 전체 */
+  }
+}

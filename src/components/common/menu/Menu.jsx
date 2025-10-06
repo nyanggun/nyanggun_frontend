@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./Menu.css";
 import NavigationBar from "../navigationbar/NavigationBar";
 import { Col, Row } from "react-bootstrap";
-const Menu = ({ menuOne, menuTwo }) => {
+const Menu = ({ menuOne, menuTwo, chooseMenu }) => {
   //메뉴 1번의 상태입니다.
   //기본적으로 선택되어 있습니다.
   const [isMenuOneClick, setMenuOneClick] = useState(true);
@@ -20,6 +20,8 @@ const Menu = ({ menuOne, menuTwo }) => {
               onClick={() => {
                 setMenuOneClick(true);
                 setMenuTwoClick(false);
+                if (chooseMenu)
+                  chooseMenu({ isMenuOneClick: true, isMenuTwoClick: false });
               }}
             >
               {menuOne}
@@ -29,6 +31,8 @@ const Menu = ({ menuOne, menuTwo }) => {
               onClick={() => {
                 setMenuOneClick(false);
                 setMenuTwoClick(true);
+                if (chooseMenu)
+                  chooseMenu({ isMenuOneClick: false, isMenuTwoClick: true });
               }}
             >
               {menuTwo}
