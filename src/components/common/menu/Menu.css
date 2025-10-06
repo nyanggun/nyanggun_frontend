@@ -12,9 +12,9 @@
   flex-direction: column; /* 세로로 쌓기 */
   align-items: center; /* 수평 중앙 정렬 */
   justify-content: center; /* 필요하면 수직 중앙 정렬 */
-
-.menu-btn{
-    color: #868F98;
+}
+.menu-btn {
+  color: #868f98;
 }
 
 .menu-btn.active {
@@ -23,7 +23,7 @@
 .menu-tab p {
   font-size: 18px;
   margin: 0;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .menu-lines {
   display: flex;
@@ -40,16 +40,16 @@
   margin: 0;
   padding: 0;
   background-color: black;
-  width: 100%;
+  width: 50%;
   opacity: 1;
 }
-/* 
+
 @media (max-width: 768px) {
   .line {
-    width: 100%; /* 모바일에서 Col 폭 전체 */
-/*  } 
+    width: 87%; /* 모바일에서 Col 폭 전체 */
+  }
 }
- */
+
 .line.green {
   background-color: #54957f;
 }
