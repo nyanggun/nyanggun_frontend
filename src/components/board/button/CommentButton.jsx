@@ -1,9 +1,10 @@
 import React from "react";
-import BookmarkImage from "../../assets/bookmark.svg";
 import { Button, Image } from "react-bootstrap";
-import "./BookmarkButton.css";
 
-const BookmarkButton = ({ count }) => {
+import "../../board/BookmarkButton.css";
+import CommentButtonImage from "../../../assets/comment.svg";
+
+const CommentButton = ({ count }) => {
 	// bookmark 관련 로직
 	const handleClick = () => {};
 
@@ -15,7 +16,7 @@ const BookmarkButton = ({ count }) => {
 			onClick={handleClick}
 		>
 			<div className="icons d-flex align-items-center gap-1">
-				<Image fluid className="bookmark-btn-img" src={BookmarkImage} />
+				<Image fluid className="post-etc-btn-img" src={CommentButtonImage} />
 				{/* props.count로 북마크 수를 가져와 출력 */}
 				<span>&nbsp;{count}</span>
 			</div>
@@ -23,4 +24,4 @@ const BookmarkButton = ({ count }) => {
 	);
 };
 
-export default BookmarkButton;
+export default CommentButton;

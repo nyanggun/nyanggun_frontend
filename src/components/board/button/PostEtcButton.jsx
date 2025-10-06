@@ -3,7 +3,7 @@ import BookmarkImage from "../../assets/bookmark.svg";
 import { Button, Image } from "react-bootstrap";
 import "./BookmarkButton.css";
 
-const BookmarkButton = ({ count }) => {
+const PostEtcButton = (props) => {
 	// bookmark 관련 로직
 	const handleClick = () => {};
 
@@ -15,12 +15,12 @@ const BookmarkButton = ({ count }) => {
 			onClick={handleClick}
 		>
 			<div className="icons d-flex align-items-center gap-1">
-				<Image fluid className="bookmark-btn-img" src={BookmarkImage} />
+				<Image fluid className="post-etc-btn-img" src={props.buttonImage} />
 				{/* props.count로 북마크 수를 가져와 출력 */}
-				<span>&nbsp;{count}</span>
+				<span>&nbsp;{props.count}</span>
 			</div>
 		</Button>
 	);
 };
 
-export default BookmarkButton;
+export default PostEtcButton;
