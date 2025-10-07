@@ -2,10 +2,11 @@ import React from "react";
 import { Button, Image } from "react-bootstrap";
 
 import WritingButtonImage from "../../assets/writing-button-image.svg";
+import "./WritePostButton.css";
 
-const WritePostButton = (props) => {
+const WritePostButton = ({ location }) => {
 	const handleClick = () => {
-		window.location.href = props.location;
+		window.location.href = location + "/new";
 	};
 
 	return (
