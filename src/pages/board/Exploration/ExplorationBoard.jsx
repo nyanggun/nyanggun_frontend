@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Subtitle from "../../../components/board/Subtitle";
+import { Outlet } from "react-router-dom";
 import axios from "axios";
 
-import ExplorationPost from "./ExplorationPost";
+import Subtitle from "../../../components/board/Subtitle";
 import Menu from "../../../components/common/menu/Menu";
+import ExplorationPost from "./ExplorationPost";
 
 const ExplorationBoard = () => {
 	//axios로 비동기 통신, 글 리스트 가져오기
@@ -28,13 +29,13 @@ const ExplorationBoard = () => {
 		}
 	};
 	return (
-		<>
+		<div>
 			{explorations.map((exploration) => (
 				<div key={exploration.id}>
 					<ExplorationPost {...exploration} />
 				</div>
 			))}
-		</>
+		</div>
 	);
 };
 

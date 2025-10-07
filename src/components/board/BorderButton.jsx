@@ -10,7 +10,7 @@ import "./BorderButton.css";
 const BorderButton = ({ btnName, clickBtn, type = "button", buttonColor }) => {
 	return (
 		<Button size="lm" className={`border-btn px-4 ${buttonColor}`} onClick={clickBtn} type={type}>
-			<strong>{btnName}버 튼</strong>
+			<strong>{btnName}</strong>
 		</Button>
 	);
 };
