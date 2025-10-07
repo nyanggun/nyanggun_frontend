@@ -6,9 +6,8 @@ import TextIcon from "../../assets/text-icon.svg";
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
 import BorderButton from "./BorderButton";
 
-const TalkDetail = ({ talk, onClick }) => {
+const TalkDetail = ({ talk, onClick, onDeleteTalk }) => {
     const handleUpdateTalk = () => {};
-    const handleDeleteTalk = () => {};
     return (
         <Row
             onClick={onClick}
@@ -81,13 +80,15 @@ const TalkDetail = ({ talk, onClick }) => {
                                 <BorderButton
                                     btnName={"수정"}
                                     buttonColor={"black"}
-                                    onClick={handleUpdateTalk}
+                                    clickBtn={handleUpdateTalk}
                                 ></BorderButton>
                                 <span> </span>
                                 <BorderButton
                                     btnName={"삭제"}
                                     buttonColor={"red"}
-                                    onClick={handleDeleteTalk}
+                                    clickBtn={() => {
+                                        onDeleteTalk();
+                                    }}
                                 ></BorderButton>
                             </div>
                         </div>

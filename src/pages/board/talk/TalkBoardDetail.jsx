@@ -6,6 +6,7 @@ import Comment from "../../../components/comment/Comment";
 import CommentInput from "../../../components/comment/CommentInput";
 import "./TalkBoardDetail.css";
 import api from "../../../config/apiConfig";
+import { useNavigate, useParams } from "react-router-dom";
 
 //대댓글 처리 메소드
 //서버에서 댓글 목록들을 불러온 후 계층 구조로 변환합니다.
@@ -42,19 +43,18 @@ const organizeComments = (comments) => {
 };
 
 //담소 게시글의 내용을 가져오는 메소드 입니다.
-const TalkBoardDetail = ({ talkId }) => {
+const TalkBoardDetail = () => {
+    const navigate = useNavigate();
     const [talkBoard, setTalkBoard] = useState(null);
     const [talkBoardComment, setTalkBoardComment] = useState([]);
     //대댓글의 상태를 기억함
     const [activeParentCommentId, setActiveParentCommentId] = useState(null);
-
+    const { talkId } = useParams(); // URL의 :id 값을 id로 추출
     const getTalkBoard = async () => {
         if (!talkId) return;
 
         try {
-            const response = await axios.get(
-                `http://localhost:8080/talks/${talkId}`
-            );
+            const response = await api.get(`/talks/${talkId}`);
             setTalkBoard(response.data.data);
 
             // 댓글 구조화
@@ -63,10 +63,10 @@ const TalkBoardDetail = ({ talkId }) => {
             );
 
             setTalkBoardComment(organizedComments);
-            console.log("담소 게시글을 가져왔습니다.", response.data);
+            console.log("담소 게시글 상세를 가져왔습니다.", response.data);
         } catch (error) {
             console.error(
-                "담소 게시글을 가져오는 데 오류가 발생했습니다.",
+                "담소 게시글 상세를 가져오는 데 오류가 발생했습니다.",
                 error.message
             );
         }
@@ -75,6 +75,22 @@ const TalkBoardDetail = ({ talkId }) => {
     useEffect(() => {
         getTalkBoard();
     }, [talkId]);
+
+    //담소를 수정하는 메소드 입니다.
+
+    //담소를 삭제하는 메소드 입니다.
+    const handleDeleteTalk = async () => {
+        try {
+            await api.delete(`/talks/${talkId}`, {
+                talkId,
+            });
+            console.log("담소 게시글 삭제 완료");
+            alert("게시글이 삭제되었습니다.");
+            navigate(`/dorandoran/talks`);
+        } catch (error) {
+            console.log("담소 게시글 삭제에 문제가 생겼습니다", error.message);
+        }
+    };
 
     //담소 댓글을 전송하는 메소드 입니다.
     //로그인/로그아웃 구현 후 해당 회원 하드 코딩은 지워집니다.
@@ -128,7 +144,14 @@ const TalkBoardDetail = ({ talkId }) => {
 
     return (
         <div>
-            <div>{talkBoard && <TalkDetail talk={talkBoard} />}</div>
+            <div>
+                {talkBoard && (
+                    <TalkDetail
+                        talk={talkBoard}
+                        onDeleteTalk={handleDeleteTalk}
+                    />
+                )}
+            </div>
             <div className="comments">
                 <div className="comments-input">
                     <CommentInput onSubmit={handleCommentSubmit}></CommentInput>
