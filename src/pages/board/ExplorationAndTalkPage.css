@@ -1,19 +1,27 @@
 .board-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .menu-margin {
-  margin-bottom: 3%;
+    margin-bottom: 3%;
 }
 
 .search-margin {
-  margin-bottom: 2%;
-  width: 50%;
+    margin-bottom: 2%;
+    width: 50%;
 }
 
 @media (max-width: 768px) {
-  .search-margin {
-    width: 100%; /* 모바일에서 Col 폭 전체 */
-  }
+    .search-margin {
+        width: 100%; /* 모바일에서 Col 폭 전체 */
+    }
+}
+
+.talk-button {
+    z-index: 1000;
+    position: fixed;
+    bottom: 70px;
+    right: 0;
+    margin: 4%;
 }

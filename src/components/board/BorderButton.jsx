@@ -8,11 +8,16 @@ import "./BorderButton.css";
 // <CompleteButton btnName="등록" type="submit" />
 // <CompleteButton btnName="취소" clickBtn={handleCancel} />
 const BorderButton = ({ btnName, clickBtn, type = "button", buttonColor }) => {
-	return (
-		<Button size="lm" className={`border-btn px-4 ${buttonColor}`} onClick={clickBtn} type={type}>
-			<strong>{btnName}버 튼</strong>
-		</Button>
-	);
+    return (
+        <Button
+            size="sm"
+            className={`border-btn px-4 ${buttonColor}`}
+            onClick={clickBtn}
+            type={type}
+        >
+            <strong>{btnName}</strong>
+        </Button>
+    );
 };
 
 export default BorderButton;
