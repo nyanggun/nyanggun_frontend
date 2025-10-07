@@ -5,7 +5,7 @@ import axios from "axios";
 import ExplorationPost from "./ExplorationPost";
 import Menu from "../../../components/common/menu/Menu";
 
-const ExplorationMain = () => {
+const ExplorationBoard = () => {
 	//axios로 비동기 통신, 글 리스트 가져오기
 	// const [loading, setLoading] = useState(false);
 
@@ -29,8 +29,6 @@ const ExplorationMain = () => {
 	};
 	return (
 		<>
-			<Subtitle text="문화재 탐방기" />
-			<Menu menuOne="문화재 탐방기" menuTwo="문화재 담소" />
 			{explorations.map((exploration) => (
 				<div key={exploration.id}>
 					<ExplorationPost {...exploration} />
@@ -40,4 +38,4 @@ const ExplorationMain = () => {
 	);
 };
 
-export default ExplorationMain;
+export default ExplorationBoard;
