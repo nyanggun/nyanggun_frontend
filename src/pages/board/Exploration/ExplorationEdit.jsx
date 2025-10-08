@@ -1,16 +1,21 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import axios from "axios";
 import WritingEditor from "../../../components/board/WritingEditor";
 import WritingPostInputBox from "../../../components/board/WritePostInputBox";
 import BorderButton from "../../../components/board/BorderButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-const NewExploration = () => {
+const ExplorationDetailPageEdit = () => {
 	const navigate = useNavigate();
 
-	const [title, setTitle] = useState("");
-	const [relatedHeritage, setRelatedHeritage] = useState("");
-	const [content, setContent] = useState("");
+	const { id } = useParams();
+
+	const location = useLocation();
+	const { originTitle, originRelatedHeritage, originContent } = location.state || {};
+
+	const [title, setTitle] = useState(originTitle);
+	const [relatedHeritage, setRelatedHeritage] = useState(originRelatedHeritage);
+	const [content, setContent] = useState(originContent);
 
 	const cancel = () => {
 		// 이전 페이지로 보내기
@@ -24,6 +29,7 @@ const NewExploration = () => {
 		}
 
 		const postData = {
+			id: id,
 			title: title,
 			relatedHeritage: relatedHeritage,
 			content: content, // 현재는 텍스트와 HTML 태그만 포함된 내용
@@ -31,7 +37,7 @@ const NewExploration = () => {
 		};
 
 		try {
-			const response = await axios.post("http://localhost:8080/api/exploration", postData);
+			const response = await axios.patch(`http://localhost:8080/api/exploration/${id}`, postData);
 			console.log("서버 응답:", response.data);
 
 			//
@@ -67,4 +73,4 @@ const NewExploration = () => {
 	);
 };
 
-export default NewExploration;
+export default ExplorationDetailPageEdit;
