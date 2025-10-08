@@ -7,7 +7,21 @@ import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";
 import SmileFace from "../../assets/smile-face.svg";
 import Menu from "../../components/common/menu/Menu";
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
+// 거리 계산 함수 (Haversine Formula)
+// 위경도가 lat1, lon1인 위치A, 위경도가 lat2, lon2인 위치B 사이의 거리를 구할 때 사용
+const getDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371000; // 지구 반지름 (m)
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // 거리(m)
+};
 
 const BadgeAcquisition = () => {
   // 지도 좌표 클릭하면 해당 주소 보여주는 useState
@@ -16,6 +30,10 @@ const BadgeAcquisition = () => {
   const [center, setCenter] = useState({ lat: 37.5642135, lng: 127.0016985 });
   // 국가유산청 api 상태 관리
   const [heritageList, setHeritageList] = useState([]);
+  // 획득 반경에 있는 문화재 상태 관리
+  const [nearest, setNearest] = useState(null);
+  // 버튼 활성화 상태 관리
+  const [isNear, setIsNear] = useState(false);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -31,23 +49,56 @@ const BadgeAcquisition = () => {
     }
     if (navigator.geolocation) {
       // 지도 페이지가 mount 될 때 내가 있는 위치를 기본으로 지도에 표시하며, 지도 중앙에 마커 표시
-      navigator.geolocation.getCurrentPosition((position) => {
-        const defaultLat = Number(position.coords.latitude);
-        const defaultLng = Number(position.coords.longitude);
-        console.log(center, typeof center?.lat, typeof center?.lng);
-        setCenter({ lat: defaultLat, lng: defaultLng });
-        fetchAddress(defaultLat, defaultLng);
-      }),
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(
+            center,
+            typeof center?.latitude,
+            typeof center?.longitude
+          );
+          setCenter({ lat: latitude, lng: longitude });
+          fetchAddress(latitude, longitude);
+
+          let minDistance = Infinity;
+          let nearestTarget = null;
+
+          // 모든 문화재와 거리 계산 후 가장 가까운 문화재를 target으로
+          heritageList.forEach((item) => {
+            const distance = getDistance(
+              latitude,
+              longitude,
+              item.latitude,
+              item.longitude
+            );
+            if (distance < minDistance) {
+              minDistance = distance;
+              nearestTarget = item;
+            }
+          });
+
+          // X미터 반경 이내면 그 문화재 세팅하고 버튼 활성화
+          if (nearestTarget && minDistance < 1000) {
+            setNearest(nearestTarget);
+            setIsNear(true);
+          } else {
+            setNearest(null);
+            setIsNear(false);
+          }
+        },
         (error) => {
           console.log("위치 접근에 실패했습니다.", error);
           setMapAddress("위치 접근에 실패했습니다.");
         },
         {
           enableHighAccuracy: true, // GPS 기반으로 더 정확한 위치 측정
+          timeout: 10000, // 10초 이내에 응답 없으면 에러 발생
           maximumAge: 0, // 캐시된 위치 절대 사용 금지 (항상 새로 측정)
-        };
+        }
+      );
+      return () => navigator.geolocation.clearWatch(watchId);
     }
-  }, []);
+  }, [heritageList]);
 
   // 2. 좌표 → 주소 변환 (역지오코딩)
   // 지도를 클릭 했을 때 좌표 -> 주소 반환 : 보안을 위해 역지오코딩 하기 위한 좌표를 서버에서 처리 후 반환
@@ -154,11 +205,36 @@ const BadgeAcquisition = () => {
                   lng: Number(item.longitude),
                 }}
                 title={item.name}
-              ></AdvancedMarker>
+              >
+                <img
+                  src={item.badgeUrl}
+                  width={30}
+                  height={30}
+                  onError={(e) => {
+                    const fallback = encodeURI(
+                      "https://cdn.jsdelivr.net/gh/nyanggun/nyanggoon-badges@main/기본.png?flush_cache=true"
+                    );
+                    e.currentTarget.src = fallback;
+                  }}
+                  style={{
+                    background: "rgba(255,255,255,0.8)",
+                    borderRadius: "50%",
+                    boxShadow: "0 0 5px rgba(0,0,0,0.3)",
+                  }}
+                />
+              </AdvancedMarker>
             ))}
           </Map>
         </APIProvider>
-        <CertificationButton text="획득하기"></CertificationButton>
+        {/* ✅ 인증 버튼 (100m 이내일 때만 활성화) */}
+        <CertificationButton
+          text={
+            isNear
+              ? `🎯 ${nearest?.name} 인증하기`
+              : "문화재 근처에서만 인증 가능"
+          }
+          disabled={!isNear}
+        />
       </Col>
     </Row>
   );
