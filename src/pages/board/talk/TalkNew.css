@@ -1,0 +1,11 @@
+.talk-new-container {
+  margin: 0 10%;
+}
+.talk-new-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2%;
+}
+.talk-new-button-gap {
+  margin-left: 2%;
+}

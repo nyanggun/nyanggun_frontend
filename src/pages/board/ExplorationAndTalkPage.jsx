@@ -27,7 +27,8 @@ const ExplorationAndTalkPage = () => {
 
 	// }, [isMenuOneClick])
 
-	const isNewPostPage = useLocation().pathname === "/dorandoran/exploration/new";
+	const location = useLocation();
+	const isPostListPage = location.pathname === "/dorandoran/exploration" || location.pathname === "/dorandoran/talks";
 
 	return (
 		<div>
@@ -37,26 +38,20 @@ const ExplorationAndTalkPage = () => {
 				</div>
 			</div>
 
-			<div className="">
-				<Menu menuOne={"문화재 탐방기"} menuTwo={"문화재 담소"} /*chooseMenu={handleMenuChange}*/></Menu>
+			<div className="menu-margin">
+				<Menu
+					menuOne={"문화재 탐방기"}
+					menuOneLink={"/dorandoran/exploration"}
+					menuTwoLink={"/dorandoran/talks"}
+					menuTwo={"문화재 담소"} /*chooseMenu={handleMenuChange}*/
+				></Menu>
 			</div>
-
-			{/* 주석처리: 바로 아래 코드에서 ReactRouterDom의 Outlet을 적용한 코드 적용 */}
-			{/* {menuState.isMenuOneClick ? (
-				// <div>탐방기 목록 입니다. 여기에서 탐방기를 불러오면 됩니다.</div>
-				<ExplorationBoard />
-			) : selectedTalkId ? (
-				<TalkBoardDetail talkId={selectedTalkId} />
-			) : (
-				<TalkBoardList onSelectTalk={(id) => setSelectedTalkId(id)} />
-			)} */}
-
 			{/* outlet을 적용한 코드 */}
 			<main>
 				<Outlet />
 			</main>
 
-			{!isNewPostPage && <WritePostButton location={window.location.href} />}
+			{isPostListPage && <WritePostButton location={window.location.href} />}
 		</div>
 	);
 };
