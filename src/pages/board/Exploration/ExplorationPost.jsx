@@ -1,4 +1,6 @@
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
+import DOMPurify from "dompurify";
+
 import BookmarkButton from "../../../components/board/BookmarkButton";
 import "../../../components/board/TalkDetail.css";
 
@@ -6,8 +8,19 @@ import RelatedHeritageButton from "../../../components/board/button/RelatedHerit
 import CommentButton from "../../../components/board/button/CommentButton";
 import ReportButton from "../../../components/board/button/ReportButton";
 
-const TalkDetail = ({ member, createdAt, title, img, content, bookmarkCount, commentCount, relatedHeritage }) => {
+const TalkDetail = ({
+	memberNickname,
+	createdAt,
+	title,
+	img,
+	content,
+	bookmarkCount,
+	commentCount,
+	relatedHeritage,
+}) => {
 	const load = () => {};
+
+	const sanitizedContent = DOMPurify.sanitize(content);
 
 	return (
 		<Row className="h-100 justify-content-center align-items-center m-0">
@@ -25,14 +38,16 @@ const TalkDetail = ({ member, createdAt, title, img, content, bookmarkCount, com
 								/>
 							</div>
 							<div>
-								<span>{member}</span>
+								<span>{memberNickname}</span>
 							</div>
 							<div>
 								<span className="small">{createdAt}</span>
 							</div>
 						</div>
 						<Card.Img src={img} className="mt-2" />
-						<Card.Text className="mt-3">{content}</Card.Text>
+						<Card.Text as="div" className="">
+							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+						</Card.Text>
 						<div className="d-flex align-items-center gap-2">
 							<div>
 								<BookmarkButton count={bookmarkCount}></BookmarkButton>

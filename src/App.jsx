@@ -5,36 +5,30 @@ import ExplorationAndTalkPage from "./pages/board/ExplorationAndTalkPage";
 
 import BadgeAcquisition from "./pages/badge/BadgeAcquisition";
 import ExplorationBoard from "./pages/board/Exploration/ExplorationBoard";
-import NewExploration from "./pages/board/NewExploration";
+import ExplorationDetailPage from "./pages/board/Exploration/ExplorationDetailPage";
+import NewExploration from "./pages/board/Exploration/NewExploration";
 import TalkBoardList from "./pages/board/talk/TalkBoardList";
 import TalkBoardDetail from "./pages/board/talk/TalkBoardDetail";
 
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import ChatbotButton from "./components/common/chatbot/ChatbotButton";
+
 const App = () => {
-    return (
-        <>
-            <Routes>
-                <Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
-                    {/* <Route index element={<Navigate to="exploration" replace />} /> */}
-                    <Route
-                        path="exploration"
-                        element={<ExplorationBoard />}
-                    ></Route>
-                    <Route
-                        path="exploration/new"
-                        element={<NewExploration></NewExploration>}
-                    ></Route>
-                    <Route
-                        path="talks"
-                        element={<TalkBoardList></TalkBoardList>}
-                    ></Route>
-                    <Route
-                        path="talks/detail/:talkId"
-                        element={<TalkBoardDetail></TalkBoardDetail>}
-                    ></Route>
-                </Route>
-            </Routes>
-        </>
-    );
+	return (
+		<>
+			<Routes>
+				<Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
+					<Route index element={<Navigate to="exploration" replace />} />
+					<Route path="exploration" element={<ExplorationBoard />}></Route>
+					<Route path="exploration/:id" element={<ExplorationDetailPage />} />
+					<Route path="exploration/new" element={<NewExploration></NewExploration>}></Route>
+					<Route path="talks" element={<TalkBoardList></TalkBoardList>}></Route>
+					<Route path="talks/detail/:talkId" element={<TalkBoardDetail></TalkBoardDetail>}></Route>
+				</Route>
+			</Routes>
+		</>
+	);
 };
 
 export default App;
