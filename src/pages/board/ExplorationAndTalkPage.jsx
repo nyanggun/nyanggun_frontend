@@ -11,42 +11,46 @@ import ExplorationBoard from "./Exploration/ExplorationBoard";
 import WritePostButton from "../../components/board/WritePostButton";
 
 const ExplorationAndTalkPage = () => {
-    // 처음 페이지에서는 탐방기부터 보여줍니다. -> 주석처리 : ReactRouterDom의 <Outlet>을 사용하여 하위 URL로 표현
-    // const [menuState, setMenuState] = useState({
-    // 	isMenuOneClick: true,
-    // 	isMenuTwoClick: false,
-    // });
-    // const [selectedTalkId, setSelectedTalkId] = useState(null);
-    // const handleMenuChange = (newState) => {
-    // 	setMenuState(newState);
-    // 	setSelectedTalkId(null);
-    // };
+  // 처음 페이지에서는 탐방기부터 보여줍니다. -> 주석처리 : ReactRouterDom의 <Outlet>을 사용하여 하위 URL로 표현
+  // const [menuState, setMenuState] = useState({
+  // 	isMenuOneClick: true,
+  // 	isMenuTwoClick: false,
+  // });
+  // const [selectedTalkId, setSelectedTalkId] = useState(null);
+  // const handleMenuChange = (newState) => {
+  // 	setMenuState(newState);
+  // 	setSelectedTalkId(null);
+  // };
 
-    // const writePostButtonProps =
-    // const useEffect(()=>{
+  // const writePostButtonProps =
+  // const useEffect(()=>{
 
-    // }, [isMenuOneClick])
+  // }, [isMenuOneClick])
 
-    const isNewPostPage =
-        useLocation().pathname === "/dorandoran/exploration/new";
+  const location = useLocation();
+  const isPostListPage =
+    location.pathname === "/dorandoran/exploration" ||
+    location.pathname === "/dorandoran/talks";
 
-    return (
-        <div>
-            <div className="board-page">
-                <div className="search-margin">
-                    <Subtitle text={"도란도란"}></Subtitle>
-                </div>
-            </div>
+  return (
+    <div>
+      <div className="board-page">
+        <div className="search-margin">
+          <Subtitle text={"도란도란"}></Subtitle>
+        </div>
+      </div>
 
-            <div className="menu-margin">
-                <Menu
-                    menuOne={"문화재 탐방기"}
-                    menuTwo={"문화재 담소"} /*chooseMenu={handleMenuChange}*/
-                ></Menu>
-            </div>
+      <div className="menu-margin">
+        <Menu
+          menuOne={"문화재 탐방기"}
+          menuOneLink={"/dorandoran/exploration"}
+          menuTwoLink={"/dorandoran/talks"}
+          menuTwo={"문화재 담소"} /*chooseMenu={handleMenuChange}*/
+        ></Menu>
+      </div>
 
-            {/* 주석처리: 바로 아래 코드에서 ReactRouterDom의 Outlet을 적용한 코드 적용 */}
-            {/* {menuState.isMenuOneClick ? (
+      {/* 주석처리: 바로 아래 코드에서 ReactRouterDom의 Outlet을 적용한 코드 적용 */}
+      {/* {menuState.isMenuOneClick ? (
 				// <div>탐방기 목록 입니다. 여기에서 탐방기를 불러오면 됩니다.</div>
 				<ExplorationBoard />
 			) : selectedTalkId ? (
@@ -55,16 +59,14 @@ const ExplorationAndTalkPage = () => {
 				<TalkBoardList onSelectTalk={(id) => setSelectedTalkId(id)} />
 			)} */}
 
-            {/* outlet을 적용한 코드 */}
-            <main>
-                <Outlet />
-            </main>
+      {/* outlet을 적용한 코드 */}
+      <main>
+        <Outlet />
+      </main>
 
-            {!isNewPostPage && (
-                <WritePostButton location={window.location.href} />
-            )}
-        </div>
-    );
+      {isPostListPage && <WritePostButton location={window.location.href} />}
+    </div>
+  );
 };
 
 export default ExplorationAndTalkPage;
