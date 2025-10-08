@@ -33,7 +33,6 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
     return () => clearInterval(interval);
   }, [talk.createdAt]);
 
-  const handleUpdateTalk = () => {};
   return (
     <Row
       onClick={onClick}
@@ -63,19 +62,26 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
                 <span className="small">{timeAgo}</span>
               </div>
             </div>
-            <Card.Img
-              src="https://media.istockphoto.com/id/1676101015/ko/%EC%82%AC%EC%A7%84/%EA%B2%BD%EB%B3%B5%EA%B6%81%EC%9D%80-%EC%84%9D%EC%96%91%EC%9D%B4-%EC%95%84%EB%A6%84%EB%8B%B5%EA%B3%A0-%EC%84%9C%EC%9A%B8-%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD.jpg?s=612x612&w=0&k=20&c=gKZvvJAShxWls229xvzBJlCHJMJF9rOJn-yOYn1ACeA="
-              className="mt-2"
-            />
+            {talk.image ? (
+              <div>이미지가 있다면 이미지를 출력하세요.</div>
+            ) : (
+              <div>
+                {/* <Card.Img
+                src="https://media.istockphoto.com/id/1676101015/ko/%EC%82%AC%EC%A7%84/%EA%B2%BD%EB%B3%B5%EA%B6%81%EC%9D%80-%EC%84%9D%EC%96%91%EC%9D%B4-%EC%95%84%EB%A6%84%EB%8B%B5%EA%B3%A0-%EC%84%9C%EC%9A%B8-%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD.jpg?s=612x612&w=0&k=20&c=gKZvvJAShxWls229xvzBJlCHJMJF9rOJn-yOYn1ACeA="
+                className="mt-2"
+              /> */}
+              </div>
+            )}
+
             <Card.Text className="mt-3">{talk.content}</Card.Text>
-            <div className="card-setting align-items-center gap-2">
+            <div className="card-setting align-items-center gap-1">
               <div className="card-box">
-                <div>
-                  <BookmarkButton></BookmarkButton>
+                <div className="me-1">
+                  <BookmarkButton count={talk.bookmarkCount}></BookmarkButton>
                 </div>
-                <div className="icon-border d-flex align-items-center gap-1 p-1">
-                  <Image fluid className="icons" src={TextIcon} />
-                  <span className="small">11</span>
+                <div className="icon-border d-flex align-items-center gap-1 pt-1 ps-2 pe-2 pb-1 me-1">
+                  <Image fluid className="icons" src={TextIcon} width="15" />
+                  <span className="small">{talk.commentCount}</span>
                 </div>
                 {/* 담소는 연관 문화재가 없으므로 해당 아이콘을 안보이게 합니다. */}
                 {talk.relatedHeritage ? (
@@ -87,7 +93,7 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
                   <div></div>
                 )}
 
-                <div>
+                <div className="talk-detail-report">
                   <Image
                     fluid
                     className="icons d-flex align-items-center"
