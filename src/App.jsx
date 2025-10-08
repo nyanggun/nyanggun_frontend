@@ -6,6 +6,7 @@ import ExplorationAndTalkPage from "./pages/board/ExplorationAndTalkPage";
 import BadgeAcquisition from "./pages/badge/BadgeAcquisition";
 import ExplorationBoard from "./pages/board/Exploration/ExplorationBoard";
 import ExplorationDetailPage from "./pages/board/Exploration/ExplorationDetailPage";
+import ExplorationEdit from "./pages/board/Exploration/ExplorationEdit";
 import NewExploration from "./pages/board/Exploration/NewExploration";
 import TalkBoardList from "./pages/board/talk/TalkBoardList";
 import TalkBoardDetail from "./pages/board/talk/TalkBoardDetail";
@@ -19,10 +20,13 @@ import ChatbotButton from "./components/common/chatbot/ChatbotButton";
 const App = () => {
 	return (
 		<>
+			<Header />
 			<Routes>
 				<Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
-					{/* <Route index element={<Navigate to="exploration" replace />} /> */}
+					<Route index element={<Navigate to="exploration" replace />} />
 					<Route path="exploration" element={<ExplorationBoard />}></Route>
+					<Route path="exploration/:id" element={<ExplorationDetailPage />} />
+					<Route path="exploration/:id/edit" element={<ExplorationEdit />} />
 					<Route path="exploration/new" element={<NewExploration></NewExploration>}></Route>
 					<Route path="talks" element={<TalkBoardList></TalkBoardList>}></Route>
 					<Route path="talks/detail/:talkId" element={<TalkBoardDetail></TalkBoardDetail>}></Route>
@@ -30,6 +34,7 @@ const App = () => {
 					<Route path="talks/update" element={<TalkUpdate></TalkUpdate>}></Route>
 				</Route>
 			</Routes>
+			<Footer />
 		</>
 	);
 };
