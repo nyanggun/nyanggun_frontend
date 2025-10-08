@@ -1,20 +1,30 @@
 .talk-profile {
-  text-align: center;
+    text-align: center;
 }
 
 .talk-profile-pic {
-  width: 5vw;
-  height: 5vw;
-  max-width: 50px;
-  max-height: 50px;
+    width: 5vw;
+    height: 5vw;
+    max-width: 50px;
+    max-height: 50px;
 }
 
 .icon-border {
-  border: 1px solid #343a40;
-  border-radius: 50px;
+    border: 1px solid #343a40;
+    border-radius: 50px;
 }
 
 .icons {
-  height: 1.2rem;
-  border-color: #343a40;
+    height: 1.2rem;
+    border-color: #343a40;
+}
+.card-setting {
+    display: flex;
+    justify-content: space-between;
+}
+.card-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
