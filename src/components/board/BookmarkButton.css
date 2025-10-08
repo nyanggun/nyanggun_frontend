@@ -1,7 +1,16 @@
 .bookmark-btn {
-  border-color: #343a40 !important;
+	border-color: #343a40 !important;
 }
 .bookmark-btn-img {
-  height: 1rem;
-  border-color: #343a40 !important;
+	height: 1rem;
+	border-color: #343a40 !important;
+}
+
+.bookmark-btn .text-content {
+	/* 텍스트가 한 줄로만 표시되도록 강제 */
+	white-space: nowrap;
+	/* 자신의 영역을 벗어나는 텍스트는 숨김 처리 */
+	overflow: hidden;
+	/* 벗어나는 텍스트를 말줄임표(...)로 표시 */
+	text-overflow: ellipsis;
 }
