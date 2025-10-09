@@ -5,6 +5,7 @@ import api from "../../../config/apiConfig";
 import "./TalkNew.css";
 import { useNavigate } from "react-router-dom";
 import BorderButton from "../../../components/board/BorderButton";
+import { Col, Row } from "react-bootstrap";
 
 //새로운 담소 게시글을 작성할 수 있는 페이지 입니다.
 const TalkNew = () => {
@@ -43,7 +44,9 @@ const TalkNew = () => {
   };
 
   return (
-    <div className="talk-new-container">
+    <Row className="row p-4 justify-content-center m-0  ">
+        <Col xs={12} sm={10} md={6} className=" m-0 p-0">
+        <div className="talk-new-container">
       <WritePostInputBox
         type={"text"}
         placeholder={"제목"}
@@ -73,7 +76,9 @@ const TalkNew = () => {
           ></BorderButton>
         </div>
       </div>
-    </div>
+      </div>
+      </Col>
+    </Row>
   );
 };
 
