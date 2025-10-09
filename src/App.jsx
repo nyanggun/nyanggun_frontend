@@ -16,6 +16,10 @@ import TalkUpdate from "./pages/board/talk/TalkUpdate";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import ChatbotButton from "./components/common/chatbot/ChatbotButton";
+import PhotoPage from "./pages/board/photo/PhotoPage";
+import PhotoNew from "./pages/board/photo/PhotoNew";
+import PhotoDetail from "./pages/board/photo/PhotoDetail";
+import NavigationBar from "./components/common/navigationbar/NavigationBar";
 
 const App = () => {
 	return (
@@ -33,8 +37,13 @@ const App = () => {
 					<Route path="talks/new" element={<TalkNew></TalkNew>}></Route>
 					<Route path="talks/update" element={<TalkUpdate></TalkUpdate>}></Route>
 				</Route>
+                <Route path ="/photos" element={<PhotoPage></PhotoPage>}>
+                    <Route path ="detail/:photoId" element={<PhotoDetail></PhotoDetail>}></Route>
+                    <Route path ="new" element={<PhotoNew></PhotoNew>}/>
+                </Route>
 			</Routes>
 			<Footer />
+        <NavigationBar></NavigationBar>
 		</>
 	);
 };

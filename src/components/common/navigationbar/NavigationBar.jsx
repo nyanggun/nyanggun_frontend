@@ -13,6 +13,7 @@ import {
   MoonStars,
 } from "react-bootstrap-icons";
 import "./NavigationBar.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {
   //네비게이션 버튼들의 상태 입니다.
@@ -28,6 +29,13 @@ const NavigationBar = () => {
   const [isClickBadgeButton, setClickBadgeButton] = useState(false);
   const [isClickPictureButton, setClickPictureButton] = useState(false);
   const [isClickTalkButton, setClickTalkButton] = useState(false);
+
+//현재 경로를 가져옵니다.
+const location = useLocation();
+const currentPath = location.pathname;
+const navigate = useNavigate();
+
+
   return (
     <>
       <Navbar fixed="bottom">
@@ -42,6 +50,7 @@ const NavigationBar = () => {
               setClickBadgeButton(false);
               setClickPictureButton(false);
               setClickTalkButton(false);
+              
             }}
           >
             {isHomeHover || isClickHomeButton ? (
@@ -86,7 +95,7 @@ const NavigationBar = () => {
             <div>사냥꾼 증표</div>
           </div>
           <div
-            className={`navBtn ${isClickPictureButton ? "active" : ""}`}
+            className={`navBtn ${isClickPictureButton || currentPath.startsWith("/photos") ? "active" : ""}`}
             onMouseEnter={() => setPictureHover(true)}
             onMouseLeave={() => setPictureHover(false)}
             onClick={() => {
@@ -95,9 +104,10 @@ const NavigationBar = () => {
               setClickBadgeButton(false);
               setClickPictureButton(true);
               setClickTalkButton(false);
+               navigate("/photos")
             }}
           >
-            {isPictureHover || isClickPictureButton ? (
+            {isPictureHover || isClickPictureButton || currentPath.startsWith("/photos") ? (
               <InboxesFill width={40} height={40}></InboxesFill>
             ) : (
               <Inboxes width={40} height={40}></Inboxes>
@@ -105,7 +115,7 @@ const NavigationBar = () => {
             <div>사진함</div>
           </div>
           <div
-            className={`navBtn ${isClickTalkButton ? "active" : ""}`}
+            className={`navBtn ${isClickTalkButton || currentPath.startsWith("/dorandoran") ? "active" : ""}`}
             onMouseEnter={() => setTalkHover(true)}
             onMouseLeave={() => setTalkHover(false)}
             onClick={() => {
@@ -114,9 +124,10 @@ const NavigationBar = () => {
               setClickBadgeButton(false);
               setClickPictureButton(false);
               setClickTalkButton(true);
+              navigate("/dorandoran")
             }}
           >
-            {isTalkHover || isClickTalkButton ? (
+            {isTalkHover || isClickTalkButton || currentPath.startsWith("/dorandoran") ? (
               <MoonStarsFill width={40} height={40}></MoonStarsFill>
             ) : (
               <MoonStars width={40} height={40}></MoonStars>
