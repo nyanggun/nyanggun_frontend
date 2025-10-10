@@ -105,7 +105,7 @@ const NavigationBar = () => {
           </div>
           <div
             className={`navBtn ${
-              isClickPictureButton || currentPath.startsWith("/photos")
+              isClickPictureButton || currentPath.startsWith("/photobox")
                 ? "active"
                 : ""
             }`}
@@ -117,12 +117,12 @@ const NavigationBar = () => {
               setClickBadgeButton(false);
               setClickPictureButton(true);
               setClickTalkButton(false);
-              navigate("/photos");
+              navigate("/photobox");
             }}
           >
             {isPictureHover ||
             isClickPictureButton ||
-            currentPath.startsWith("/photos") ? (
+            currentPath.startsWith("/photobox") ? (
               <InboxesFill width={40} height={40}></InboxesFill>
             ) : (
               <Inboxes width={40} height={40}></Inboxes>

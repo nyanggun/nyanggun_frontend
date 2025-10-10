@@ -165,7 +165,7 @@ const TalkBoardDetail = () => {
         <div className="comments-input">
           <CommentInput onSubmit={handleCommentSubmit}></CommentInput>
         </div>
-        <div className="comments-list">
+        {talkBoardComment.length > 0 ? ( <div className="comments-list">
           {talkBoardComment.map((comment) => (
             <div key={comment.talkCommentId}>
               <Comment
@@ -199,7 +199,8 @@ const TalkBoardDetail = () => {
               ))}
             </div>
           ))}
-        </div>
+        </div>) : (<div className="comments-none">댓글이 없습니다.</div>) }
+       
       </div>
     </div>
   );

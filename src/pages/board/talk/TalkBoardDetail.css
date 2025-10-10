@@ -26,3 +26,8 @@
     width: 90%; /* 모바일에서 Col 폭 전체 */
   }
 }
+
+.comments-none{
+  margin : 10% 0;
+  margin-bottom : 15%;
+}

@@ -1,10 +1,45 @@
-.photos-img {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3%;
+.photos-container {
+  padding: 0 10%;
 }
 
 .photos-img img {
-    border-radius: 25px;
-    width: 100%;
+  border-radius: 25px;
+  width: 100%;
+}
+
+.masonry-item {
+  width: 150px; /* 원하는 너비 */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.masonry-item:hover {
+  width: 150px; /* 원하는 너비 */
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.masonry-item:hover {
+  transform: scale(1.05);
+}
+.masonry-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.masonry-item:hover::after {
+  opacity: 0.5; /* hover 시 색깔 보임 */
 }
