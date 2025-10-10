@@ -23,6 +23,7 @@ import PhotoPage from "./pages/board/photo/PhotoPage";
 import PhotoNew from "./pages/board/photo/PhotoNew";
 import PhotoDetail from "./pages/board/photo/PhotoDetail";
 import NavigationBar from "./components/common/navigationbar/NavigationBar";
+import Logout from "./pages/board/login-register/Logout";
 
 const App = () => {
 	return (
@@ -31,6 +32,7 @@ const App = () => {
 				<Header />
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
+					<Route path="/logout" element={<Logout />} />
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
 						<Route index element={<Navigate to="exploration" replace />} />
