@@ -1,6 +1,6 @@
 //사진함에서 새로운 사진 업로드를 하는 페이지 입니다.
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig";
@@ -8,31 +8,64 @@ import WritePostInputBox from "../../../components/board/WritePostInputBox";
 import WritingEditor from "../../../components/board/WritingEditor";
 import BorderButton from "../../../components/board/BorderButton";
 import "./PhotoNew.css";
+import { X } from "react-bootstrap-icons";
 
 const PhotoNew = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [contentOrigin, setContentOrigin] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [relatedHeritage, setRelatedHeritage] = useState("");
+  const [uploadImg, setUploadImg] = useState(null);
+
+  const fileInputRef = useRef(null);
   const [tags, setTags] = useState([]);
+  const [input, setInput] = useState("");
 
-  //담소 게시글을 작성하는 메소드 입니다.
-  //서버로 요청을 보냅니다.
-  //현재 회원은 id가 1로 고정되어 있습니다. 로그인 구현 후 변경해야 합니다.
-  const memberId = 1;
-
-  const InputTag = (e) => {
-    const value = e.target.value;
-    // 스페이스 입력 시
-    if (value.endsWith(" ")) {
-      const newTag = value.trim();
-      if (newTag.startsWith("#") && newTag.length > 1) {
-        setTags([...tags, newTag]); // 태그 배열에 추가
-      }
-      setInputValue(""); // 입력창 초기화
-    } else {
-      setInputValue(value);
+  // 파일 선택 시 이미지 미리보기
+  const onchangeImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadImg(URL.createObjectURL(file));
     }
+  };
+  const handleImgUpload = () => {
+    fileInputRef.current.click();
+  };
+
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === " " || e.key === "Enter") {
+  //       e.preventDefault();
+  //       const newTag = input.trim();
+  //       if (newTag && !tags.includes(newTag)) {
+  //         setTags([...tags, newTag]);
+  //         setInput("");
+  //       }
+  //     }
+  //   };
+
+  const handleKeyDown = (e) => {
+    const value = e.target.value;
+
+    // 스페이스나 엔터 입력 시
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault(); // 기본 스페이스 동작 방지
+      const trimmed = value.trim();
+
+      // #로 시작하는지 확인
+      if (trimmed.startsWith("#") && trimmed.length > 1) {
+        if (!tags.includes(trimmed)) {
+          setTags([...tags, trimmed]);
+          setInput(""); // 입력창 초기화
+        }
+      }
+
+      setInput(""); // 입력창 초기화
+    } else {
+      return;
+    }
+  };
+
+  const handleDeleteTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
@@ -40,15 +73,61 @@ const PhotoNew = () => {
       <Col xs={12} sm={10} md={6} className=" m-0 p-0">
         <div className="photo-new-container">
           <div className="photo-button-container">
-            <WritePostInputBox placeholder={"제목"}></WritePostInputBox>
-            <WritePostInputBox placeholder={"연관 문화재"}></WritePostInputBox>
-            <Button type="button" className="photo-button">
+            <WritePostInputBox
+              placeholder={"제목"}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            ></WritePostInputBox>
+            <WritePostInputBox
+              placeholder={"연관 문화재"}
+              value={relatedHeritage}
+              onChange={(e) => setRelatedHeritage(e.target.value)}
+            ></WritePostInputBox>
+
+            <Button
+              type="button"
+              className="photo-button"
+              onClick={handleImgUpload}
+            >
               이미지 업로드
             </Button>
-            <WritePostInputBox
-              placeholder={"태그를 입력하세요"}
-              onChange={InputTag}
-            ></WritePostInputBox>
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={onchangeImageUpload}
+                style={{ display: "none" }}
+              />
+              {uploadImg && (
+                <img
+                  className="photo-imgsize"
+                  src={uploadImg}
+                  alt="업로드된 이미지"
+                />
+              )}
+            </div>
+          </div>
+          <div className="photo-tag">
+            <input
+              className="photo-input"
+              type="text"
+              placeholder="태그를 입력하세요 (# 포함)"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </div>
+          <div className="photo-tag-box">
+            {tags.map((tag, i) => (
+              <div
+                key={i}
+                className="photo-tag-item"
+                onClick={() => handleDeleteTag(tag)}
+              >
+                {tag}
+              </div>
+            ))}
           </div>
 
           <div className="photo-new-button">
