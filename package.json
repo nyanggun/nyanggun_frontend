@@ -14,6 +14,7 @@
     "@ckeditor/ckeditor5-font": "^47.0.0",
     "@ckeditor/ckeditor5-react": "^11.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^47.0.0",
+    "@egjs/react-infinitegrid": "^4.12.0",
     "@googlemaps/markerclusterer": "^2.6.2",
     "@vis.gl/react-google-maps": "^1.5.5",
     "axios": "^1.12.2",

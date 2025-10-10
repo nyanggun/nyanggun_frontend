@@ -1,7 +1,7 @@
 .btn.add-post {
 	border: 1px solid white;
-	bottom: 40px;
-	right: 20px;
+	bottom: 100px;
+	right: 10px;
 	z-index: 100000;
 	position: fixed;
 }

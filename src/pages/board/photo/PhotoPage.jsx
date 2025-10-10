@@ -18,12 +18,12 @@ const PhotoPage = () => {
             <div className="photo-menu-margin">
                 <Menu></Menu>
             </div>
-           <PhotoList></PhotoList>
+       
            <div>
             <Outlet></Outlet>
            </div>
             <div>
-                <WritePostButton location={"photos"}></WritePostButton>
+                <WritePostButton location="/photobox"></WritePostButton>
             </div>
         </div>
     );

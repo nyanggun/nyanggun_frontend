@@ -95,7 +95,7 @@ const navigate = useNavigate();
             <div>사냥꾼 증표</div>
           </div>
           <div
-            className={`navBtn ${isClickPictureButton || currentPath.startsWith("/photos") ? "active" : ""}`}
+            className={`navBtn ${isClickPictureButton || currentPath.startsWith("/photobox") ? "active" : ""}`}
             onMouseEnter={() => setPictureHover(true)}
             onMouseLeave={() => setPictureHover(false)}
             onClick={() => {
@@ -104,10 +104,10 @@ const navigate = useNavigate();
               setClickBadgeButton(false);
               setClickPictureButton(true);
               setClickTalkButton(false);
-               navigate("/photos")
+               navigate("/photobox")
             }}
           >
-            {isPictureHover || isClickPictureButton || currentPath.startsWith("/photos") ? (
+            {isPictureHover || isClickPictureButton || currentPath.startsWith("/photobox") ? (
               <InboxesFill width={40} height={40}></InboxesFill>
             ) : (
               <Inboxes width={40} height={40}></Inboxes>
