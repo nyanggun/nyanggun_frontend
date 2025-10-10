@@ -1,0 +1,10 @@
+.photos-img {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3%;
+}
+
+.photos-img img {
+    border-radius: 25px;
+    width: 100%;
+}

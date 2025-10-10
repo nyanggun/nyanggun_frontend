@@ -1,0 +1,20 @@
+.photo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* 가로 가운데 정렬 추가 */
+}
+
+.photo-search-margin {
+    margin-bottom: 2%;
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .photo-search-margin {
+        width: 100%; /* 모바일에서 Col 폭 전체 */
+    }
+}
+.photo-menu-margin {
+    margin-bottom: 2%;
+}
