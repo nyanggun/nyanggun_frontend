@@ -1,9 +1,10 @@
-import { React, useState } from "react";
-import axios from "axios";
+import { React, useContext, useState } from "react";
+import api from "../../../config/apiConfig";
 import WritingEditor from "../../../components/board/WritingEditor";
 import WritingPostInputBox from "../../../components/board/WritePostInputBox";
 import BorderButton from "../../../components/board/BorderButton";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const NewExploration = () => {
 	const navigate = useNavigate();
@@ -11,6 +12,9 @@ const NewExploration = () => {
 	const [title, setTitle] = useState("");
 	const [relatedHeritage, setRelatedHeritage] = useState("");
 	const [content, setContent] = useState("");
+
+	const { user } = useContext(AuthContext);
+	console.log(user);
 
 	const cancel = () => {
 		// 이전 페이지로 보내기
@@ -27,16 +31,16 @@ const NewExploration = () => {
 			title: title,
 			relatedHeritage: relatedHeritage,
 			content: content, // 현재는 텍스트와 HTML 태그만 포함된 내용
-			memberId: 1,
+			memberId: user.id,
 		};
 
 		try {
-			const response = await axios.post("http://localhost:8080/api/exploration", postData);
+			const response = await api.post("http://localhost:8080/explorations", postData);
 			console.log("서버 응답:", response.data);
 
 			//
 			const newPostId = response.data.id;
-			const newPostUrl = `/dorandoran/exploration/${newPostId}`; // App.js에 정의된 경로와 일치해야 합니다.
+			const newPostUrl = `/dorandoran/explorations/${newPostId}`; // App.js에 정의된 경로와 일치해야 합니다.
 			navigate(newPostUrl);
 		} catch (error) {
 			console.error("게시글 등록 오류:", error);
