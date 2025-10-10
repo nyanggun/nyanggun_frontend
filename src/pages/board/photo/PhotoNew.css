@@ -1,0 +1,29 @@
+.photo-new-container {
+    margin : 3% 0%;
+
+}
+.photo-new-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2%;
+}
+.photo-new-button-gap {
+  margin-left: 2%;
+}
+.photo-button{
+    width: 100%;
+    color :  #343a40;
+    background-color: transparent;
+    border : 1px solid #343a40;
+    border-radius: 30px;
+}
+.photo-button:hover{
+    background-color: #343a40;
+}
+.photo-button:active{
+    background-color: #343a40 !important;
+}
+
+.photo-button-container{
+
+}

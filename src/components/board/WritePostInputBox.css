@@ -1,3 +1,7 @@
 .custom-form-control::placeholder {
-	text-align: center;
+  text-align: center;
+}
+.custom-form-control:focus {
+  box-shadow: none;
+  border: 1px solid #ccced1;
 }
