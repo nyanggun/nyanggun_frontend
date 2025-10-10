@@ -4,10 +4,13 @@ import Menu from "../../../components/common/menu/Menu";
 import { Row, Col } from "react-bootstrap";
 import "./PhotoPage.css";
 import WritePostButton from "../../../components/board/WritePostButton";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import PhotoList from "./PhotoList";
 
 const PhotoPage = () => {
+    const location = useLocation();
+    const isPostListPage = location.pathname === "/photobox/list";
+
     return (
         <div>
             <div className="photo-container">
@@ -18,13 +21,17 @@ const PhotoPage = () => {
             <div className="photo-menu-margin">
                 <Menu></Menu>
             </div>
-       
-           <div>
-            <Outlet></Outlet>
-           </div>
+
             <div>
-                <WritePostButton location="/photobox"></WritePostButton>
+                <Outlet></Outlet>
             </div>
+            {isPostListPage ? (
+                <div>
+                    <WritePostButton location="/photobox"></WritePostButton>
+                </div>
+            ) : (
+                <div></div>
+            )}
         </div>
     );
 };

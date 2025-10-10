@@ -25,6 +25,7 @@ import PhotoDetail from "./pages/board/photo/PhotoDetail";
 import NavigationBar from "./components/common/navigationbar/NavigationBar";
 import PhotoList from "./pages/board/photo/PhotoList";
 import Logout from "./pages/board/login-register/Logout";
+import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
 
 const App = () => {
 	return (
@@ -51,6 +52,7 @@ const App = () => {
 						<Route path="list" element={<PhotoList></PhotoList>}></Route>
 						<Route path="detail/:photoId" element={<PhotoDetail></PhotoDetail>}></Route>
 						<Route path="new" element={<PhotoNew></PhotoNew>} />
+                        <Route path="update" element={<PhotoUpdate></PhotoUpdate>}></Route>
 					</Route>
 				</Routes>
 				<Footer />
