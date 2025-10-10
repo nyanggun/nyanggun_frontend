@@ -1,5 +1,5 @@
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
-import axios from "axios";
+import api from "../../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 
@@ -11,26 +11,17 @@ import CommentButton from "../../../components/board/button/CommentButton";
 import ReportButton from "../../../components/board/button/ReportButton";
 import BorderButton from "../../../components/board/BorderButton";
 
-const TalkDetail = ({
-	id,
-	memberNickname,
-	createdAt,
-	title,
-	img,
-	content,
-	bookmarkCount,
-	commentCount,
-	relatedHeritage,
-}) => {
+const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount, commentCount, relatedHeritage }) => {
 	const navigate = useNavigate();
 
 	const editExploration = () => {
 		// ✨ 데이터를 담아서 페이지를 이동시키는 올바른 코드
-		navigate(`/dorandoran/exploration/${id}/edit`, {
+		navigate(`/dorandoran/explorations/${id}/edit`, {
 			state: {
 				originTitle: title,
 				originRelatedHeritage: relatedHeritage,
 				originContent: content,
+				memberId: member.id,
 			},
 		});
 	};
@@ -38,18 +29,13 @@ const TalkDetail = ({
 		// 사용자에게 진짜 삭제할 것인지 확인
 		if (window.confirm("정말로 삭제하시겠습니까?")) {
 			try {
+				console.log("글쓴이Id:" + member.id);
 				// 확인을 누르면 서버에 삭제 요청을 보냄
-				await axios.delete(`http://localhost:8080/api/exploration/${id}`, {
-					state: {
-						originTitle: title,
-						originRelatedHeritage: relatedHeritage,
-						originContent: content,
-					},
-				});
+				await api.delete(`http://localhost:8080/explorations/${id}`);
 
 				// 3. 삭제 성공 시, 사용자에게 알리고 목록 페이지 등으로 이동시킵니다.
 				alert("삭제가 완료되었습니다.");
-				navigate("/dorandoran/exploration"); // 게시물 목록 페이지 경로로 변경해주세요.
+				navigate("/dorandoran/explorations"); // 게시물 목록 페이지 경로로 변경해주세요.
 			} catch (error) {
 				// 4. 삭제 실패 시, 에러를 처리합니다.
 				console.error("게시물 삭제에 실패했습니다:", error);
@@ -76,7 +62,7 @@ const TalkDetail = ({
 								/>
 							</div>
 							<div>
-								<span>{memberNickname}</span>
+								<span>{member.nickname}</span>
 							</div>
 							<div>
 								<span className="small">{createdAt}</span>

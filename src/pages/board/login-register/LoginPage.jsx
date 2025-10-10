@@ -37,7 +37,7 @@ const LoginPage = () => {
 		setLoading(true);
 		try {
 			//1. 로그인 API 호출
-			const loginResponse = await api.post("/api/auth/login", formData);
+			const loginResponse = await api.post("/auth/login", formData);
 			//2. JWT 토큰 추출 및 localstorage에 저장
 			const token = loginResponse.headers["authorization"];
 			if (token) {

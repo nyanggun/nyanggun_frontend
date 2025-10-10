@@ -28,7 +28,8 @@ const ExplorationAndTalkPage = () => {
 	// }, [isMenuOneClick])
 
 	const location = useLocation();
-	const isPostListPage = location.pathname === "/dorandoran/exploration" || location.pathname === "/dorandoran/talks";
+	const isPostListPage =
+		location.pathname === "/dorandoran/explorations" || location.pathname === "/dorandoran/talks";
 
 	return (
 		<div>
@@ -41,7 +42,7 @@ const ExplorationAndTalkPage = () => {
 			<div className="menu-margin">
 				<Menu
 					menuOne={"문화재 탐방기"}
-					menuOneLink={"/dorandoran/exploration"}
+					menuOneLink={"/dorandoran/explorations"}
 					menuTwoLink={"/dorandoran/talks"}
 					menuTwo={"문화재 담소"} /*chooseMenu={handleMenuChange}*/
 				></Menu>

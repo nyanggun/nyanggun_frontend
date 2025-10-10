@@ -23,6 +23,7 @@ import PhotoPage from "./pages/board/photo/PhotoPage";
 import PhotoNew from "./pages/board/photo/PhotoNew";
 import PhotoDetail from "./pages/board/photo/PhotoDetail";
 import NavigationBar from "./components/common/navigationbar/NavigationBar";
+import Logout from "./pages/board/login-register/Logout";
 
 const App = () => {
 	return (
@@ -31,13 +32,14 @@ const App = () => {
 				<Header />
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
+					<Route path="/logout" element={<Logout />} />
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
-						<Route index element={<Navigate to="exploration" replace />} />
-						<Route path="exploration" element={<ExplorationBoard />}></Route>
-						<Route path="exploration/:id" element={<ExplorationDetailPage />} />
-						<Route path="exploration/:id/edit" element={<ExplorationEdit />} />
-						<Route path="exploration/new" element={<NewExploration></NewExploration>}></Route>
+						<Route index element={<Navigate to="explorations" replace />} />
+						<Route path="explorations" element={<ExplorationBoard />}></Route>
+						<Route path="explorations/:id" element={<ExplorationDetailPage />} />
+						<Route path="explorations/:id/edit" element={<ExplorationEdit />} />
+						<Route path="explorations/new" element={<NewExploration></NewExploration>}></Route>
 						<Route path="talks" element={<TalkBoardList></TalkBoardList>}></Route>
 						<Route path="talks/detail/:talkId" element={<TalkBoardDetail></TalkBoardDetail>}></Route>
 						<Route path="talks/new" element={<TalkNew></TalkNew>}></Route>
