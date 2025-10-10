@@ -30,11 +30,10 @@ const NavigationBar = () => {
   const [isClickPictureButton, setClickPictureButton] = useState(false);
   const [isClickTalkButton, setClickTalkButton] = useState(false);
 
-//현재 경로를 가져옵니다.
-const location = useLocation();
-const currentPath = location.pathname;
-const navigate = useNavigate();
-
+  //현재 경로를 가져옵니다.
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
 
   return (
     <>
@@ -50,7 +49,6 @@ const navigate = useNavigate();
               setClickBadgeButton(false);
               setClickPictureButton(false);
               setClickTalkButton(false);
-              
             }}
           >
             {isHomeHover || isClickHomeButton ? (
@@ -80,7 +78,11 @@ const navigate = useNavigate();
             <div>문화재 도감</div>
           </div>
           <div
-            className={`navBtn ${isClickBadgeButton ? "active" : ""}`}
+            className={`navBtn ${
+              isClickBadgeButton || currentPath.startsWith("/badges")
+                ? "active"
+                : ""
+            }`}
             onMouseEnter={() => setBadgeHover(true)}
             onMouseLeave={() => setBadgeHover(false)}
             onClick={() => {
@@ -89,13 +91,24 @@ const navigate = useNavigate();
               setClickBadgeButton(true);
               setClickPictureButton(false);
               setClickTalkButton(false);
+              navigate("/badges");
             }}
           >
-            <YinYang width={40} height={40}></YinYang>
+            {isBadgeHover ||
+            isClickBadgeButton ||
+            currentPath.startsWith("/badges") ? (
+              <YinYang width={40} height={40}></YinYang>
+            ) : (
+              <YinYang width={40} height={40}></YinYang>
+            )}
             <div>사냥꾼 증표</div>
           </div>
           <div
-            className={`navBtn ${isClickPictureButton || currentPath.startsWith("/photos") ? "active" : ""}`}
+            className={`navBtn ${
+              isClickPictureButton || currentPath.startsWith("/photos")
+                ? "active"
+                : ""
+            }`}
             onMouseEnter={() => setPictureHover(true)}
             onMouseLeave={() => setPictureHover(false)}
             onClick={() => {
@@ -104,10 +117,12 @@ const navigate = useNavigate();
               setClickBadgeButton(false);
               setClickPictureButton(true);
               setClickTalkButton(false);
-               navigate("/photos")
+              navigate("/photos");
             }}
           >
-            {isPictureHover || isClickPictureButton || currentPath.startsWith("/photos") ? (
+            {isPictureHover ||
+            isClickPictureButton ||
+            currentPath.startsWith("/photos") ? (
               <InboxesFill width={40} height={40}></InboxesFill>
             ) : (
               <Inboxes width={40} height={40}></Inboxes>
@@ -115,7 +130,11 @@ const navigate = useNavigate();
             <div>사진함</div>
           </div>
           <div
-            className={`navBtn ${isClickTalkButton || currentPath.startsWith("/dorandoran") ? "active" : ""}`}
+            className={`navBtn ${
+              isClickTalkButton || currentPath.startsWith("/dorandoran")
+                ? "active"
+                : ""
+            }`}
             onMouseEnter={() => setTalkHover(true)}
             onMouseLeave={() => setTalkHover(false)}
             onClick={() => {
@@ -124,10 +143,12 @@ const navigate = useNavigate();
               setClickBadgeButton(false);
               setClickPictureButton(false);
               setClickTalkButton(true);
-              navigate("/dorandoran")
+              navigate("/dorandoran");
             }}
           >
-            {isTalkHover || isClickTalkButton || currentPath.startsWith("/dorandoran") ? (
+            {isTalkHover ||
+            isClickTalkButton ||
+            currentPath.startsWith("/dorandoran") ? (
               <MoonStarsFill width={40} height={40}></MoonStarsFill>
             ) : (
               <MoonStars width={40} height={40}></MoonStars>
