@@ -27,13 +27,15 @@ const BadgeAcquisition = () => {
   // 지도 좌표 클릭하면 해당 주소 보여주는 useState
   const [mapAddress, setMapAddress] = useState("");
   // 지도 중심 관리(내 위치) 상태 관리
-  const [center, setCenter] = useState({ lat: 37.5642135, lng: 127.0016985 });
+  const [center, setCenter] = useState(null);
   // 국가유산청 api 상태 관리
   const [heritageList, setHeritageList] = useState([]);
   // 획득 반경에 있는 문화재 상태 관리
   const [nearest, setNearest] = useState(null);
   // 버튼 활성화 상태 관리
   const [isNear, setIsNear] = useState(false);
+  // 내 위치 관리
+  const [myLocation, setMyLocation] = useState(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -52,13 +54,12 @@ const BadgeAcquisition = () => {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log(
-            center,
-            typeof center?.latitude,
-            typeof center?.longitude
-          );
-          setCenter({ lat: latitude, lng: longitude });
-          fetchAddress(latitude, longitude);
+          console.log(center, center?.lat, center?.lng);
+          setMyLocation({ lat: latitude, lng: longitude });
+          if (!center) {
+            setCenter({ lat: latitude, lng: longitude });
+            fetchAddress(latitude, longitude);
+          }
 
           let minDistance = Infinity;
           let nearestTarget = null;
@@ -219,21 +220,17 @@ const BadgeAcquisition = () => {
           <Map
             defaultZoom={13}
             // defaultCenter={{ lat: 37.5642135, lng: 127.0016985 }}
-            defaultCenter={center}
+            center={center}
             mapId="badge_acquisition_map"
             className="custom-map ba-border"
             onClick={handleMapClick}
-            onCameraChanged={(ev) =>
-              console.log(
-                "camera changed:",
-                ev.detail.center,
-                "zoom:",
-                ev.detail.zoom
-              )
-            }
+            onCameraChanged={(e) => {
+              const newCenter = e.detail.center;
+              setCenter(newCenter);
+            }}
           >
             {/* 현재 내 위치(내 위치가 안잡히면 default 위치(서울시청)) 표시 */}
-            <AdvancedMarker position={center} />
+            {myLocation && <AdvancedMarker position={myLocation} />}
             {/* heritage 좌표에 마커 표시 */}
             {heritageList.map((item, index) => (
               <AdvancedMarker
