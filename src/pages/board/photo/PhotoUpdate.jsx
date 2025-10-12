@@ -13,26 +13,31 @@ const PhotoUpdate = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const {
+        photoId,
         title: initialTitle,
         relatedHeritage: initialRelatedHeritage,
-        nickname: initialNickname,
+        photoBoxPicturePath: initialPhotoBoxPicturePath,
         tags: initialTags,
     } = location.state || {};
     const [title, setTitle] = useState(initialTitle || "");
     const [relatedHeritage, setRelatedHeritage] = useState(
         initialRelatedHeritage || ""
     );
-    const [uploadImg, setUploadImg] = useState(null);
+    const [uploadImg, setUploadImg] = useState(
+        initialPhotoBoxPicturePath || null
+    );
     const [tags, setTags] = useState(initialTags || []);
 
     const fileInputRef = useRef(null);
     const [input, setInput] = useState("");
+    const [file, setFile] = useState(null);
 
     // 파일 선택 시 이미지 미리보기
     const onchangeImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
             setUploadImg(URL.createObjectURL(file));
+            setFile(file);
         }
     };
     const handleImgUpload = () => {
@@ -63,6 +68,45 @@ const PhotoUpdate = () => {
 
     const handleDeleteTag = (tagToRemove) => {
         setTags(tags.filter((tag) => tag !== tagToRemove));
+    };
+
+    //사진함 게시글을 수정하는 메소드 입니다.
+    //보낼 파일 객체
+    const photoData = {
+        title: title,
+        relatedHeritage: relatedHeritage,
+        tags: tags,
+    };
+    const handleUpdatePhotoBox = async () => {
+        if (!title.trim() || !relatedHeritage.trim() || tags.length === 0) {
+            alert("내용을 모두 입력해 주세요.");
+            return;
+        }
+
+        // FormData 생성
+        const formData = new FormData();
+        formData.append(
+            "photoData",
+            new Blob([JSON.stringify(photoData)], { type: "application/json" })
+        );
+        if (file) {
+            formData.append("file", file);
+        }
+        try {
+            const response = await api.put(`/photobox/${photoId}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            alert("게시글을 수정했습니다.");
+            console.log("사진함 게시글을 수정했습니다.", response.data);
+            navigate("/photobox");
+        } catch (error) {
+            console.error(
+                "사진함 게시글을 수정하는 데 문제 발생",
+                error.message
+            );
+        }
     };
 
     return (
@@ -99,7 +143,11 @@ const PhotoUpdate = () => {
                             {uploadImg && (
                                 <img
                                     className="photo-imgsize"
-                                    src={uploadImg}
+                                    src={
+                                        uploadImg.startsWith("/uploads/")
+                                            ? `http://localhost:8080${uploadImg}` // 서버 이미지
+                                            : uploadImg // 새로 선택한 이미지 (blob URL)
+                                    }
                                     alt="업로드된 이미지"
                                 />
                             )}
@@ -133,7 +181,7 @@ const PhotoUpdate = () => {
                                 btnName={"취소"}
                                 buttonColor={"red"}
                                 clickBtn={() => {
-                                    navigate(`/photobox/list`);
+                                    navigate(`/photobox/detail/${photoId}`);
                                 }}
                             ></BorderButton>
                         </div>
@@ -141,6 +189,9 @@ const PhotoUpdate = () => {
                             <BorderButton
                                 btnName={"완료"}
                                 buttonColor={"black"}
+                                clickBtn={() => {
+                                    handleUpdatePhotoBox();
+                                }}
                             ></BorderButton>
                         </div>
                     </div>

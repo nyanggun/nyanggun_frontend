@@ -39,4 +39,14 @@
 }
 .tags {
     margin-top: 3%;
+    display: flex; /* flex 사용 */
+    flex-wrap: wrap;
+    text-decoration: underline; /* 밑줄 */
+    gap: 8px;
+    margin-right: 4px; /* 태그 간 간격 */
+}
+.talk-photo-imgsize {
+    width: 100%;
+    padding: 3%;
+    border-radius: 30px;
 }

@@ -7,7 +7,13 @@ import { Card, Container, Row, Col, Image } from "react-bootstrap";
 import BorderButton from "./BorderButton";
 import { useEffect, useState } from "react";
 
-const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
+const TalkDetail = ({
+    talk,
+    onClick,
+    onDeleteTalk,
+    onUpdateTalk,
+    onBookmark,
+}) => {
     //시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
     //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
     const [timeAgo, setTimeAgo] = useState("");
@@ -64,8 +70,13 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
                                 <span className="small">{timeAgo}</span>
                             </div>
                         </div>
-                        {talk.image ? (
-                            <div>이미지가 있다면 이미지를 출력하세요.</div>
+                        {talk.photoBoxPicturePath ? (
+                            <div>
+                                <img
+                                    className="talk-photo-imgsize"
+                                    src={`http://localhost:8080${talk.photoBoxPicturePath}`}
+                                ></img>
+                            </div>
                         ) : (
                             <div>
                                 <Card.Img
@@ -74,9 +85,11 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
                                 />
                             </div>
                         )}
-                        {talk.tags ? (
+                        {talk.tags && talk.tags.length > 0 ? (
                             <div className="tags">
-                                <u>#궁궐</u> <u>#4대궁</u>
+                                {talk.tags.map((tag, index) => (
+                                    <span key={index}>{tag} </span>
+                                ))}
                             </div>
                         ) : (
                             <div></div>
@@ -88,6 +101,8 @@ const TalkDetail = ({ talk, onClick, onDeleteTalk, onUpdateTalk }) => {
                                 <div className="me-1">
                                     <BookmarkButton
                                         count={talk.bookmarkCount}
+                                        onBookmark={onBookmark}
+                                        isBookmarked={talk.bookmarked}
                                     ></BookmarkButton>
                                 </div>
                                 {/* 사진함은 댓글이 없으므로 해당 아이콘을 보이지 않게 합니다. */}
