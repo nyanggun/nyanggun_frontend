@@ -27,13 +27,15 @@ const BadgeAcquisition = () => {
   // 지도 좌표 클릭하면 해당 주소 보여주는 useState
   const [mapAddress, setMapAddress] = useState("");
   // 지도 중심 관리(내 위치) 상태 관리
-  const [center, setCenter] = useState({ lat: 37.5642135, lng: 127.0016985 });
+  const [center, setCenter] = useState(null);
   // 국가유산청 api 상태 관리
   const [heritageList, setHeritageList] = useState([]);
   // 획득 반경에 있는 문화재 상태 관리
   const [nearest, setNearest] = useState(null);
   // 버튼 활성화 상태 관리
   const [isNear, setIsNear] = useState(false);
+  // 내 위치 관리
+  const [myLocation, setMyLocation] = useState(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -52,13 +54,12 @@ const BadgeAcquisition = () => {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log(
-            center,
-            typeof center?.latitude,
-            typeof center?.longitude
-          );
-          setCenter({ lat: latitude, lng: longitude });
-          fetchAddress(latitude, longitude);
+          console.log(center, center?.lat, center?.lng);
+          setMyLocation({ lat: latitude, lng: longitude });
+          if (!center) {
+            setCenter({ lat: latitude, lng: longitude });
+            fetchAddress(latitude, longitude);
+          }
 
           let minDistance = Infinity;
           let nearestTarget = null;
@@ -78,7 +79,7 @@ const BadgeAcquisition = () => {
           });
 
           // X미터 반경 이내면 그 문화재 세팅하고 버튼 활성화
-          if (nearestTarget && minDistance < 1000) {
+          if (nearestTarget && minDistance < 5000) {
             setNearest(nearestTarget);
             setIsNear(true);
           } else {
@@ -105,7 +106,7 @@ const BadgeAcquisition = () => {
   const fetchAddress = useCallback(async (lat, lng) => {
     try {
       const response = await api.get(
-        `/api/googlemap/coordinate?lat=${lat}&lng=${lng}`
+        `/googlemap/coordinate?lat=${lat}&lng=${lng}`
       );
       if (response.data && response.data.address) {
         setMapAddress(response.data.address);
@@ -120,11 +121,10 @@ const BadgeAcquisition = () => {
   // 지도를 클릭 했을 때 그 위치 정보 처리
   const handleMapClick = useCallback(
     (e) => {
-      console.log("🔥 지도 클릭 이벤트 발생");
+      console.log("지도 클릭 이벤트 발생");
       if (!e.detail || !e.detail.latLng) return;
       const lat = e.detail.latLng.lat;
       const lng = e.detail.latLng.lng;
-      console.log("📍 클릭 좌표:", lat, lng);
       fetchAddress(lat, lng);
       setCenter({ lat, lng }); // 지도 중심 이동
     },
@@ -138,7 +138,7 @@ const BadgeAcquisition = () => {
   useEffect(() => {
     const fetchHeritages = async () => {
       try {
-        const response = await api.get("/api/heritages/markers");
+        const response = await api.get("/badges/markers");
         if (response.data.data) {
           console.log(response.data.data);
           setHeritageList(response.data.data);
@@ -149,6 +149,45 @@ const BadgeAcquisition = () => {
     };
     fetchHeritages();
   }, []);
+
+  //----------------------------------------------------------------------
+
+  // 지도 위의 배지 클릭 시 발생 이벤트 : input 박스에 증표 주소 표시
+  const handleMarkerClick = useCallback(
+    (item) => {
+      console.log("증표 클릭 이벤트 발생");
+      const lat = item.latitude;
+      const lng = item.longitude;
+
+      fetchAddress(lat, lng);
+      setCenter({ lat, lng }); // 지도 중심 이동
+    },
+    [fetchAddress]
+  );
+
+  // 인증하기 버튼 클릭했을 때 발생하는 이벤트
+  // 나중에 id로 바꿔줘야함
+  // 인증하기 버튼 누르면 저장
+  const acquired = false; // 즉시 렌더링해서 지도에 표시해주기 위해 추가
+  const handleAquire = async () => {
+    alert("클릭 : " + nearest.id + " 이름:" + nearest.name);
+    if (!nearest) return; // 가까운 문화재 없으면 return
+    try {
+      const response = await api.post(`/badges/acquire/${nearest.id}}`); // 가장 가까운 문화재 id 서버로 전달
+      if (response.data.success) {
+        alert(`${nearest.name} 배지 획득`);
+        setHeritageList((prev) =>
+          prev.map((heritage) =>
+            heritage.id === nearest.id
+              ? { ...heritage, acquired: true }
+              : heritage
+          )
+        );
+      }
+    } catch (error) {
+      alert("서버 오류 발생! 배지를 획득할 수 없습니다:", error);
+    }
+  };
 
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">
@@ -181,21 +220,17 @@ const BadgeAcquisition = () => {
           <Map
             defaultZoom={13}
             // defaultCenter={{ lat: 37.5642135, lng: 127.0016985 }}
-            defaultCenter={center}
+            center={center}
             mapId="badge_acquisition_map"
             className="custom-map ba-border"
             onClick={handleMapClick}
-            onCameraChanged={(ev) =>
-              console.log(
-                "camera changed:",
-                ev.detail.center,
-                "zoom:",
-                ev.detail.zoom
-              )
-            }
+            onCameraChanged={(e) => {
+              const newCenter = e.detail.center;
+              setCenter(newCenter);
+            }}
           >
             {/* 현재 내 위치(내 위치가 안잡히면 default 위치(서울시청)) 표시 */}
-            <AdvancedMarker position={center} />
+            {myLocation && <AdvancedMarker position={myLocation} />}
             {/* heritage 좌표에 마커 표시 */}
             {heritageList.map((item, index) => (
               <AdvancedMarker
@@ -204,23 +239,32 @@ const BadgeAcquisition = () => {
                   lat: Number(item.latitude),
                   lng: Number(item.longitude),
                 }}
-                title={item.name}
+                onClick={() => handleMarkerClick(item)}
               >
                 <img
-                  src={item.badgeUrl}
+                  src={encodeURI(item.badgeUrl)}
+                  alt={item.name}
+                  title={item.name}
                   width={30}
                   height={30}
                   onError={(e) => {
-                    const fallback = encodeURI(
+                    const defaultImg = encodeURI(
                       "https://cdn.jsdelivr.net/gh/nyanggun/nyanggoon-badges@main/기본.png?flush_cache=true"
                     );
-                    e.currentTarget.src = fallback;
+                    e.currentTarget.src = defaultImg;
                   }}
-                  style={{
-                    background: "rgba(255,255,255,0.8)",
-                    borderRadius: "50%",
-                    boxShadow: "0 0 5px rgba(0,0,0,0.3)",
-                  }}
+                  style={
+                    acquired
+                      ? {
+                          background: "rgba(255,255,255,0.8)",
+                          borderRadius: "90%",
+                          boxShadow: "0 0 3px rgba(0,0,0,0.3)",
+                          cursor: "pointer",
+                        }
+                      : {
+                          opacity: 0.5,
+                        }
+                  }
                 />
               </AdvancedMarker>
             ))}
@@ -230,10 +274,13 @@ const BadgeAcquisition = () => {
         <CertificationButton
           text={
             isNear
-              ? `🎯 ${nearest?.name} 인증하기`
+              ? acquired
+                ? "획득한 문화재"
+                : `${nearest?.name} 인증하기`
               : "문화재 근처에서만 인증 가능"
           }
-          disabled={!isNear}
+          onClick={handleAquire}
+          disabled={!isNear || acquired}
         />
       </Col>
     </Row>

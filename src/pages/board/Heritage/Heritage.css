@@ -1,0 +1,146 @@
+/* 목록 및 상세 페이지 레이아웃 통합 */
+
+/* === A. 기본 설정 및 컨테이너 === */
+body, #root {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    background-color: #f8f8f8;
+}
+
+.list-page-container, .detail-page-container {
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 80px; /* 하단 네비게이션 공간 확보 */
+}
+
+/* === B. 문화재 목록 스타일 (CulturalHeritageList.jsx) === */
+
+/* --- 목록 그리드 컨테이너 (모바일 기본: 1열) --- */
+.heritage-list-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* 모바일: 1열 */
+    gap: 20px; 
+    padding: 15px;
+}
+
+/* --- 목록 항목 스타일 (ListItem.jsx) --- */
+.list-item-card {
+    display: flex; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.item-image {
+    width: 120px; 
+    height: 120px; 
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.item-content {
+    padding: 10px;
+    position: relative;
+    flex-grow: 1;
+}
+
+.item-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.item-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.9em;
+    color: #ffc107;
+}
+
+
+/* === 상세 페이지 스타일 (CulturalHeritageDetail.jsx) === */
+
+.content {
+    padding: 15px;
+}
+
+/* --- 정보 박스 (InfoBox.jsx) --- */
+.heritage-info-box .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.star-rating {
+    display: inline-block;
+    background-color: #ffc107;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.summary-details {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    margin: 15px 0;
+}
+
+/* --- 지도 섹션 (MapSection.jsx) --- */
+.map-section {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.map-section img {
+    width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* === D. 데스크톱 반응형 미디어 쿼리 (768px 이상) === */
+@media (min-width: 768px) {
+    
+    /* 1. 목록 페이지 그리드 변경 (4열) */
+    .heritage-list-grid {
+        max-width: 1200px; 
+        margin: 0 auto;
+        padding: 20px;
+        grid-template-columns: repeat(4, 1fr); /* 데스크톱: 4열 */
+        gap: 25px;
+    }
+    
+    .list-item-card {
+        flex-direction: column; /* 목록 항목을 세로로 변경 */
+        text-align: center;
+    }
+
+    .item-image {
+        width: 100%; 
+        height: 200px; 
+    }
+    
+    .item-rating {
+        position: static;
+        margin-top: 10px;
+        display: block;
+    }
+
+    /* 2. 상세 페이지 너비 제한 */
+    .detail-page-container {
+        max-width: 800px; 
+    }
+}
