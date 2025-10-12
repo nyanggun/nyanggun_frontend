@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 import Subtitle from "../../../components/board/Subtitle";
@@ -29,19 +30,25 @@ const ExplorationBoard = () => {
 		}
 	};
 	return (
-		<div>
+		<>
 			{explorations.map((exploration) => (
 				// Link 컴포넌트로 감싸고, to 속성에 동적 URL을 지정합니다.
 				// 클릭 시 페이지 새로고침이 일어나지 않도록 a 태그 대신 Link를 사용합니다.
-				<Link
-					key={exploration.id}
-					to={`${exploration.id}`}
-					style={{ textDecoration: "none", color: "inherit" }} // Link 기본 스타일 제거
-				>
-					<ExplorationPost {...exploration} />
-				</Link>
+				<Row className="justify-content-center">
+					<Col xs={11} sm={10} md={8} lg={6} className="">
+						<Link
+							key={exploration.id}
+							to={`${exploration.id}`}
+							style={{ textDecoration: "none", color: "inherit" }} // Link 기본 스타일 제거
+						>
+							<div className="border-bottom">
+								<ExplorationPost {...exploration} />
+							</div>
+						</Link>
+					</Col>
+				</Row>
 			))}
-		</div>
+		</>
 	);
 };
 

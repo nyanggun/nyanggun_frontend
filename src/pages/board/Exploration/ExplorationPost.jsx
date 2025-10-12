@@ -48,8 +48,8 @@ const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount,
 
 	return (
 		<Row className="h-100 justify-content-center align-items-center m-0">
-			<Col xs={12} sm={10} md={8} lg={6}>
-				<Card className="rounded-0 border-0 border-bottom">
+			<Col xs={11} sm={10} md={8} lg={6}>
+				<Card className="rounded-0 border-0">
 					<Card.Body>
 						<Card.Title className="mt-3">{title}</Card.Title>
 						<div className="d-flex align-items-center gap-2">
