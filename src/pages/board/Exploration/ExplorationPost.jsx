@@ -1,8 +1,10 @@
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
 import api from "../../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import DOMPurify from "dompurify";
 
+import { AuthContext } from "../../../contexts/AuthContext";
 import BookmarkButton from "../../../components/board/BookmarkButton";
 import "../../../components/board/TalkDetail.css";
 
@@ -13,6 +15,33 @@ import BorderButton from "../../../components/board/BorderButton";
 
 const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount, commentCount, relatedHeritage }) => {
 	const navigate = useNavigate();
+	const { user } = useContext(AuthContext);
+	const [isBookmarked, setIsBookmarked] = useState(false);
+	const [bookmarkCounts, setBookmarkCounts] = useState(bookmarkCount);
+
+	useEffect(() => {
+		const checkBookmarkStatus = async () => {
+			if (!user || !id) return; // user나 id가 없으면 실행하지 않음
+
+			try {
+				const response = await api.get(`http://localhost:8080/explorations/bookmarks`, {
+					params: {
+						memberId: user.id,
+						explorationId: id,
+					},
+				});
+				console.log(response.data);
+				// Spring Boot에서 보낸 ApiResponseDto의 data 필드(boolean)를 사용합니다.
+				console.log("asdf" + response.data.data);
+				setIsBookmarked(response.data.data);
+			} catch (err) {
+				console.error("북마크 상태 조회 실패:", err);
+				// 에러 발생 시 기본값 false 유지
+				setIsBookmarked(false);
+			}
+		};
+		checkBookmarkStatus(); // 정의한 함수를 호출합니다.
+	}, [id, user]); // id나 user 정보가 바뀔 때마다 다시 실행됩니다.
 
 	const editExploration = () => {
 		// ✨ 데이터를 담아서 페이지를 이동시키는 올바른 코드
@@ -41,6 +70,29 @@ const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount,
 				console.error("게시물 삭제에 실패했습니다:", error);
 				alert("삭제에 실패했습니다. 다시 시도해주세요.");
 			}
+		}
+	};
+
+	const onBookmark = async () => {
+		try {
+			if (!isBookmarked) {
+				const response = await api.post(`http://localhost:8080/explorations/bookmarks`, {
+					explorationId: id,
+					memberId: user.id,
+				});
+				setBookmarkCounts(bookmarkCounts + 1);
+			} else {
+				const response = await api.delete(`http://localhost:8080/explorations/bookmarks`, {
+					data: {
+						explorationId: id,
+						memberId: user.id,
+					},
+				});
+				setBookmarkCounts(bookmarkCounts - 1);
+			}
+			setIsBookmarked(!isBookmarked);
+		} catch (err) {
+			console.error(err);
 		}
 	};
 
@@ -75,7 +127,11 @@ const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount,
 						<div className="row d-flex justify-content-between">
 							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-2 py-1">
 								<div>
-									<BookmarkButton count={bookmarkCount}></BookmarkButton>
+									<BookmarkButton
+										count={bookmarkCounts}
+										onBookmark={onBookmark}
+										isBookmarked={isBookmarked}
+									></BookmarkButton>
 								</div>
 								<div>
 									<RelatedHeritageButton relatedHeritage={relatedHeritage} />
