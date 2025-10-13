@@ -106,7 +106,7 @@ const Comment = ({
             </div>
             <div className="comment-btn">
               <img src={WarningRed} width={15}></img>
-              <span className="comment-font red">댓글 신고</span>
+              <span className="comment-font-red">댓글 신고</span>
             </div>
           </div>
           <div className="comment-btn-delete">
