@@ -10,10 +10,10 @@ const ChatbotButton = () => {
   const { user } = useContext(AuthContext);
 
   const handleChatbotClick = () => {
-    // if (!user) {
-    //   alert("로그인 후 이용 가능합니다.");
-    //   return;
-    // }
+    if (!user) {
+      alert("로그인 후 이용 가능합니다.");
+      return;
+    }
     setIsOpen(!isOpen);
   };
 
