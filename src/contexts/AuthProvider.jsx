@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 로그아웃 처리 - 모든 정보 제거
-  // 사용자 상태(state)를 초기화하고 로컬 저장소에서 인증 정보(token, user)를 제거하는 로그아웃(logout) 과정을 담당
+  // 사용자 상태(state)를 초기화하고 로컬 저장소에서 인증 정보(token, user)를 제거하는 로그아웃(logout) 과정을 담당
   const logout = () => {
     setUser(null); // React Context user 상태가 변하므로 자식 컴포넌트 모두가 리렌더링
     localStorage.removeItem("token");
