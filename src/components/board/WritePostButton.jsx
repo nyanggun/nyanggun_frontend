@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Image } from "react-bootstrap";
 
 import WritingButtonImage from "../../assets/writing-button-image.svg";
 import "./WritePostButton.css";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const WritePostButton = ({ location }) => {
+  const userData = useContext(AuthContext);
   const handleClick = () => {
-    window.location.href = location + "/new";
+    if (userData.user?.id) {
+      window.location.href = location + "/new";
+    } else {
+      alert("로그인이 필요합니다.");
+    }
   };
 
   return (

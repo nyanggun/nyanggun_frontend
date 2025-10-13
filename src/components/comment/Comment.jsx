@@ -112,7 +112,7 @@ const Comment = ({
               <span className="comment-font-red">댓글 신고</span>
             </div>
           </div>
-          {memberId === userData.user.id ? (
+          {memberId === userData.user?.id ? (
             <div className="comment-btn-delete">
               <BorderButton
                 btnName={"수정"}

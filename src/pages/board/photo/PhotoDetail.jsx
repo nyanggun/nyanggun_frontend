@@ -7,6 +7,7 @@ const PhotoDetail = () => {
   const navigate = useNavigate();
   const [photoBoard, setPhotoBoard] = useState(null);
   const { photoId } = useParams(); // URL의 :id 값을 id로 추출
+  
 
   const onUpdatePhoto = () => {
     navigate(`/photobox/update`, {

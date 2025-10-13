@@ -15,7 +15,7 @@ const TalkDetail = ({
   onUpdateTalk,
   onBookmark,
 }) => {
-  const { user, setUser } = useContext(AuthContext);
+  const userData = useContext(AuthContext);
   //시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
   //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
   const [timeAgo, setTimeAgo] = useState("");
@@ -91,7 +91,16 @@ const TalkDetail = ({
               <div></div>
             )}
 
-            <Card.Text className="mt-3">{talk.content}</Card.Text>
+            <Card.Text
+              className={`mt-3 ${
+                currentPath.startsWith("/dorandoran/talks/detail") ||
+                currentPath.startsWith("/photobox/detail")
+                  ? ""
+                  : "multi-line-ellipsis"
+              }`}
+            >
+              {talk.content}
+            </Card.Text>
             <div className="card-setting align-items-center gap-1">
               <div className="card-box">
                 <div className="me-1">
@@ -128,30 +137,33 @@ const TalkDetail = ({
                   />
                 </div>
               </div>
-              {(talk.memberId === user.id &&
-                currentPath !== "/dorandoran/talks") ||
-              currentPath === "/photobox/detail/1" ? (
-                <div className="comment-btn-delete">
-                  <BorderButton
-                    btnName={"수정"}
-                    buttonColor={"black"}
-                    clickBtn={() => {
-                      onUpdateTalk();
-                    }}
-                  ></BorderButton>
-                  <span> </span>
-                  <BorderButton
-                    btnName={"삭제"}
-                    buttonColor={"red"}
-                    clickBtn={() => {
-                      onDeleteTalk();
-                    }}
-                  ></BorderButton>
-                </div>
+              {/* 게시글 작성 아이디 = 유저 번호 */}
+
+              {/* 현재 페이지가 상세 페이지일때만 버튼 노출 */}
+              {currentPath.startsWith("/dorandoran/talks/detail") ||
+              currentPath.startsWith("/photobox/detail") ? (
+                talk.memberId === userData.user?.id ? (
+                  <div className="comment-btn-delete">
+                    <BorderButton
+                      btnName="수정"
+                      buttonColor="black"
+                      clickBtn={onUpdateTalk}
+                    />
+                    <span> </span>
+                    <BorderButton
+                      btnName="삭제"
+                      buttonColor="red"
+                      clickBtn={onDeleteTalk}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )
               ) : (
                 <div></div>
               )}
             </div>
+
             <hr className="border-1 p-0"></hr>
           </Card.Body>
         </Card>
