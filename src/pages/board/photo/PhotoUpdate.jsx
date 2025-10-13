@@ -1,8 +1,7 @@
-//사진함에서 새로운 사진 업로드를 하는 페이지 입니다.
-
+//사진함을 수정할 수 있는 페이지 입니다.
 import { useRef, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig";
 import WritePostInputBox from "../../../components/board/WritePostInputBox";
 import WritingEditor from "../../../components/board/WritingEditor";
@@ -10,61 +9,28 @@ import BorderButton from "../../../components/board/BorderButton";
 import "./PhotoNew.css";
 import { X } from "react-bootstrap-icons";
 
-const PhotoNew = () => {
+const PhotoUpdate = () => {
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [relatedHeritage, setRelatedHeritage] = useState("");
-    const [uploadImg, setUploadImg] = useState(null);
+    const location = useLocation();
+    const {
+        photoId,
+        title: initialTitle,
+        relatedHeritage: initialRelatedHeritage,
+        photoBoxPicturePath: initialPhotoBoxPicturePath,
+        tags: initialTags,
+    } = location.state || {};
+    const [title, setTitle] = useState(initialTitle || "");
+    const [relatedHeritage, setRelatedHeritage] = useState(
+        initialRelatedHeritage || ""
+    );
+    const [uploadImg, setUploadImg] = useState(
+        initialPhotoBoxPicturePath || null
+    );
+    const [tags, setTags] = useState(initialTags || []);
+
     const fileInputRef = useRef(null);
-    const [tags, setTags] = useState([]);
     const [input, setInput] = useState("");
     const [file, setFile] = useState(null);
-
-    //보낼 파일 객체
-    const photoData = {
-        title,
-        relatedHeritage,
-        tags,
-    };
-
-    // 사진함 게시글을 생성하는 메소드 입니다.
-
-    const handlePhotoBox = async () => {
-        if (
-            !title.trim() ||
-            !relatedHeritage.trim() ||
-            !file ||
-            tags.length === 0
-        ) {
-            alert("내용을 모두 입력해 주세요.");
-            return;
-        }
-
-        // FormData 생성
-        const formData = new FormData();
-        formData.append(
-            "photoData",
-            new Blob([JSON.stringify(photoData)], { type: "application/json" })
-        );
-        if (file) {
-            formData.append("file", file);
-        }
-        try {
-            const response = await api.post("/photobox", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            alert("게시글을 작성했습니다.");
-            console.log("사진함 게시글을 작성했습니다.", response.data);
-            navigate("/photobox");
-        } catch (error) {
-            console.error(
-                "사진함 게시글을 작성하는 데 문제 발생",
-                error.message
-            );
-        }
-    };
 
     // 파일 선택 시 이미지 미리보기
     const onchangeImageUpload = (e) => {
@@ -104,6 +70,45 @@ const PhotoNew = () => {
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
+    //사진함 게시글을 수정하는 메소드 입니다.
+    //보낼 파일 객체
+    const photoData = {
+        title: title,
+        relatedHeritage: relatedHeritage,
+        tags: tags,
+    };
+    const handleUpdatePhotoBox = async () => {
+        if (!title.trim() || !relatedHeritage.trim() || tags.length === 0) {
+            alert("내용을 모두 입력해 주세요.");
+            return;
+        }
+
+        // FormData 생성
+        const formData = new FormData();
+        formData.append(
+            "photoData",
+            new Blob([JSON.stringify(photoData)], { type: "application/json" })
+        );
+        if (file) {
+            formData.append("file", file);
+        }
+        try {
+            const response = await api.put(`/photobox/${photoId}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            alert("게시글을 수정했습니다.");
+            console.log("사진함 게시글을 수정했습니다.", response.data);
+            navigate("/photobox");
+        } catch (error) {
+            console.error(
+                "사진함 게시글을 수정하는 데 문제 발생",
+                error.message
+            );
+        }
+    };
+
     return (
         <Row className="row p-4 justify-content-center m-0 ">
             <Col xs={12} sm={10} md={6} className=" m-0 p-0">
@@ -138,7 +143,11 @@ const PhotoNew = () => {
                             {uploadImg && (
                                 <img
                                     className="photo-imgsize"
-                                    src={uploadImg}
+                                    src={
+                                        uploadImg.startsWith("/uploads/")
+                                            ? `http://localhost:8080${uploadImg}` // 서버 이미지
+                                            : uploadImg // 새로 선택한 이미지 (blob URL)
+                                    }
                                     alt="업로드된 이미지"
                                 />
                             )}
@@ -172,7 +181,7 @@ const PhotoNew = () => {
                                 btnName={"취소"}
                                 buttonColor={"red"}
                                 clickBtn={() => {
-                                    navigate(`/photobox/list`);
+                                    navigate(`/photobox/detail/${photoId}`);
                                 }}
                             ></BorderButton>
                         </div>
@@ -180,7 +189,9 @@ const PhotoNew = () => {
                             <BorderButton
                                 btnName={"완료"}
                                 buttonColor={"black"}
-                                clickBtn={() => handlePhotoBox()}
+                                clickBtn={() => {
+                                    handleUpdatePhotoBox();
+                                }}
                             ></BorderButton>
                         </div>
                     </div>
@@ -190,4 +201,4 @@ const PhotoNew = () => {
     );
 };
 
-export default PhotoNew;
+export default PhotoUpdate;
