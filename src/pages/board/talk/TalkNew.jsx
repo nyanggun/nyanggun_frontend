@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import WritePostInputBox from "../../../components/board/WritePostInputBox";
 import WritingEditor from "../../../components/board/WritingEditor";
 import api from "../../../config/apiConfig";
@@ -6,6 +6,7 @@ import "./TalkNew.css";
 import { useNavigate } from "react-router-dom";
 import BorderButton from "../../../components/board/BorderButton";
 import { Col, Row } from "react-bootstrap";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 //새로운 담소 게시글을 작성할 수 있는 페이지 입니다.
 const TalkNew = () => {
@@ -13,11 +14,10 @@ const TalkNew = () => {
   const [title, setTitle] = useState("");
   const [contentOrigin, setContentOrigin] = useState("");
   const content = contentOrigin.replace(/<[^>]+>/g, "");
-
+  const userData = useContext(AuthContext);
   //담소 게시글을 작성하는 메소드 입니다.
   //서버로 요청을 보냅니다.
-  //현재 회원은 id가 1로 고정되어 있습니다. 로그인 구현 후 변경해야 합니다.
-  const memberId = 1;
+
   const handleTalkNew = async (title, content) => {
     // 유효성 검사
     if (!title.trim() || !content.trim()) {
@@ -26,7 +26,7 @@ const TalkNew = () => {
     }
     try {
       const response = await api.post("/talks", {
-        memberId,
+        memberId: userData.user.id,
         title,
         content,
       });
@@ -45,38 +45,38 @@ const TalkNew = () => {
 
   return (
     <Row className="row p-4 justify-content-center m-0  ">
-        <Col xs={12} sm={10} md={6} className=" m-0 p-0">
+      <Col xs={12} sm={10} md={6} className=" m-0 p-0">
         <div className="talk-new-container">
-      <WritePostInputBox
-        type={"text"}
-        placeholder={"제목"}
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-      ></WritePostInputBox>
-      <WritingEditor
-        value={contentOrigin}
-        onChange={setContentOrigin}
-      ></WritingEditor>
+          <WritePostInputBox
+            type={"text"}
+            placeholder={"제목"}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          ></WritePostInputBox>
+          <WritingEditor
+            value={contentOrigin}
+            onChange={setContentOrigin}
+          ></WritingEditor>
 
-      <div className="talk-new-button">
-        <div className="talk-new-button-gap">
-          <BorderButton
-            btnName={"취소"}
-            buttonColor={"red"}
-            clickBtn={() => {
-              navigate(`/dorandoran/talks`);
-            }}
-          ></BorderButton>
+          <div className="talk-new-button">
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName={"취소"}
+                buttonColor={"red"}
+                clickBtn={() => {
+                  navigate(`/dorandoran/talks`);
+                }}
+              ></BorderButton>
+            </div>
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName={"완료"}
+                buttonColor={"black"}
+                clickBtn={() => handleTalkNew(title, content)}
+              ></BorderButton>
+            </div>
+          </div>
         </div>
-        <div className="talk-new-button-gap">
-          <BorderButton
-            btnName={"완료"}
-            buttonColor={"black"}
-            clickBtn={() => handleTalkNew(title, content)}
-          ></BorderButton>
-        </div>
-      </div>
-      </div>
       </Col>
     </Row>
   );

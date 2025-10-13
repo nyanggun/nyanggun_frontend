@@ -2,10 +2,11 @@ import React from "react";
 import { Row, Col, Form, Image } from "react-bootstrap";
 import SmileFace from "../../assets/smile-face.svg";
 import FindImage from "../../assets/find.svg";
-
-const Subtitle = ({ text }) => {
+import "./Subtitle.css";
+const Subtitle = ({ text, onSearchBoard }) => {
   const handleClick = () => {
     console.log("검색");
+    onSearchBoard();
   };
 
   return (
@@ -23,7 +24,10 @@ const Subtitle = ({ text }) => {
           className="d-flex justify-content-center align-items-center m-0 rounded-5 border border-dark"
           xs={9}
         >
-          <Form.Control className="border-0" />
+          <Form.Control
+            className="form-input-container"
+            onKeyDown={handleClick}
+          />
           <Image as="Button" src={FindImage} onClick={handleClick} />
         </Col>
       </Row>

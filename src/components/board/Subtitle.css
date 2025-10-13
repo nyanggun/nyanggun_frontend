@@ -1,0 +1,6 @@
+.form-input-container {
+  border: 0;
+}
+.form-input-container:focus {
+  box-shadow: none;
+}
