@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CommentProfile from "../../assets/comment-profile.svg";
 import CommentIcon from "../../assets/comment.svg";
 import CommentInput from "./CommentInput";
@@ -6,17 +6,20 @@ import WarningRed from "../../assets/warning-red.svg";
 import { Row, Col, Button, Image, Form } from "react-bootstrap";
 import "./Comment.css";
 import BorderButton from "../board/BorderButton";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Comment = ({
   nickname,
   createdAt,
   content,
   profile,
+  memberId,
   talkCommentId,
   onCommentSubmit,
   onUpdateComment,
   onDeleteComment,
 }) => {
+  const userData = useContext(AuthContext);
   const [isCommentAdd, setCommentAdd] = useState(false);
   //댓글 수정 모드로 변환
   const [isUpdateMode, setIsUpdateMode] = useState(false);
@@ -109,21 +112,25 @@ const Comment = ({
               <span className="comment-font-red">댓글 신고</span>
             </div>
           </div>
-          <div className="comment-btn-delete">
-            <BorderButton
-              btnName={"수정"}
-              buttonColor={"black"}
-              clickBtn={() => {
-                setIsUpdateMode(true);
-              }}
-            ></BorderButton>
-            <span> </span>
-            <BorderButton
-              btnName={"삭제"}
-              buttonColor={"red"}
-              clickBtn={() => onDeleteComment(talkCommentId)}
-            ></BorderButton>
-          </div>
+          {memberId === userData.user.id ? (
+            <div className="comment-btn-delete">
+              <BorderButton
+                btnName={"수정"}
+                buttonColor={"black"}
+                clickBtn={() => {
+                  setIsUpdateMode(true);
+                }}
+              ></BorderButton>
+              <span> </span>
+              <BorderButton
+                btnName={"삭제"}
+                buttonColor={"red"}
+                clickBtn={() => onDeleteComment(talkCommentId)}
+              ></BorderButton>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
         {isCommentAdd ? (
           <div className="comment-add">

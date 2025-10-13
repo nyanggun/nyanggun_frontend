@@ -5,7 +5,8 @@ import ReportIcon from "../../assets/report-icon.svg";
 import TextIcon from "../../assets/text-icon.svg";
 import { Card, Container, Row, Col, Image } from "react-bootstrap";
 import BorderButton from "./BorderButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const TalkDetail = ({
   talk,
@@ -14,9 +15,11 @@ const TalkDetail = ({
   onUpdateTalk,
   onBookmark,
 }) => {
+  const { user, setUser } = useContext(AuthContext);
   //시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
   //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
   const [timeAgo, setTimeAgo] = useState("");
+  const currentPath = location.pathname;
   const formatTimeAgo = (time) => {
     const now = new Date();
     const past = new Date(time); // 서버에서 받은 LocalDateTime 문자열
@@ -125,24 +128,29 @@ const TalkDetail = ({
                   />
                 </div>
               </div>
-
-              <div className="comment-btn-delete">
-                <BorderButton
-                  btnName={"수정"}
-                  buttonColor={"black"}
-                  clickBtn={() => {
-                    onUpdateTalk();
-                  }}
-                ></BorderButton>
-                <span> </span>
-                <BorderButton
-                  btnName={"삭제"}
-                  buttonColor={"red"}
-                  clickBtn={() => {
-                    onDeleteTalk();
-                  }}
-                ></BorderButton>
-              </div>
+              {(talk.memberId === user.id &&
+                currentPath !== "/dorandoran/talks") ||
+              currentPath === "/photobox/detail/1" ? (
+                <div className="comment-btn-delete">
+                  <BorderButton
+                    btnName={"수정"}
+                    buttonColor={"black"}
+                    clickBtn={() => {
+                      onUpdateTalk();
+                    }}
+                  ></BorderButton>
+                  <span> </span>
+                  <BorderButton
+                    btnName={"삭제"}
+                    buttonColor={"red"}
+                    clickBtn={() => {
+                      onDeleteTalk();
+                    }}
+                  ></BorderButton>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
             <hr className="border-1 p-0"></hr>
           </Card.Body>
