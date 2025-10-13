@@ -158,7 +158,7 @@ const TalkBoardDetail = () => {
       try {
         const response = await api.delete(`/talks/bookmark/${talkId}`);
         alert("북마크를 취소했습니다.");
-        //getTalkBoard();
+        getTalkBoard();
       } catch (error) {
         console.log("북마크를 취소하는 중 오류 발생", error.message);
       }
@@ -167,7 +167,7 @@ const TalkBoardDetail = () => {
       try {
         const response = await api.post(`/talks/bookmark/${talkId}`);
         alert("북마크했습니다.");
-        //getTalkBoard();
+        getTalkBoard();
       } catch (error) {
         console.log("북마크를 등록하는 중 오류 발생", error.message);
       }

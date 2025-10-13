@@ -28,6 +28,7 @@ import Logout from "./pages/board/login-register/Logout";
 import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
 
 const App = () => {
+
   return (
     <>
       <AuthProvider>
