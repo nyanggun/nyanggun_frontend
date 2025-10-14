@@ -42,14 +42,13 @@ const NavigationBar = () => {
           {/* 문화재 도감 */}
           <div
             className={`navBtn ${
-              currentPath.startsWith("/encyclopedia") ? "active" : ""
+              currentPath.startsWith("/heritages") ? "active" : ""
             }`}
-            onMouseEnter={() => setHover("encyclopedia")}
+            onMouseEnter={() => setHover("heritage")}
             onMouseLeave={() => setHover("")}
-            onClick={() => navigate("/encyclopedia")}
+            onClick={() => navigate("/heritages")}
           >
-            {hover === "encyclopedia" ||
-            currentPath.startsWith("/encyclopedia") ? (
+            {hover === "heritage" || currentPath.startsWith("/heritages") ? (
               <BookFill width={40} height={40} />
             ) : (
               <Book width={40} height={40} />
