@@ -200,7 +200,12 @@ const BadgeAcquisition = () => {
             <h2 className="">사냥꾼 증표</h2>
           </div>
         </div>
-        <Menu className="" />
+        <Menu
+          menuOne={"문화재 인증"}
+          menuOneLink={"/"}
+          menuTwoLink={"/"}
+          menuTwo={"증표함"}
+        ></Menu>
         <InputGroup className="flex-nowrap my-4 ba-border">
           <InputGroup.Text>
             <Image fluid className="icons" src={GeoAltIcon} />
