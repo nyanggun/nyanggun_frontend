@@ -1,4 +1,4 @@
-import { Card, Container, Row, Col, Image } from "react-bootstrap";
+import { Card, Container, Row, Col, Image, Carousel } from "react-bootstrap";
 import api from "../../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
@@ -13,7 +13,17 @@ import CommentButton from "../../../components/board/button/CommentButton";
 import ReportButton from "../../../components/board/button/ReportButton";
 import BorderButton from "../../../components/board/BorderButton";
 
-const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount, commentCount, relatedHeritage }) => {
+const TalkDetail = ({
+	id,
+	createdAt,
+	title,
+	imagePathList,
+	content,
+	member,
+	bookmarkCount,
+	commentCount,
+	relatedHeritage,
+}) => {
 	const navigate = useNavigate();
 	const { user } = useContext(AuthContext);
 	const [isBookmarked, setIsBookmarked] = useState(false);
@@ -30,9 +40,7 @@ const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount,
 						explorationId: id,
 					},
 				});
-				console.log(response.data);
 				// Spring Boot에서 보낸 ApiResponseDto의 data 필드(boolean)를 사용합니다.
-				console.log("asdf" + response.data.data);
 				setIsBookmarked(response.data.data);
 			} catch (err) {
 				console.error("북마크 상태 조회 실패:", err);
@@ -120,7 +128,27 @@ const TalkDetail = ({ id, createdAt, title, img, content, member, bookmarkCount,
 								<span className="small">{createdAt}</span>
 							</div>
 						</div>
-						<Card.Img src={img} className="mt-2" />
+						<Carousel interval={null} className="mt-3 bg-light rounded">
+							{/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
+							{imagePathList.map((imagePath, index) => (
+								// 2. 각 이미지마다 Carousel.Item을 생성합니다.
+								//    React가 각 항목을 식별할 수 있도록 고유한 'key'를 꼭 넣어주어야 합니다.
+								<Carousel.Item key={index}>
+									{console.log(`http://localhost:8080${imagePath}`)}
+									<img
+										className="d-block w-100"
+										// 3. src에 현재 순회 중인 이미지 주소(imagePath)를 넣어줍니다.
+										src={`http://localhost:8080${imagePath}`}
+										alt={`Slide ${index + 1}`}
+										style={{
+											maxHeight: "450px",
+											objectFit: "contain", // 이미지가 잘리지 않게 비율 유지
+											margin: "0 auto",
+										}}
+									/>
+								</Carousel.Item>
+							))}
+						</Carousel>
 						<Card.Text as="div" className="">
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
