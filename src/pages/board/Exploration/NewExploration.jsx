@@ -85,7 +85,7 @@ const NewExploration = () => {
 					onChange={(e) => setRelatedHeritage(e.target.value)}
 				/>
 				<WritingEditor value={content} onChange={setContent} />
-				{/* --- 아래 UI가 추가됩니다 --- */}
+				{/* 이미지 추가 */}
 				<div className="mt-3">
 					<input
 						type="file"
