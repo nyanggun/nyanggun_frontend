@@ -43,16 +43,10 @@ const HeritageEncyclopediaBoardList = () => {
         </div>
         <div>
           {list.content.map((heritage) => (
-            <Link
+            <EncyclopediaEventListColumn
               key={heritage.id}
-              to={`/heritages/detail/${heritage.id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <EncyclopediaEventListColumn
-                key={heritage.id}
-                heritage={heritage}
-              />
-            </Link>
+              heritage={heritage}
+            />
           ))}
         </div>
         <div>

@@ -4,11 +4,15 @@ import { Col, Row, Image } from "react-bootstrap";
 import api from "../../../config/apiConfig";
 import { useParams } from "react-router-dom";
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import BookmarkButton from "../../../components/board/BookmarkButton";
 
 const HeritageEncyclopediaDetail = () => {
   const [heritage, setHeritage] = useState(null);
   const { HeritageEncyclopediaId } = useParams();
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [count, setCount] = useState(0);
 
   const fetchHeritageDetail = async () => {
     try {
@@ -16,7 +20,8 @@ const HeritageEncyclopediaDetail = () => {
         `/heritages/detail/${HeritageEncyclopediaId}`
       );
 
-      console.log(response.data.data);
+      console.log("??", response.data.data);
+      console.log(response.data.success);
 
       if (response.data.success) {
         setHeritage(response.data.data);
@@ -28,7 +33,34 @@ const HeritageEncyclopediaDetail = () => {
 
   useEffect(() => {
     fetchHeritageDetail();
-  }, [HeritageEncyclopediaId]);
+    if (heritage) {
+      setIsBookmarked(heritage.bookmarked);
+      setCount(heritage.bookmarkCount);
+    }
+  }, [heritage]);
+
+  const bookMarkClick = async () => {
+    if (!heritage) return;
+    console.log("heritage.bookmarked", heritage.bookmarked);
+    console.log("isBookmarked", isBookmarked);
+    try {
+      if (isBookmarked) {
+        const response = await api.delete(`/heritages/bookmark/${heritage.id}`);
+        if (response.data.success) {
+          setIsBookmarked(false);
+          setCount((prev) => prev - 1);
+        }
+      } else {
+        const response = await api.post(`/heritages/bookmark/${heritage.id}`);
+        if (response.data.success) {
+          setIsBookmarked(true);
+          setCount((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      console.log("북마크 처리에 실패했습니다.", error);
+    }
+  };
 
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">
@@ -54,6 +86,13 @@ const HeritageEncyclopediaDetail = () => {
                   {heritage.name}({heritage.chineseName})
                 </strong>
               </span>
+            </div>
+            <div className="d-flex justify-content-end mb-3">
+              <BookmarkButton
+                count={count}
+                isBookmarked={isBookmarked}
+                onBookmark={bookMarkClick}
+              ></BookmarkButton>
             </div>
             <div className="mb-4">
               <p className="mb-0 fs-6">소재지 : {heritage.address}</p>
