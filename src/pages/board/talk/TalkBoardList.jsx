@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import TalkDetail from "../../../components/board/TalkDetail";
 import api from "../../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
@@ -6,20 +6,43 @@ import "./TalkBoardList.css";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 const TalkBoardList = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const userData = useContext(AuthContext);
   const [talkBoard, setTalkBoard] = useState([]);
   const navigate = useNavigate();
-  // 담소 게시글을 가져오는 api
+
+  // let cursor = null;
+  // let hasNext = false;
+  // ref를 사용하여 최신 값 유지
+  const cursor = useRef(null);
+  const hasNext = useRef(true);
+
+  // 담소 게시글을 가져오는 메소드 입니다.
   const getTalkBoard = async () => {
+    console.log("tempCursor: ", cursor);
+    console.log("tempHasNext: ", hasNext);
+
     try {
-      const response = await api.get("/talks");
-      //내림차순으로 정렬합니다.
-      const sortedData = response.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setTalkBoard(sortedData);
+      const response = await api.get("/talks", {
+        params: { cursor: cursor.current },
+      });
+
+      const {
+        contents,
+        nextCursor,
+        hasNext: hasNextFromServer,
+      } = response.data.data;
+
+      cursor.current = nextCursor;
+      hasNext.current = hasNextFromServer;
+
+      setTalkBoard((prev) => [
+        ...prev,
+        ...contents.filter(
+          (item) => !prev.some((p) => p.talkId === item.talkId)
+        ),
+      ]);
+
       console.log("담소 게시글을 가져왔습니다.", response.data);
-      console.log("유저 정보 확인 : ", user);
     } catch (error) {
       console.error(
         "담소 게시글을 가져오는 데 오류가 발생했습니다.",
@@ -27,9 +50,22 @@ const TalkBoardList = () => {
       );
     }
   };
-
   useEffect(() => {
     getTalkBoard();
+
+    //스크롤이 끝에 도달했을 때 게시글 더 불러오기
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight >= documentHeight - 100 && hasNext.current) {
+        getTalkBoard();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

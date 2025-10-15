@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import TalkDetail from "../../../components/board/TalkDetail";
 import api from "../../../config/apiConfig";
 import { useEffect, useState } from "react";
+import PhotoList from "./PhotoList";
 const PhotoDetail = () => {
   const navigate = useNavigate();
   const [photoBoard, setPhotoBoard] = useState(null);
   const { photoId } = useParams(); // URL의 :id 값을 id로 추출
-  
 
   const onUpdatePhoto = () => {
     navigate(`/photobox/update`, {
@@ -89,6 +89,7 @@ const PhotoDetail = () => {
       ) : (
         <p>로딩중...</p>
       )}
+      <PhotoList></PhotoList>
     </div>
   );
 };
