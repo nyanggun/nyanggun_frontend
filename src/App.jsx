@@ -13,7 +13,7 @@ import TalkBoardList from "./pages/board/talk/TalkBoardList";
 import TalkBoardDetail from "./pages/board/talk/TalkBoardDetail";
 import TalkNew from "./pages/board/talk/TalkNew";
 import TalkUpdate from "./pages/board/talk/TalkUpdate";
-
+import TalkSearchResult from "./pages/board/talk/TalkSearchResult";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import ChatbotButton from "./components/common/chatbot/ChatbotButton";
@@ -28,6 +28,7 @@ import Logout from "./pages/board/login-register/Logout";
 import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
 import HeritageEncyclopediaBoardList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardList";
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
+import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
 
 const App = () => {
   return (
@@ -63,6 +64,10 @@ const App = () => {
               path="talks/update"
               element={<TalkUpdate></TalkUpdate>}
             ></Route>
+            <Route
+              path="talks/search"
+              element={<TalkSearchResult></TalkSearchResult>}
+            />
           </Route>
           <Route>
             <Route
@@ -86,6 +91,11 @@ const App = () => {
               element={<PhotoDetail></PhotoDetail>}
             ></Route>
             <Route path="new" element={<PhotoNew></PhotoNew>} />
+            <Route path="update" element={<PhotoUpdate></PhotoUpdate>} />
+            <Route
+              path="search"
+              element={<PhotoSearchResult></PhotoSearchResult>}
+            />
           </Route>
         </Routes>
         <Footer />

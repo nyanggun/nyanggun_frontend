@@ -46,7 +46,7 @@ const PhotoList = () => {
       ]);
 
       //setPhotoBoard(sortedData);
-      console.log("사진함 사진 목록을 불러왔습니다.", photoBoard);
+      console.log("사진함 사진 목록을 불러왔습니다.", response2.data);
     } catch (error) {
       console.log(
         "사진 목록을 불러오는 중 오류가 발생했습니다.",
