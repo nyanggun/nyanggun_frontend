@@ -1,5 +1,5 @@
 // PhotoMasonry.jsx
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import "./PhotoList.css";
 import { Row, Col } from "react-bootstrap";
@@ -16,27 +16,69 @@ const PhotoList = () => {
   const navigate = useNavigate();
   const [photoBoard, setPhotoBoard] = useState([]);
   const userData = useContext(AuthContext);
+  // let cursor = null;
+  // let hasNext = false;
+  // ref를 사용하여 최신 값 유지
+  const cursor = useRef(null);
+  const hasNext = useRef(true);
 
-  // 아이템이 끝에 도달했을 때 호출되는 콜백
-  // const onRequestAppend = () => {
-  //     const nextId = items.length + 1;
-  //     const newItems = [
-  //         { id: nextId, src: Img1 },
-  //         { id: nextId + 1, src: Img2 },
-  //         { id: nextId + 2, src: Img3 },
-  //     ];
-  //     setItems([...items, ...newItems]);
-  // };
+  const onRequestAppend = async () => {
+    if (hasNext.current === false) return;
+    try {
+      // console.log("커서 요청 2:");
+      const response2 = await api.get("/photobox", {
+        params: { cursor: cursor.current },
+      });
+
+      cursor.current = response2.data.data.nextCursor;
+      hasNext.current = response2.data.data.hasNext;
+      // console.log("tempCursor2: ", cursor);
+      // console.log("tempHasNext2: ", hasNext);
+      // console.log("서버의 cursor 값 2:", response2.data.data.nextCursor);
+
+      const { contents, nextCursor, hasNext: newHasNext } = response2.data.data;
+
+      setPhotoBoard((prev) => [
+        ...prev,
+        ...contents.filter(
+          (item) => !prev.some((p) => p.photoBoxId === item.photoBoxId)
+        ),
+      ]);
+
+      //setPhotoBoard(sortedData);
+      console.log("사진함 사진 목록을 불러왔습니다.", photoBoard);
+    } catch (error) {
+      console.log(
+        "사진 목록을 불러오는 중 오류가 발생했습니다.",
+        error.message
+      );
+    }
+  };
 
   //사진 목록을 불러오는 메소드 입니다.
   const handlePhotoBoxList = async () => {
+    console.log("tempCursor: ", cursor);
+    console.log("tempHasNext: ", hasNext);
     try {
-      const response = await api.get("/photobox");
-      const sortedData = response.data.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setPhotoBoard(sortedData);
-      console.log("사진함 사진 목록을 불러왔습니다.", sortedData);
+      // console.log("커서 요청 1:", cursor);
+      const response1 = await api.get("/photobox");
+
+      cursor.current = response1.data.data.nextCursor;
+      hasNext.current = response1.data.data.hasNext;
+      // console.log("tempCursor: ", cursor);
+      // console.log("tempHasNext: ", hasNext);
+      // console.log("서버의 cursor 값 1:", response1.data.data.nextCursor);
+      const { contents, nextCursor, hasNext: newHasNext } = response1.data.data;
+
+      setPhotoBoard((prev) => [
+        ...prev,
+        ...contents.filter(
+          (item) => !prev.some((p) => p.photoBoxId === item.photoBoxId)
+        ),
+      ]);
+
+      //setPhotoBoard(sortedData);
+      console.log("사진함 사진 목록을 불러왔습니다.", photoBoard);
     } catch (error) {
       console.log(
         "사진 목록을 불러오는 중 오류가 발생했습니다.",
@@ -56,7 +98,7 @@ const PhotoList = () => {
           {photoBoard.length > 0 ? (
             <MasonryInfiniteGrid
               gap={10}
-              // onRequestAppend={onRequestAppend} //사용자가 스크롤 끝에 도달했을 때 데이터를 추가할 콜백 함수
+              onRequestAppend={onRequestAppend} //사용자가 스크롤 끝에 도달했을 때 데이터를 추가할 콜백 함수
               // useRecycle={true} // 스크롤 시 화면에 보이지 않는 요소를 재활용하여 성능 최적화
             >
               {photoBoard.map((item) => (

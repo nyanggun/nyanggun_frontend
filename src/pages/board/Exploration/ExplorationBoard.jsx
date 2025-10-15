@@ -25,6 +25,7 @@ const ExplorationBoard = () => {
 		try {
 			const response = await axios.get("http://localhost:8080/explorations");
 			setExplorations(response.data);
+			console.log(response.data.data);
 		} catch (error) {
 			console.error("탐방기 로드 실패:", error);
 		}
