@@ -27,20 +27,11 @@ const HeritageEncyclopediaBoardList = () => {
     fetchHeritageEncyclopedia(page);
   }, [page]);
 
+  const onSearch = () => {};
+
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">
       <Col xs={12} sm={10} md={8} lg={6}>
-        <div className="">
-          <div className="mb-3">
-            <Subtitle text={"문화재 도감"}></Subtitle>
-          </div>
-          <Menu
-            menuOne={"ㄱㄴㄷ순"}
-            menuOneLink={"/"}
-            menuTwoLink={"/"}
-            menuTwo={"인기순"}
-          ></Menu>
-        </div>
         <div>
           {list.content.map((heritage) => (
             <EncyclopediaEventListColumn

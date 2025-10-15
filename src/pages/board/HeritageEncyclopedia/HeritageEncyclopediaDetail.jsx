@@ -32,12 +32,15 @@ const HeritageEncyclopediaDetail = () => {
   };
 
   useEffect(() => {
-    fetchHeritageDetail();
     if (heritage) {
       setIsBookmarked(heritage.bookmarked);
       setCount(heritage.bookmarkCount);
     }
   }, [heritage]);
+
+  useEffect(() => {
+    fetchHeritageDetail();
+  }, [HeritageEncyclopediaId]);
 
   const bookMarkClick = async () => {
     if (!heritage) return;

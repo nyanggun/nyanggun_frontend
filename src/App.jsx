@@ -26,7 +26,9 @@ import NavigationBar from "./components/common/navigationbar/NavigationBar";
 import PhotoList from "./pages/board/photo/PhotoList";
 import Logout from "./pages/board/login-register/Logout";
 import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
-import HeritageEncyclopediaBoardList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardList";
+import HeritageEncyclopediaBoard from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoard";
+import HeritageEncyclopediaBoardNameList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardNameList";
+import HeritageEncyclopediaBoardPopularList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardPopularList";
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
 
 const App = () => {
@@ -64,13 +66,18 @@ const App = () => {
               element={<TalkUpdate></TalkUpdate>}
             ></Route>
           </Route>
-          <Route>
+          <Route path="/heritages" element={<HeritageEncyclopediaBoard />}>
+            <Route index element={<Navigate to="name" replace />} />
             <Route
-              path="/heritages"
-              element={<HeritageEncyclopediaBoardList />}
+              path="name"
+              element={<HeritageEncyclopediaBoardNameList />}
             />
             <Route
-              path="/heritages/detail/:HeritageEncyclopediaId"
+              path="popular"
+              element={<HeritageEncyclopediaBoardPopularList />}
+            />
+            <Route
+              path="detail/:HeritageEncyclopediaId"
               element={<HeritageEncyclopediaDetail />}
             />
           </Route>
