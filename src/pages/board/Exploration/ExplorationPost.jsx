@@ -17,7 +17,7 @@ const TalkDetail = ({
 	id,
 	createdAt,
 	title,
-	imagePathList,
+	imageNameList,
 	content,
 	member,
 	bookmarkCount,
@@ -58,7 +58,7 @@ const TalkDetail = ({
 				originTitle: title,
 				originRelatedHeritage: relatedHeritage,
 				originContent: content,
-				originImagePathList: imagePathList,
+				originImageNameList: imageNameList,
 				memberId: member.id,
 			},
 		});
@@ -131,15 +131,15 @@ const TalkDetail = ({
 						</div>
 						<Carousel interval={null} className="mt-3 bg-light rounded">
 							{/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
-							{imagePathList.map((imagePath, index) => (
+							{imageNameList.map((imageName, index) => (
 								// 2. 각 이미지마다 Carousel.Item을 생성합니다.
 								//    React가 각 항목을 식별할 수 있도록 고유한 'key'를 꼭 넣어주어야 합니다.
 								<Carousel.Item key={index} className="bg-dark">
-									{console.log(`http://localhost:8080${imagePath}`)}
+									{console.log(`http://localhost:8080/explorations/images/${imageName}`)}
 									<img
 										className="w-100"
 										// 3. src에 현재 순회 중인 이미지 주소(imagePath)를 넣어줍니다.
-										src={`http://localhost:8080${imagePath}`}
+										src={`http://localhost:8080/explorations/images/${imageName}`}
 										alt={`Slide ${index + 1}`}
 										style={{
 											maxHeight: "450px",
