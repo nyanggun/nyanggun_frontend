@@ -9,7 +9,16 @@ import "./BorderButton.css";
 // <CompleteButton btnName="취소" clickBtn={handleCancel} />
 const BorderButton = ({ btnName, clickBtn, type = "button", buttonColor }) => {
 	return (
-		<Button size="sm" className={`border-btn px-2 ${buttonColor}`} onClick={clickBtn} type={type}>
+		<Button
+			size="sm"
+			className={`border-btn px-2 ${buttonColor}`}
+			onClick={(e) => {
+				e.preventDefault();
+				e.stopPropagation;
+				clickBtn();
+			}}
+			type={type}
+		>
 			<strong>{btnName}</strong>
 		</Button>
 	);
