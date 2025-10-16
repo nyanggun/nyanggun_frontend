@@ -18,15 +18,12 @@ const EncyclopediaEventListColumn = ({ heritage }) => {
 
   const bookMarkClick = async () => {
     if (!heritage) return;
-    console.log("heritage.bookmarked", heritage.bookmarked);
-    console.log("isBookmarked", isBookmarked);
     try {
       if (isBookmarked) {
         // bookmarked가 true일 때 클릭하면 북마크 삭제
         const response = await api.delete(`/heritages/bookmark/${heritage.id}`);
         if (response.data.success) {
           setIsBookmarked(false);
-          console.log("북마크삭제", response.data);
           setCount((prev) => prev - 1);
         }
       } else {
@@ -34,7 +31,6 @@ const EncyclopediaEventListColumn = ({ heritage }) => {
         const response = await api.post(`/heritages/bookmark/${heritage.id}`);
         if (response.data.success) {
           setIsBookmarked(true);
-          console.log("북마크생성", response.data);
           setCount((prev) => prev + 1);
         }
       }

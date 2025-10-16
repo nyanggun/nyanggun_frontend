@@ -1,29 +1,35 @@
 import "./HeritageEncyclopedia.css";
 import Subtitle from "../../../components/board/Subtitle";
 import Menu from "../../../components/common/menu/Menu";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const HeritageEncyclopediaBoardList = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const linkToPage =
-    location.pathname === "/heritages/name" ||
-    location.pathname === "/heritages/popular";
 
-  const onSearch = () => {};
+  const onSearch = (keyword) => {
+    navigate(`/heritages/search?keyword=${keyword}`);
+  };
 
+  const isSearchPage = location.pathname.includes("heritages/search");
   return (
     <div>
       <div className="">
         <div className="mb-3">
-          <Subtitle text={"문화재 도감"} onSearchBoard={onSearch} />
+          <Subtitle
+            moveTo={"/heritages/name"}
+            text={"문화재 도감"}
+            onSearchBoard={onSearch}
+          />
         </div>
-        <Menu
-          menuOne={"ㄱㄴㄷ순"}
-          menuOneLink={"/"}
-          menuTwoLink={"/"}
-          menuTwo={"인기순"}
-        ></Menu>
+        {!isSearchPage && (
+          <Menu
+            menuOne={"ㄱㄴㄷ순"}
+            menuOneLink={"/heritages/name"}
+            menuTwoLink={"/heritages/popular"}
+            menuTwo={"인기순"}
+          ></Menu>
+        )}
       </div>
       <main>
         <Outlet />

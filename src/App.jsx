@@ -29,6 +29,7 @@ import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
 import HeritageEncyclopediaBoard from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoard";
 import HeritageEncyclopediaBoardNameList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardNameList";
 import HeritageEncyclopediaBoardPopularList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardPopularList";
+import HeritageEncyclopediaBoardSearchList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardSearchList";
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
 import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
 
@@ -80,6 +81,10 @@ const App = () => {
             <Route
               path="popular"
               element={<HeritageEncyclopediaBoardPopularList />}
+            />
+            <Route
+              path="search"
+              element={<HeritageEncyclopediaBoardSearchList />}
             />
             <Route
               path="detail/:HeritageEncyclopediaId"

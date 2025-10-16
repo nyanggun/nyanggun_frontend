@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Image, Pagination } from "react-bootstrap";
 import "./HeritageEncyclopedia.css";
-import Subtitle from "../../../components/board/Subtitle";
 import EncyclopediaEventListColumn from "../../../components/board/EncyclopediaEventListColumn";
 import Paginations from "../../../components/common/pagination/Paginations";
 import api from "../../../config/apiConfig";
-import Menu from "../../../components/common/menu/Menu";
-import { Link } from "react-router-dom";
 
 const HeritageEncyclopediaBoardList = () => {
   const [page, setPage] = useState(0);

@@ -14,7 +14,7 @@ const HeritageEncyclopediaBoardList = () => {
 
   const fetchHeritageEncyclopedia = async (page) => {
     try {
-      const response = await api.get(`/heritages/list/name?page=${page}`);
+      const response = await api.get(`/heritages/list/popular?page=${page}`);
       if (response.data.success) {
         setList(response.data.data);
       }
@@ -26,8 +26,6 @@ const HeritageEncyclopediaBoardList = () => {
   useEffect(() => {
     fetchHeritageEncyclopedia(page);
   }, [page]);
-
-  const onSearch = () => {};
 
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">

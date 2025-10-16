@@ -19,10 +19,6 @@ const HeritageEncyclopediaDetail = () => {
       const response = await api.get(
         `/heritages/detail/${HeritageEncyclopediaId}`
       );
-
-      console.log("??", response.data.data);
-      console.log(response.data.success);
-
       if (response.data.success) {
         setHeritage(response.data.data);
       }
@@ -44,8 +40,6 @@ const HeritageEncyclopediaDetail = () => {
 
   const bookMarkClick = async () => {
     if (!heritage) return;
-    console.log("heritage.bookmarked", heritage.bookmarked);
-    console.log("isBookmarked", isBookmarked);
     try {
       if (isBookmarked) {
         const response = await api.delete(`/heritages/bookmark/${heritage.id}`);
@@ -68,16 +62,6 @@ const HeritageEncyclopediaDetail = () => {
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">
       <Col xs={12} sm={10} md={8} lg={6}>
-        <div className="">
-          <div className="mb-3">
-            <Subtitle text={"문화재 도감"}></Subtitle>
-          </div>
-          <div className="menu-lines center">
-            <hr className="line green"></hr>
-            <hr className="line white"></hr>
-            <hr className="line red"></hr>
-          </div>
-        </div>
         {heritage && (
           <div className="mb-20">
             <div className="text-center mt-4">
