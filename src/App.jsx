@@ -26,9 +26,13 @@ import NavigationBar from "./components/common/navigationbar/NavigationBar";
 import PhotoList from "./pages/board/photo/PhotoList";
 import Logout from "./pages/board/login-register/Logout";
 import PhotoUpdate from "./pages/board/photo/PhotoUpdate";
-import HeritageEncyclopediaBoardList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardList";
+import HeritageEncyclopediaBoard from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoard";
+import HeritageEncyclopediaBoardNameList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardNameList";
+import HeritageEncyclopediaBoardPopularList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardPopularList";
+import HeritageEncyclopediaBoardSearchList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardSearchList";
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
 import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
+import ExplorationSearchResult from "./pages/board/Exploration/ExplorationSearchResult";
 
 const App = () => {
   return (
@@ -42,6 +46,10 @@ const App = () => {
           <Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
             <Route index element={<Navigate to="explorations" replace />} />
             <Route path="explorations" element={<ExplorationBoard />}></Route>
+            <Route
+              path="explorations/search"
+              element={<ExplorationSearchResult></ExplorationSearchResult>}
+            />
             <Route
               path="explorations/:id"
               element={<ExplorationDetailPage />}
@@ -69,13 +77,22 @@ const App = () => {
               element={<TalkSearchResult></TalkSearchResult>}
             />
           </Route>
-          <Route>
+          <Route path="/heritages" element={<HeritageEncyclopediaBoard />}>
+            <Route index element={<Navigate to="name" replace />} />
             <Route
-              path="/heritages"
-              element={<HeritageEncyclopediaBoardList />}
+              path="name"
+              element={<HeritageEncyclopediaBoardNameList />}
             />
             <Route
-              path="/heritages/detail/:HeritageEncyclopediaId"
+              path="popular"
+              element={<HeritageEncyclopediaBoardPopularList />}
+            />
+            <Route
+              path="search"
+              element={<HeritageEncyclopediaBoardSearchList />}
+            />
+            <Route
+              path="detail/:HeritageEncyclopediaId"
               element={<HeritageEncyclopediaDetail />}
             />
           </Route>
