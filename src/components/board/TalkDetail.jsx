@@ -71,11 +71,11 @@ const TalkDetail = ({
                 <span className="small">{timeAgo}</span>
               </div>
             </div>
-            {talk.photoBoxPicturePath ? (
+            {talk.talkPictureList ? (
               <div>
                 <img
                   className="talk-photo-imgsize"
-                  src={`http://localhost:8080${talk.photoBoxPicturePath}`}
+                  src={`http://localhost:8080${talk.talkPictureList.path}`}
                 ></img>
               </div>
             ) : (
