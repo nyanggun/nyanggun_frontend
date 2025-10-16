@@ -3,132 +3,117 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { AuthContext } from "../../../contexts/AuthContext";
+import rehypeRaw from "rehype-raw";
 import "./ChatbotWindow.css";
 
+const markdownComponents = {
+  a: ({ ...props }) => {
+    const isExternal = props.href.startsWith("http");
+    return (
+      <a
+        {...props}
+        target={isExternal ? "_blank" : "_self"}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        style={{ color: "#007bff", textDecoration: "underline" }}
+      />
+    );
+  },
+  table: ({ children }) => (
+    <div style={{ overflowX: "auto", maxWidth: "100%", marginBottom: "10px" }}>
+      <table style={{ borderCollapse: "collapse", width: "100%", whiteSpace: "nowrap" }}>
+        {children}
+      </table>
+    </div>
+  ),
+  ul: ({ children }) => <ul style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ul>,
+  ol: ({ children }) => <ol style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ol>,
+};
+
 export default function ChatbotWindow({ onClose }) {
-  const { user } = useContext(AuthContext);
-  const [messages, setMessages] = useState([]);
+  const { user } = useContext(AuthContext); // 로그인 정보 가져오기
+  const [messages, setMessages] = useState([
+    { role: "bot", content: "안녕하세요! 🐸 꺼비 챗봇이에요." },
+  ]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
+  const API_BASE_URL = "http://localhost:8080/api/chat";
 
-  // 버튼/키워드 → 경로 및 설명 매핑
   const routeMap = {
-    도란도란: {
-      path: "/dorandoran/explorations",
-      desc: "문화재 탐방 기록, 담소를 볼 수 있어요.",
-    },
-    탐방기: {
-      path: "/dorandoran/explorations",
-      desc: "문화재 탐방 기록을 볼 수 있어요.",
-    },
-    담소: {
-      path: "/dorandoran/talks",
-      desc: "문화재 관련 담소를 나눌 수 있어요.",
-    },
-    증표: {
-      path: "/badges",
-      desc: "문화재 방문 시 획득 가능한 증표를 확인할 수 있어요.",
-    },
-    사진함: {
-      path: "/photobox/list",
-      desc: "사진을 업로드하고 모아볼 수 있어요.",
-    },
+    도란도란: { path: "/dorandoran/explorations", desc: "문화재 탐방 기록, 담소를 볼 수 있어요." },
+    탐방기: { path: "/dorandoran/explorations", desc: "문화재 탐방 기록을 볼 수 있어요." },
+    담소: { path: "/dorandoran/talks", desc: "문화재 관련 담소를 나눌 수 있어요." },
+    증표: { path: "/badges", desc: "문화재 방문 시 획득 가능한 증표를 확인할 수 있어요." },
+    사진함: { path: "/photobox/list", desc: "사진을 업로드하고 모아볼 수 있어요." },
   };
 
-  // 초기 안내 메시지
-  useEffect(() => {
-    const initialMessages = [
-      {
-        role: "bot",
-        content:
-          "안녕하세요! 🐸 꺼비 챗봇이에요. 문화재 정보, 뱃지, 사진함 등을 안내해드릴게요.",
-      },
-    ];
-    setMessages(initialMessages);
-  }, []);
+  const sendMessage = async (message = input) => {
+    const trimmed = message.trim();
+    if (!trimmed) return;
 
-  // 버튼 클릭 시 경로 이동
-  const handleNavigate = (label) => {
-    const routeInfo = routeMap[label];
-    if (routeInfo) {
-      navigate(routeInfo.path); // 여기서만 path 사용
-      handleClose();
-    } else {
-      console.warn("정의되지 않은 경로입니다:", label);
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
     }
-  };
 
-  // 챗봇 닫기 + 대화 초기화
-  const handleClose = () => {
-    setMessages([]);
-    onClose();
-  };
-
-  // 메시지 전송
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = { role: "user", content: input };
     setInput("");
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
 
-    // 입력값 기반 경로 확인
-    const matchedKey = Object.keys(routeMap).find((key) => input.includes(key));
+    const matchedKey = Object.keys(routeMap).find((key) => trimmed.includes(key));
     if (matchedKey) {
       const routeInfo = routeMap[matchedKey];
-      const desc = routeInfo.desc; // path는 사용하지 않음
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
-          content: `${matchedKey} 기능으로 이동할게요!\n\n설명: ${desc}`,
+          content: `${matchedKey} 기능으로 이동할까요?\n설명: ${routeInfo.desc}`,
           options: [{ label: matchedKey }],
         },
       ]);
       return;
     }
 
+    const loadingMsg = "꺼비가 생각 중이에요... ⏳";
+    setMessages((prev) => [...prev, { role: "bot", content: loadingMsg }]);
+
     try {
-      // 로딩 메시지 추가
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: "꺼비가 생각 중이에요..." },
-      ]);
+      const res = await axios.post(`${API_BASE_URL}/messages`, { message: trimmed });
+      const botMsg = res.data;
 
-      const postData = {
-        message: input,
-        memberId: user?.id || null,
-      };
-
-      const res = await axios.post("http://localhost:8080/api/chat", postData);
-
-      // 로딩 메시지 교체
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.content === "꺼비가 생각 중이에요..."
-            ? { role: "bot", content: res.data.response }
+          msg.content === loadingMsg
+            ? { role: "bot", content: botMsg.response, options: botMsg.options || [], heritageId: botMsg.heritageId }
             : msg
         )
       );
     } catch (err) {
-      console.error(err);
+      console.error("Chat API Error:", err);
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.content === "꺼비가 생각 중이에요..."
-            ? { role: "bot", content: "죄송합니다. 서버와 연결할 수 없습니다." }
+          msg.content === loadingMsg
+            ? { role: "bot", content: "서버 연결 오류가 발생했습니다." }
             : msg
         )
       );
     }
   };
 
-  // 엔터키 전송
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") sendMessage();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
   };
 
-  // 새 메시지 → 스크롤 하단 이동
+  const handleNavigate = (label) => {
+    const routeInfo = routeMap[label];
+    if (routeInfo) {
+      navigate(routeInfo.path);
+      onClose();
+    }
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -136,30 +121,45 @@ export default function ChatbotWindow({ onClose }) {
   return (
     <div className="chatbot-window">
       <div className="chatbot-header">
-        <span>꺼비</span>
-        <button onClick={handleClose}>X</button>
+        <span>🐸 꺼비 챗봇</span>
+        <button onClick={onClose}>×</button>
       </div>
 
       <div className="chatbot-messages">
-        {messages.map((msg, i) => (
-          <div key={i} className={msg.role === "bot" ? "bot" : "user"}>
-            <ReactMarkdown>{msg.content}</ReactMarkdown>
+        {messages.map((msg, i) => {
+          let displayContent = msg.content;
+          if (msg.heritageId && msg.content?.includes("상세 페이지")) {
+            displayContent = msg.content.replace(
+              "상세 페이지",
+              `[상세 페이지](/heritages/detail/${msg.heritageId})`
+            );
+          }
 
-            {msg.options && (
-              <div className="chatbot-options">
-                {msg.options.map((opt, j) => (
-                  <button
-                    key={j}
-                    className="chatbot-option-btn"
-                    onClick={() => handleNavigate(opt.label)}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+          return (
+            <div key={i} className={`message-bubble ${msg.role === "bot" ? "bot" : "user"}`}>
+              <ReactMarkdown components={markdownComponents} rehypePlugins={[rehypeRaw]}>
+                {displayContent}
+              </ReactMarkdown>
+
+              {msg.options?.length > 0 && (
+                <div className="chatbot-options">
+                  {msg.options.map((opt, j) => (
+                    <button
+                      key={j}
+                      className="chatbot-option-btn"
+                      onClick={() => {
+                        if (routeMap[opt.label]) handleNavigate(opt.label);
+                        else sendMessage(opt.label);
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
 
@@ -168,9 +168,12 @@ export default function ChatbotWindow({ onClose }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="메시지를 입력하세요."
+          placeholder={user ? "메시지를 입력하세요." : "로그인 후 이용하세요."}
+          disabled={!user}
         />
-        <button onClick={sendMessage}>전송</button>
+        <button onClick={() => sendMessage(input)} disabled={!user}>
+          전송
+        </button>
       </div>
     </div>
   );
