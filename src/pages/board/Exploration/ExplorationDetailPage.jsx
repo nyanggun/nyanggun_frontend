@@ -16,6 +16,7 @@ const ExplorationDetailPage = () => {
 
 	const [exploration, setExploration] = useState(null); // 단일 게시물 데이터
 	const [explorationComments, setExplorationComments] = useState([]);
+	const [replyExplorationComments, setReplyExplorationComments] = useState({});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
@@ -48,6 +49,27 @@ const ExplorationDetailPage = () => {
 
 		loadData();
 	}, [id]); // id 값이 변경될 때마다 데이터를 다시 불러옵니다.
+
+	useEffect(() => {
+		// 1. 최종적으로 상태에 저장할 새로운 객체를 미리 선언합니다.
+		const newReplyComments = {};
+
+		// 2. forEach를 사용해 배열을 순회하며 객체를 가공합니다.
+		explorationComments.forEach((comment) => {
+			if (comment.id != null && comment.parentCommentId) {
+				// 만약 해당 parentCommentId를 키로 가진 배열이 없다면 초기화해줍니다.
+				if (!newReplyComments[comment.parentCommentId]) {
+					newReplyComments[comment.parentCommentId] = [];
+				}
+				// 해당 parentCommentId를 키로 가진 배열에 현재 댓글을 추가합니다.
+				newReplyComments[comment.parentCommentId].push(comment);
+			}
+		});
+
+		// 3. 반복문이 모두 끝난 후, 완성된 객체로 상태를 '한 번만' 업데이트합니다.
+		setReplyExplorationComments(newReplyComments);
+		console.log("newReplyComments:", newReplyComments);
+	}, [explorationComments]);
 
 	const onSubmit = async (comment, parentCommentId) => {
 		try {
@@ -113,23 +135,55 @@ const ExplorationDetailPage = () => {
 		<div>
 			<div>{exploration && <ExplorationPost {...exploration} />}</div>
 			<Row className="justify-content-center">
-				<Col className="col-11 col-sm-10 col-md-6 mb-3">
+				<Col className="col-11 col-sm-10 col-md-8 mb-3">
+					<h4>댓글</h4>
 					<CommentInput onSubmit={onSubmit} />
 				</Col>
 			</Row>
-			{explorationComments.map((explorationComment) => (
-				<Row key={explorationComment.id} className="justify-content-center">
-					<Col className="col-11 col-sm-10 col-md-6">
-						<Comment
-							{...explorationComment}
-							talkCommentId={explorationComment.id}
-							onUpdateComment={onUpdateComment}
-							onDeleteComment={onDeleteComment}
-							onCommentSubmit={onSubmit}
-						/>
-					</Col>
-				</Row>
-			))}
+			<Row className="justify-content-center">
+				<Col className="col-11 col-sm-10 col-md-8">
+					{explorationComments
+						// 1. 렌더링하기 전에 원댓글(parentCommentId가 없는 댓글)만 필터링합니다.
+						//    - `comment &&` 체크를 추가하여 배열에 혹시 있을지 모를 null, undefined 값으로 인한 오류를 방지합니다.
+						.filter((comment) => comment && comment.parentCommentId == null)
+						.map((explorationComment) => {
+							// 2. 현재 댓글에 해당하는 대댓글 배열을 변수에 할당합니다.
+							//    - 이렇게 하면 코드가 더 명확해지고, undefined일 경우를 다루기 쉬워집니다.
+							const replies = replyExplorationComments[explorationComment.id];
+
+							return (
+								<div key={explorationComment.id} className="mb-3">
+									{console.log("explorationComment", explorationComment)}
+									<Comment
+										{...explorationComment}
+										id={explorationComment.id}
+										talkCommentId={explorationComment.id}
+										onUpdateComment={onUpdateComment}
+										onDeleteComment={onDeleteComment}
+										onCommentSubmit={onSubmit}
+									/>
+									{/* 3. replies 변수가 존재하고, 길이가 0보다 클 때만 대댓글 영역을 렌더링합니다. */}
+									{replies && replies.length > 0 && (
+										<div className="ms-5 mt-3 border-start ps-3">
+											{replies.map((replyComment) => (
+												<div key={replyComment.id} className="mb-2">
+													<Comment
+														{...replyComment}
+														id={replyComment.id}
+														talkCommentId={replyComment.id}
+														onUpdateComment={onUpdateComment}
+														onDeleteComment={onDeleteComment}
+														onCommentSubmit={onSubmit}
+													/>
+												</div>
+											))}
+										</div>
+									)}
+								</div>
+							);
+						})}
+				</Col>
+			</Row>
 		</div>
 	);
 };

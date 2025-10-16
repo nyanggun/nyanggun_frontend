@@ -8,11 +8,15 @@ const ReportButton = () => {
 	return (
 		<Button
 			variant=""
-			className="bookmark-btn border-0 m-0 p-0 btn rounded-4 d-flex justify-content-center align-itmes-center"
+			className="bookmark-btn border-0 m-0 p-0 btn rounded-4 d-flex justify-content-center align-itmes-center z-3"
 			size="sm"
-			onClick={handleClick}
+			onClick={(e) => {
+				e.preventDefault();
+				e.stopPropagation;
+				handleClick();
+			}}
 		>
-			<Image fluid className="report-btn-img" src={ReportImage} />
+			<Image className="report-btn-img" src={ReportImage} />
 		</Button>
 	);
 };
