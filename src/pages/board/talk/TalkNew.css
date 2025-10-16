@@ -1,6 +1,5 @@
 .talk-new-container {
-    margin : 3% 0%;
-
+  margin: 3% 0%;
 }
 .talk-new-button {
   display: flex;
@@ -9,4 +8,14 @@
 }
 .talk-new-button-gap {
   margin-left: 2%;
+}
+.talk-new-photo-imgsize {
+  padding: 1%;
+  border-radius: 20px;
+  width: 25%;
+  height: 100px;
+}
+.talk-new-photo-img-container {
+  display: flex;
+  width: 100%;
 }

@@ -6,6 +6,7 @@ import "./TalkNew.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import BorderButton from "../../../components/board/BorderButton";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { Row, Col } from "react-bootstrap";
 
 //담소 게시글을 수정할 수 있는 페이지 입니다.
 const TalkUpdate = () => {
@@ -50,37 +51,41 @@ const TalkUpdate = () => {
   };
 
   return (
-    <div className="talk-new-container">
-      <WritePostInputBox
-        type={"text"}
-        placeholder={"제목"}
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-      ></WritePostInputBox>
-      <WritingEditor
-        value={contentOrigin}
-        onChange={setContentOrigin}
-      ></WritingEditor>
+    <Row className="row p-4 justify-content-center m-0  ">
+      <Col xs={12} sm={10} md={6} className=" m-0 p-0">
+        <div className="talk-new-container">
+          <WritePostInputBox
+            type={"text"}
+            placeholder={"제목"}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          ></WritePostInputBox>
+          <WritingEditor
+            value={contentOrigin}
+            onChange={setContentOrigin}
+          ></WritingEditor>
 
-      <div className="talk-new-button">
-        <div className="talk-new-button-gap">
-          <BorderButton
-            btnName={"취소"}
-            buttonColor={"red"}
-            clickBtn={() => {
-              navigate(`/dorandoran/talks`);
-            }}
-          ></BorderButton>
+          <div className="talk-new-button">
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName={"취소"}
+                buttonColor={"red"}
+                clickBtn={() => {
+                  navigate(`/dorandoran/talks`);
+                }}
+              ></BorderButton>
+            </div>
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName={"완료"}
+                buttonColor={"black"}
+                clickBtn={() => handleTalkUpdate(title, content)}
+              ></BorderButton>
+            </div>
+          </div>
         </div>
-        <div className="talk-new-button-gap">
-          <BorderButton
-            btnName={"완료"}
-            buttonColor={"black"}
-            clickBtn={() => handleTalkUpdate(title, content)}
-          ></BorderButton>
-        </div>
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 };
 

@@ -1,93 +1,111 @@
 .hamburger-container {
-    position: fixed;
-    top: 0;
-    width: 100vw; /* 가로 전체 */
-    height: 100vh; /* 세로 전체 */
-    background-color: rgb(255, 255, 255);
-    overflow-y: auto;
-    z-index: 1000000 !important;
+  position: fixed;
+  top: 0;
+  width: 100vw; /* 가로 전체 */
+  height: 100vh; /* 세로 전체 */
+  background-color: rgb(255, 255, 255);
+  overflow-y: auto;
+  z-index: 1000000 !important;
 }
 .hamburger-header {
-    display: flex;
-    justify-content: flex-end;
-    margin: 3% 3%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 3% 3%;
 }
 .hamburger-profile-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 2% 7%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 2% 7%;
 }
 .hamburger-profile-text {
-    margin: 0 3%;
-    overflow-wrap: anywhere;
+  margin: 0 3%;
+  overflow-wrap: anywhere;
 }
 .hamburger-profile-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .hamburger-login {
-    display: flex;
-    margin-left: 20px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  margin-left: 20px;
+  justify-content: center;
+  align-items: center;
 }
 .hamburger-login-text {
-    margin-right: 10px;
+  margin-right: 10px;
+}
+.hamburger-user-box {
+  display: flex;
+  width: 100%;
+  margin-left: 5%;
 }
 .hamburger-profile-font {
-    font-size: 17px;
+  font-size: 17px;
 }
 .hamburger-talk-profile-pic {
-    width: 70px;
-    height: 100%;
+  width: 70px;
+  height: 100%;
 }
 .hamburger-menu {
-    margin-top: 5%;
+  margin-top: 5%;
 }
 .hamburger-menu-text {
-    margin: 5% 9%;
-
-    padding: 0;
-    font-size: 20px;
+  margin: 5% 9%;
+  cursor: pointer;
+  padding: 0;
+  font-size: 20px;
 }
 .hamburger-line {
-    border: none;
-    width: 100%;
-    height: 2px;
-    background-color: #eadfdf;
+  border: none;
+  width: 100%;
+  height: 2px;
+  background-color: #eadfdf;
 }
 .hamburger-menu-lines {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    margin: 0 3%;
+  margin: 0 3%;
 }
 
 .hamburger-line {
-    border: none;
-    height: 2px;
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    width: 90%;
-    opacity: 1;
+  border: none;
+  height: 2px;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  width: 90%;
+  opacity: 1;
 }
 .hamburger-line.green {
-    background-color: #54957f;
+  background-color: #54957f;
 }
 
 .hamburger-line.white {
-    background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
 }
 
 .hamburger-line.red {
-    background-color: #9c283d;
+  background-color: #9c283d;
 }
 
 .hamburger-line.semi-white {
-    background-color: #eadfdf;
+  background-color: #eadfdf;
+}
+.hamburger-user {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.hamburger-user-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
 }
