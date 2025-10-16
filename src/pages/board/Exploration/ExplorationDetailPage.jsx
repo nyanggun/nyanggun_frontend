@@ -28,8 +28,8 @@ const ExplorationDetailPage = () => {
 
 				// Promise.all을 사용해 두 API 요청을 동시에 보냅니다.
 				const [explorationResponse, commentResponse] = await Promise.all([
-					api.get(`http://localhost:8080/explorations/${id}`),
-					api.get(`http://localhost:8080/exploration-comments`, {
+					api.get(`/explorations/${id}`),
+					api.get(`/exploration-comments`, {
 						params: { explorationId: id },
 					}),
 				]);
