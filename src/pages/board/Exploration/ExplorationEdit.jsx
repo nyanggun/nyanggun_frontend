@@ -18,7 +18,7 @@ const ExplorationDetailPageEdit = () => {
 		originRelatedHeritage = "",
 		originContent = "",
 		memberId = "",
-		originImagePathList = [],
+		originImageNameList = [],
 	} = location.state || {};
 
 	// 1. 상태 변수 수정 및 추가
@@ -27,7 +27,7 @@ const ExplorationDetailPageEdit = () => {
 	const [content, setContent] = useState(originContent);
 
 	// 기존 이미지, 새로 추가할 이미지, 삭제할 이미지를 분리하여 관리
-	const [existingImages, setExistingImages] = useState(originImagePathList);
+	const [existingImages, setExistingImages] = useState(originImageNameList);
 	const [newImageFiles, setNewImageFiles] = useState([]);
 	const [imagesToDelete, setImagesToDelete] = useState([]); // 삭제할 '기존' 이미지 경로 목록
 
@@ -43,11 +43,11 @@ const ExplorationDetailPageEdit = () => {
 	};
 
 	// 기존 이미지를 제거하는 핸들러
-	const removeExistingImage = (imagePath) => {
+	const removeExistingImage = (imageName) => {
 		// 화면에 보이는 목록에서 제거
-		setExistingImages((prevPaths) => prevPaths.filter((path) => path !== imagePath));
+		setExistingImages((prevNames) => prevNames.filter((name) => name !== imageName));
 		// '삭제할 목록'에 추가
-		setImagesToDelete((prevPaths) => [...prevPaths, imagePath]);
+		setImagesToDelete((prevNames) => [...prevNames, imageName]);
 	};
 
 	const cancel = () => navigate(-1);
@@ -124,19 +124,19 @@ const ExplorationDetailPageEdit = () => {
 				{/* 4. 기존 이미지와 새 이미지 미리보기를 따로 렌더링 */}
 				<div className="mt-2 d-flex flex-wrap border p-2 rounded">
 					{/* 기존 이미지 미리보기 */}
-					{existingImages.map((path, index) => (
+					{existingImages.map((name, index) => (
 						<div
 							key={`existing-${index}`}
 							className="position-relative m-1"
 							style={{ width: "100px", height: "100px" }}
 						>
 							<img
-								src={`http://localhost:8080${path}`}
+								src={`http://localhost:8080/explorations/images/${name}`}
 								alt={`기존 이미지 ${index}`}
 								style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
 							/>
 							<button
-								onClick={() => removeExistingImage(path)}
+								onClick={() => removeExistingImage(name)}
 								className="btn btn-sm btn-danger position-absolute top-0 end-0"
 							>
 								X

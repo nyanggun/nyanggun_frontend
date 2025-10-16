@@ -32,6 +32,7 @@ import HeritageEncyclopediaBoardPopularList from "./pages/board/HeritageEncyclop
 import HeritageEncyclopediaBoardSearchList from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaBoardSearchList";
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
 import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
+import ExplorationSearchResult from "./pages/board/Exploration/ExplorationSearchResult";
 
 const App = () => {
   return (
@@ -45,6 +46,10 @@ const App = () => {
           <Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
             <Route index element={<Navigate to="explorations" replace />} />
             <Route path="explorations" element={<ExplorationBoard />}></Route>
+            <Route
+              path="explorations/search"
+              element={<ExplorationSearchResult></ExplorationSearchResult>}
+            />
             <Route
               path="explorations/:id"
               element={<ExplorationDetailPage />}

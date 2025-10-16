@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Image } from "react-bootstrap";
 import SmileFace from "../../assets/smile-face.svg";
 import FindImage from "../../assets/find.svg";
 import "./Subtitle.css";
 import { Link } from "react-router-dom";
-const Subtitle = ({ text, onSearchBoard, moveTo }) => {
+import { useSearchParams } from "react-router-dom";
+
+const Subtitle = ({ text, onSearchBoard }) => {
+  const [searchParams] = useSearchParams();
+
   const [keyword, setKeyword] = useState("");
   const handleClick = () => {
     console.log("Subtitle 클릭됨");
@@ -13,25 +17,30 @@ const Subtitle = ({ text, onSearchBoard, moveTo }) => {
     }
   };
 
+  useEffect(() => {
+    if (searchParams.get("keyword")) {
+      setKeyword(searchParams.get("keyword"));
+    } else {
+      setKeyword("");
+    }
+  }, [searchParams]);
+
   return (
     <div>
-      {/* <Link to={moveTo} style={{ textDecoration: "none", color: "#343A40" }}> */}
-      <div className="justify-content-center d-flex align-items-center">
-        <div className="" xs={1}>
-          <Image src={SmileFace} />
+      <Link to={moveTo} style={{ textDecoration: "none", color: "#343A40" }}>
+        <div className="justify-content-center d-flex align-items-center">
+          <div className="" xs={1}>
+            <Image src={SmileFace} />
+          </div>
+          <div className="">
+            <h2 className="">{text}</h2>
+          </div>
         </div>
-        <div className="">
-          <h2 className="">{text}</h2>
-        </div>
-      </div>
-      {/* </Link> */}
+      </Link>
       <Row className="justify-content-center p-0 m-0">
         <Col
           className="d-flex justify-content-center align-items-center m-0 rounded-5 border border-dark"
-          xs={12}
-          sm={10}
-          md={8}
-          lg={6}
+          xs={9}
         >
           <Form.Control
             className="form-input-container"
