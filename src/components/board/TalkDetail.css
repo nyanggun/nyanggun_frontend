@@ -1,65 +1,75 @@
 .talk-profile {
-  text-align: center;
+    text-align: center;
 }
 
 .talk-profile-pic {
-  width: 5vw;
-  height: 5vw;
-  max-width: 50px;
-  max-height: 50px;
+    width: 5vw;
+    height: 5vw;
+    max-width: 50px;
+    max-height: 50px;
 }
 
 .icon-border {
-  border: 1px solid #343a40;
-  border-radius: 50px;
+    border: 1px solid #343a40;
+    border-radius: 50px;
 }
 
 .icons {
-  height: 1.2rem;
-  border-color: #343a40;
+    height: 1.2rem;
+    border-color: #343a40;
 }
 .card-setting {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 .card-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .talk-detail-report {
-  border: 1px solid #343a40;
-  border-radius: 50px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  padding-bottom: 2px;
-  justify-content: center;
-  align-items: center;
+    border: 1px solid #343a40;
+    border-radius: 50px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    padding-bottom: 2px;
+    justify-content: center;
+    align-items: center;
+}
+.talk-photo-imgsize-photobox {
+    width: 100%;
+    padding: 3%;
+    border-radius: 30px;
 }
 .tags {
-  margin-top: 3%;
-  display: flex; /* flex 사용 */
-  flex-wrap: wrap;
-  text-decoration: underline; /* 밑줄 */
-  gap: 8px;
-  margin-right: 4px; /* 태그 간 간격 */
+    margin-top: 3%;
+    display: flex; /* flex 사용 */
+    flex-wrap: wrap;
+    text-decoration: underline; /* 밑줄 */
+    gap: 8px;
+    margin-right: 4px; /* 태그 간 간격 */
 }
+
 .talk-photo-imgsize {
-  width: 100%;
-  padding: 3%;
-  border-radius: 30px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-shrink: 0;
+}
+.talk-carousel {
+    margin-top: 10%;
 }
 .multi-line-ellipsis {
-  display: -webkit-box;
-  display: box; /* fallback */
-  -webkit-box-orient: vertical;
-  box-orient: vertical; /* 표준 속성 */
-  -webkit-line-clamp: 5; /* Safari, Chrome 등 */
-  line-clamp: 5; /* 표준 속성 (지원 브라우저용) */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.5;
-  max-height: calc(1.5em * 5);
+    display: -webkit-box;
+    display: box; /* fallback */
+    -webkit-box-orient: vertical;
+    box-orient: vertical; /* 표준 속성 */
+    -webkit-line-clamp: 5; /* Safari, Chrome 등 */
+    line-clamp: 5; /* 표준 속성 (지원 브라우저용) */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    line-height: 1.5;
+    max-height: calc(1.5em * 5);
 }
