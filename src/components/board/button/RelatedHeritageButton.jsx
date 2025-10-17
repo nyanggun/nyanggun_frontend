@@ -19,7 +19,7 @@ const PostEtcButton = ({ relatedHeritage }) => {
 			}}
 		>
 			<div className="icons d-flex align-items-center gap-1">
-				<Image fluid className="post-etc-btn-img" src={GeoAltIcon} />
+				<Image fluid className="post-etc-btn-img" src={GeoAltIcon} style={{ width: "17px", height: "17px" }} />
 
 				<span className="text-content">{relatedHeritage}..</span>
 			</div>
