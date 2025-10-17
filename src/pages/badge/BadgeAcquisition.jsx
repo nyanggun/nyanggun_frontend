@@ -133,22 +133,48 @@ const BadgeAcquisition = () => {
 
   //----------------------------------------------------------------------
 
-  // 4. 국가유산청 API 불러오기
-  // 국가유산청 api로 지도에 마커 표시
+  // 4. 증표 표시해줄 문화재 불러와 지도에 마커 표시
   useEffect(() => {
     const fetchHeritages = async () => {
       try {
-        const response = await api.get("/badges/markers");
-        if (response.data.data) {
-          console.log(response.data.data);
-          setHeritageList(response.data.data);
-        }
+        const [heritageMarkers, acquiredBadgeIds] = await Promise.all([
+          api.get("/badges/markers"),
+          api.get("/badges/acquired"),
+        ]);
+        // const response = await api.get("/badges/markers");
+
+        const allMarkers = heritageMarkers.data.data;
+        const badgeIds = new Set(acquiredBadgeIds.data.data);
+
+        const merged = allMarkers.map((markers) => ({
+          ...markers,
+          acquired: badgeIds.has(markers.badgeId),
+        }));
+        setHeritageList(merged);
+
+        // if (response.data.data) {
+        //   console.log(response.data.data);
+
+        //   // 6. 획득한 증표 표시
+        //   // 처음 세팅할 때, acquired 값을 넣어줘야 리액트에서 list 값 변화 감지 가능
+        //   const data = response.data.data.map((badgeList) => ({
+        //     ...badgeList,
+        //     acquired: false,
+        //   }));
+        //   setHeritageList(data);
+        //   // setHeritageList(response.data.data);
+        // }
       } catch (error) {
         console.error("유산 api 데이터 불러오기 실패", error);
       }
     };
     fetchHeritages();
   }, []);
+
+  // 상태 변화 확인용
+  useEffect(() => {
+    console.log("🟢 heritageList 변경됨:", heritageList);
+  }, [heritageList]);
 
   //----------------------------------------------------------------------
 
@@ -165,24 +191,26 @@ const BadgeAcquisition = () => {
     [fetchAddress]
   );
 
-  // 인증하기 버튼 클릭했을 때 발생하는 이벤트
-  // 나중에 id로 바꿔줘야함
+  // 5. 인증하기 버튼 클릭했을 때 발생하는 이벤트
   // 인증하기 버튼 누르면 저장
   const acquired = false; // 즉시 렌더링해서 지도에 표시해주기 위해 추가
   const handleAquire = async () => {
-    alert("클릭 : " + nearest.id + " 이름:" + nearest.name);
     if (!nearest) return; // 가까운 문화재 없으면 return
     try {
-      const response = await api.post(`/badges/acquire/${nearest.id}}`); // 가장 가까운 문화재 id 서버로 전달
+      const response = await api.post(
+        `/badges/acquire/${Number(nearest.badgeId)}`
+      ); // 가장 가까운 문화재 id 서버로 전달
       if (response.data.success) {
+        const heritageId = response.data.data.hunterBadge.id;
         alert(`${nearest.name} 배지 획득`);
-        setHeritageList((prev) =>
-          prev.map((heritage) =>
-            heritage.id === nearest.id
-              ? { ...heritage, acquired: true }
-              : heritage
-          )
-        );
+
+        //6. 획득한 증표 표시
+        setHeritageList((prev) => {
+          const updated = prev.map((badge) =>
+            badge.badgeId === heritageId ? { ...badge, acquired: true } : badge
+          );
+          return [...updated]; // 강제 렌더링
+        });
       }
     } catch (error) {
       alert("서버 오류 발생! 배지를 획득할 수 없습니다:", error);
@@ -247,7 +275,7 @@ const BadgeAcquisition = () => {
                 onClick={() => handleMarkerClick(item)}
               >
                 <img
-                  src={encodeURI(item.badgeUrl)}
+                  src={encodeURI(item.imgUrl)}
                   alt={item.name}
                   title={item.name}
                   width={30}
@@ -267,7 +295,7 @@ const BadgeAcquisition = () => {
                           cursor: "pointer",
                         }
                       : {
-                          opacity: 0.5,
+                          opacity: 0.9,
                         }
                   }
                 />
@@ -279,13 +307,13 @@ const BadgeAcquisition = () => {
         <CertificationButton
           text={
             isNear
-              ? acquired
-                ? "획득한 문화재"
-                : `${nearest?.name} 인증하기`
-              : "문화재 근처에서만 인증 가능"
+              ? !acquired
+                ? `획득완료(${nearest?.name})`
+                : `${nearest?.name} 획득하기`
+              : "문화재 근처에서만 획득 가능"
           }
           onClick={handleAquire}
-          disabled={!isNear || acquired}
+          disabled={!isNear || !acquired}
         />
       </Col>
     </Row>
