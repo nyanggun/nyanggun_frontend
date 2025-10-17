@@ -4,10 +4,6 @@ import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import "./PhotoList.css";
 import { Row, Col } from "react-bootstrap";
 
-// 예시 이미지
-import Img1 from "../../../assets/images/1.jpg";
-import Img2 from "../../../assets/images/2.jpg";
-import Img3 from "../../../assets/images/3.jpg";
 import { Outlet, useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig";
 import { AuthContext } from "../../../contexts/AuthContext";
