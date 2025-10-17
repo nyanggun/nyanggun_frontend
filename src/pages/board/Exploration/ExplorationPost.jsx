@@ -29,6 +29,31 @@ const TalkDetail = ({
 	const [isBookmarked, setIsBookmarked] = useState(false);
 	const [bookmarkCounts, setBookmarkCounts] = useState(bookmarkCount);
 
+	//시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
+	//서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
+	const [timeAgo, setTimeAgo] = useState("");
+	const formatTimeAgo = (time) => {
+		const now = new Date();
+		const past = new Date(time); // 서버에서 받은 LocalDateTime 문자열
+		const diff = Math.floor((now - past) / 1000); // 초 단위 차이
+
+		if (diff < 60) return "방금 전";
+		if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+		if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+		return `${Math.floor(diff / 86400)}일 전`;
+	};
+	useEffect(() => {
+		// 처음 렌더링 시 계산
+		setTimeAgo(formatTimeAgo(createdAt));
+
+		// 초 단위로 업데이트
+		const interval = setInterval(() => {
+			setTimeAgo(formatTimeAgo(createdAt));
+		}, 1000); // 1초마다 갱신
+
+		return () => clearInterval(interval);
+	}, [createdAt]);
+
 	useEffect(() => {
 		const checkBookmarkStatus = async () => {
 			if (!user || !id) return; // user나 id가 없으면 실행하지 않음
@@ -113,23 +138,37 @@ const TalkDetail = ({
 				<Card className="rounded-0 border-0">
 					<Card.Body>
 						<Card.Title className="mt-3">{title}</Card.Title>
-						<div className="d-flex align-items-center gap-2">
-							<div className="talk-profile">
-								<Image
-									src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
-									roundedCircle
-									fluid
-									className="talk-profile-pic border border-1"
-								/>
-							</div>
-							<div>
-								<span>{member.nickname}</span>
-							</div>
-							<div>
-								<span className="small">{createdAt}</span>
-							</div>
-						</div>
-						<Carousel interval={null} className="mt-3 bg-light rounded">
+						<Row>
+							<Col xs={7} sm={7} className="d-flex justify-content-start align-items-center gap-2">
+								<div className="talk-profile">
+									<Image
+										src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+										roundedCircle
+										fluid
+										className="talk-profile-pic border border-1"
+									/>
+								</div>
+								<div>
+									<span>{member.nickname}</span>
+								</div>
+								<div>
+									<span className="small">{timeAgo}</span>
+								</div>
+							</Col>
+							<Col xs={5} sm={5} className="d-flex justify-content-end align-items-center gap-1 py-1">
+								<div className="">
+									{user.id == member.id && (
+										<BorderButton btnName="수정" buttonColor="black" clickBtn={editExploration} />
+									)}
+								</div>
+								<div className="">
+									{user.id == member.id && (
+										<BorderButton btnName="삭제" buttonColor="red" clickBtn={deleteExploration} />
+									)}
+								</div>
+							</Col>
+						</Row>
+						<Carousel interval={null} className="my-3 bg-light rounded">
 							{/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
 							{imageNameList.map((imageName, index) => (
 								// 2. 각 이미지마다 Carousel.Item을 생성합니다.
@@ -170,14 +209,6 @@ const TalkDetail = ({
 								</div>
 								<div>
 									<ReportButton />
-								</div>
-							</div>
-							<div className="col-xs-12 col-sm-4 d-flex justify-content-end align-items-center gap-2 py-1">
-								<div className="">
-									<BorderButton btnName="수정" buttonColor="black" clickBtn={editExploration} />
-								</div>
-								<div className="">
-									<BorderButton btnName="삭제" buttonColor="red" clickBtn={deleteExploration} />
 								</div>
 							</div>
 						</div>

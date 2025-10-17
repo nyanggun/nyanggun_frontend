@@ -7,10 +7,11 @@ import rehypeRaw from "rehype-raw";
 import "./ChatbotWindow.css";
 
 const markdownComponents = {
-  a: ({ ...props }) => {
-    const isExternal = props.href.startsWith("http");
+  a: ({ href, ...props }) => {
+    const isExternal = href.startsWith("http");
     return (
       <a
+        href={href}
         {...props}
         target={isExternal ? "_blank" : "_self"}
         rel={isExternal ? "noopener noreferrer" : undefined}
@@ -20,17 +21,27 @@ const markdownComponents = {
   },
   table: ({ children }) => (
     <div style={{ overflowX: "auto", maxWidth: "100%", marginBottom: "10px" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%", whiteSpace: "nowrap" }}>
+      <table
+        style={{
+          borderCollapse: "collapse",
+          width: "100%",
+          whiteSpace: "nowrap",
+        }}
+      >
         {children}
       </table>
     </div>
   ),
-  ul: ({ children }) => <ul style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ul>,
-  ol: ({ children }) => <ol style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ol>,
+  ul: ({ children }) => (
+    <ul style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol style={{ paddingLeft: "20px", margin: "5px 0" }}>{children}</ol>
+  ),
 };
 
 export default function ChatbotWindow({ onClose }) {
-  const { user } = useContext(AuthContext); // 로그인 정보 가져오기
+  const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([
     { role: "bot", content: "안녕하세요! 🐸 꺼비 챗봇이에요." },
   ]);
@@ -40,17 +51,35 @@ export default function ChatbotWindow({ onClose }) {
   const API_BASE_URL = "http://localhost:8080/api/chat";
 
   const routeMap = {
-    도란도란: { path: "/dorandoran/explorations", desc: "문화재 탐방 기록, 담소를 볼 수 있어요." },
-    탐방기: { path: "/dorandoran/explorations", desc: "문화재 탐방 기록을 볼 수 있어요." },
-    담소: { path: "/dorandoran/talks", desc: "문화재 관련 담소를 나눌 수 있어요." },
-    증표: { path: "/badges", desc: "문화재 방문 시 획득 가능한 증표를 확인할 수 있어요." },
-    사진함: { path: "/photobox/list", desc: "사진을 업로드하고 모아볼 수 있어요." },
+    도감: {
+      path: "/heritages/name",
+      desc: "문화재 정보를 볼 수 있어요.",
+    },
+    도란도란: {
+      path: "/dorandoran/explorations",
+      desc: "문화재 탐방 기록, 담소를 볼 수 있어요.",
+    },
+    탐방기: {
+      path: "/dorandoran/explorations",
+      desc: "문화재 탐방 기록을 볼 수 있어요.",
+    },
+    담소: {
+      path: "/dorandoran/talks",
+      desc: "문화재 관련 담소를 나눌 수 있어요.",
+    },
+    증표: {
+      path: "/badges",
+      desc: "문화재 방문 시 획득 가능한 증표를 확인할 수 있어요.",
+    },
+    사진함: {
+      path: "/photobox/list",
+      desc: "사진을 업로드하고 모아볼 수 있어요.",
+    },
   };
 
   const sendMessage = async (message = input) => {
     const trimmed = message.trim();
     if (!trimmed) return;
-
     if (!user) {
       alert("로그인이 필요합니다.");
       return;
@@ -59,7 +88,9 @@ export default function ChatbotWindow({ onClose }) {
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
 
-    const matchedKey = Object.keys(routeMap).find((key) => trimmed.includes(key));
+    const matchedKey = Object.keys(routeMap).find((key) =>
+      trimmed.includes(key)
+    );
     if (matchedKey) {
       const routeInfo = routeMap[matchedKey];
       setMessages((prev) => [
@@ -77,13 +108,27 @@ export default function ChatbotWindow({ onClose }) {
     setMessages((prev) => [...prev, { role: "bot", content: loadingMsg }]);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/messages`, { message: trimmed });
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        `${API_BASE_URL}/messages`,
+        { message: trimmed },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       const botMsg = res.data;
+      let displayContent = botMsg.response || "";
+
+      if (botMsg.heritageId) {
+        displayContent += `\n\n[자세한 정보 보기](/heritages/detail/${botMsg.heritageId})`;
+      }
 
       setMessages((prev) =>
         prev.map((msg) =>
           msg.content === loadingMsg
-            ? { role: "bot", content: botMsg.response, options: botMsg.options || [], heritageId: botMsg.heritageId }
+            ? {
+                role: "bot",
+                content: displayContent,
+                options: botMsg.options || [],
+              }
             : msg
         )
       );
@@ -92,7 +137,13 @@ export default function ChatbotWindow({ onClose }) {
       setMessages((prev) =>
         prev.map((msg) =>
           msg.content === loadingMsg
-            ? { role: "bot", content: "서버 연결 오류가 발생했습니다." }
+            ? {
+                role: "bot",
+                content:
+                  err.response?.status === 401
+                    ? "로그인이 필요하거나 세션이 만료되었습니다."
+                    : "서버 연결 오류가 발생했습니다.",
+              }
             : msg
         )
       );
@@ -105,7 +156,6 @@ export default function ChatbotWindow({ onClose }) {
       sendMessage(input);
     }
   };
-
   const handleNavigate = (label) => {
     const routeInfo = routeMap[label];
     if (routeInfo) {
@@ -126,40 +176,36 @@ export default function ChatbotWindow({ onClose }) {
       </div>
 
       <div className="chatbot-messages">
-        {messages.map((msg, i) => {
-          let displayContent = msg.content;
-          if (msg.heritageId && msg.content?.includes("상세 페이지")) {
-            displayContent = msg.content.replace(
-              "상세 페이지",
-              `[상세 페이지](/heritages/detail/${msg.heritageId})`
-            );
-          }
-
-          return (
-            <div key={i} className={`message-bubble ${msg.role === "bot" ? "bot" : "user"}`}>
-              <ReactMarkdown components={markdownComponents} rehypePlugins={[rehypeRaw]}>
-                {displayContent}
-              </ReactMarkdown>
-
-              {msg.options?.length > 0 && (
-                <div className="chatbot-options">
-                  {msg.options.map((opt, j) => (
-                    <button
-                      key={j}
-                      className="chatbot-option-btn"
-                      onClick={() => {
-                        if (routeMap[opt.label]) handleNavigate(opt.label);
-                        else sendMessage(opt.label);
-                      }}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`message-bubble ${msg.role === "bot" ? "bot" : "user"}`}
+          >
+            <ReactMarkdown
+              components={markdownComponents}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {msg.content}
+            </ReactMarkdown>
+            {msg.options?.length > 0 && (
+              <div className="chatbot-options">
+                {msg.options.map((opt, j) => (
+                  <button
+                    key={j}
+                    className="chatbot-option-btn"
+                    onClick={() => {
+                      routeMap[opt.label]
+                        ? handleNavigate(opt.label)
+                        : sendMessage(opt.label);
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
         <div ref={messagesEndRef} />
       </div>
 
