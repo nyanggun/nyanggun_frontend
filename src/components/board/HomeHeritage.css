@@ -1,0 +1,21 @@
+.home-heritage-container {
+    margin: 0 10px;
+}
+
+.home-heritage-img {
+    width: 23vw;
+    height: 50vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media (max-width: 768px) {
+    .home-heritage-container {
+        display: flex;
+        margin: 10px;
+    }
+    .home-heritage-img {
+        width: 50%;
+        height: 100%;
+    }
+}
