@@ -33,6 +33,7 @@ import HeritageEncyclopediaBoardSearchList from "./pages/board/HeritageEncyclope
 import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/HeritageEncyclopediaDetail";
 import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
 import ExplorationSearchResult from "./pages/board/Exploration/ExplorationSearchResult";
+import Home from "./pages/home/Home";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
       <AuthProvider>
         <Header />
         <Routes>
+          <Route path="/" element={<Home></Home>}></Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterPage />} />

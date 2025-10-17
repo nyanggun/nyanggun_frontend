@@ -11,9 +11,13 @@ const CommentButton = ({ count }) => {
 	return (
 		<Button
 			variant=""
-			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center"
+			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center z-3"
 			size="sm"
-			onClick={handleClick}
+			onClick={(e) => {
+				e.preventDefault();
+				e.stopPropagation;
+				handleClick;
+			}}
 		>
 			<div className="icons d-flex align-items-center gap-1">
 				<Image fluid className="post-etc-btn-img" src={CommentButtonImage} />

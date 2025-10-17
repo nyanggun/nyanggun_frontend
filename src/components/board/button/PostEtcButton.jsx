@@ -12,7 +12,11 @@ const PostEtcButton = (props) => {
 			variant=""
 			className="bookmark-btn border btn rounded-4 d-flex justify-content-center align-itmes-center"
 			size="sm"
-			onClick={handleClick}
+			onClick={(e) => {
+				e.preventDefault();
+				e.stopPropagation;
+				handleClick;
+			}}
 		>
 			<div className="icons d-flex align-items-center gap-1">
 				<Image fluid className="post-etc-btn-img" src={props.buttonImage} />

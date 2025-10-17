@@ -1,0 +1,52 @@
+.home-event {
+  position: relative;
+}
+.home-image {
+  width: 100vw;
+  height: 100vh;
+  height: auto;
+  display: block;
+}
+.home-event-title {
+  color: white;
+  z-index: 100;
+  position: absolute;
+  bottom: 140px; /* 이미지 하단에서 10% 위치 */
+  left: 6%;
+}
+.home-event-title h1 {
+  font-size: 6vw;
+}
+
+.home-event-title h4 {
+  font-size: 5vw;
+}
+
+.home-event-title h6 {
+  font-size: 3vw;
+}
+
+@media (min-width: 768px) {
+  .home-event {
+    display: flex;
+  }
+  .home-image {
+    width: 50%;
+    height: 100%;
+  }
+  .home-event-title {
+    bottom: 6%;
+    left: 4%;
+  }
+  .home-event-title h1 {
+    font-size: 3vw; /* 화면 너비의 5% */
+  }
+
+  .home-event-title h4 {
+    font-size: 2vw;
+  }
+
+  .home-event-title h6 {
+    font-size: 1.5vw;
+  }
+}
