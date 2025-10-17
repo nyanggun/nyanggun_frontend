@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import WritePostInputBox from "../../../components/board/WritePostInputBox";
 import WritingEditor from "../../../components/board/WritingEditor";
 import api from "../../../config/apiConfig";
@@ -8,176 +8,176 @@ import BorderButton from "../../../components/board/BorderButton";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Row, Col, Button } from "react-bootstrap";
 
-//담소 게시글을 수정할 수 있는 페이지 입니다.
 const TalkUpdate = () => {
-    const location = useLocation();
-    const userData = useContext(AuthContext);
-    const {
-        talkId,
-        title: initialTitle,
-        content: initialContent,
-    } = location.state || {};
-    const navigate = useNavigate();
-    const [title, setTitle] = useState(initialTitle || "");
-    const [contentOrigin, setContentOrigin] = useState(initialContent || "");
-    const content = contentOrigin.replace(/<[^>]+>/g, "");
+  const location = useLocation();
+  const userData = useContext(AuthContext);
+  const {
+    talkId,
+    title: initialTitle,
+    content: initialContent,
+    talkPictureList: initialTalkPictureList,
+  } = location.state || {};
+  const navigate = useNavigate();
 
-    const [uploadImg, setUploadImg] = useState([]); // 배열로 관리
+  const [title, setTitle] = useState(initialTitle || "");
+  const [contentOrigin, setContentOrigin] = useState(initialContent || "");
+  const content = contentOrigin.replace(/<[^>]+>/g, "");
 
-    const fileInputRef = useRef(null);
-    const [uploadFiles, setUploadFiles] = useState(null);
-    const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+  const [existingImages, setExistingImages] = useState([]); // 서버 이미지 DTO
+  const [newFiles, setNewFiles] = useState([]); // 새로 업로드한 File
+  const [previewImgs, setPreviewImgs] = useState([]); // 미리보기 URL
+
+  const fileInputRef = useRef(null);
+  const MAX_FILE_SIZE = 50 * 1024 * 1024;
+
+  // 초기 이미지 세팅
+  useEffect(() => {
+    if (initialTalkPictureList && initialTalkPictureList.length > 0) {
+      const existingUrls = initialTalkPictureList.map(
+        (pic) => `http://localhost:8080${pic.path}`
+      );
+      setExistingImages(initialTalkPictureList);
+      setPreviewImgs(existingUrls);
+    }
+  }, [initialTalkPictureList]);
+
+  // 파일 선택 시
+  const onchangeImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const newUrls = [];
+
+    for (let file of files) {
+      if (file.size > MAX_FILE_SIZE) {
+        alert("50MB 이하 파일만 업로드 가능합니다.");
+        continue;
+      }
+      newUrls.push(URL.createObjectURL(file));
+    }
+
+    // 4개 제한
+    if (previewImgs.length + newUrls.length > 4) {
+      alert("사진은 최대 4개까지 첨부 가능합니다.");
+      e.target.value = "";
+      return;
+    }
+
+    setNewFiles((prev) => [...prev, ...files]);
+    setPreviewImgs((prev) => [...prev, ...newUrls]);
+    e.target.value = "";
+  };
+
+  const handleImgUpload = () => {
+    fileInputRef.current.click();
+  };
+
+  // 이미지 삭제
+  const handleRemoveImage = (index) => {
+    if (index < existingImages.length) {
+      setExistingImages((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      const newIndex = index - existingImages.length;
+      setNewFiles((prev) => prev.filter((_, i) => i !== newIndex));
+    }
+    setPreviewImgs((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // 게시글 수정
+  const handleTalkUpdate = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert("모든 내용을 입력해주세요.");
+      return;
+    }
 
     const talkData = {
-        title,
-        content,
+      title,
+      content,
+      remainingImages: existingImages.map((img) => img.talkPictureId), // 서버에 남길 이미지 ID
     };
 
-    //담소 게시글을 작성하는 메소드 입니다.
-    //서버로 요청을 보냅니다.
-    const handleTalkUpdate = async (title, content) => {
-        // 유효성 검사
-        if (!title.trim() || !content.trim()) {
-            alert("모든 내용을 입력해주세요");
-            return;
-        }
-        // FormData 생성
-        const formData = new FormData();
-        formData.append(
-            "talkData",
-            new Blob([JSON.stringify(talkData)], { type: "application/json" })
-        );
-        // 파일 여러 개 추가
-        if (uploadFiles && uploadFiles.length > 0) {
-            uploadFiles.forEach((file) => formData.append("files", file));
-            // 서버에서 "files"를 배열로 받도록 해야 함
-        }
-        try {
-            const response = await api.post("/talks", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            alert("게시글을 작성했습니다.");
-            console.log("담소 게시글을 작성했습니다.", response.data);
-            navigate("/dorandoran/talks");
-        } catch (error) {
-            console.error("담소 게시글을 작성하는 데 문제 발생", error.message);
-        }
-    };
-
-    // 파일 선택 시 이미지 미리보기
-    const onchangeImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-
-        // 이미 업로드된 이미지 + 새로 선택한 이미지 수가 4개 초과면 경고
-        if (uploadImg.length + files.length > 4) {
-            alert("사진은 4개까지 첨부가 가능합니다.");
-            e.target.value = "";
-            return;
-        }
-        const newImage = [];
-
-        for (let file of files) {
-            // 파일 크기 확인
-            if (file.size > MAX_FILE_SIZE) {
-                alert(
-                    "파일 크기가 너무 큽니다. 50MB 이하의 파일만 업로드할 수 있습니다."
-                );
-                e.target.value = ""; // 파일 input 초기화
-                continue;
-            }
-            newImage.push(URL.createObjectURL(file));
-        }
-        //하나라도 파일이 들어가면
-        if (newImage.length > 0) {
-            setUploadImg((prev) => [...prev, ...newImage].slice(0, 4));
-            setUploadFiles((prev) => [...(prev || []), ...files].slice(0, 4));
-            console.log("파일 하나 들어감");
-        }
-
-        e.target.value = "";
-    };
-
-    const handleImgUpload = () => {
-        fileInputRef.current.click();
-    };
-
-    //업로드한 사진 삭제
-    const handleRemoveImage = (index) => {
-        setUploadImg((prev) => prev.filter((_, i) => i !== index));
-        setUploadFiles((prev) => prev.filter((_, i) => i !== index));
-    };
-
-    return (
-        <Row className="row p-4 justify-content-center m-0  ">
-            <Col xs={12} sm={10} md={6} className=" m-0 p-0">
-                <div className="talk-new-container">
-                    <WritePostInputBox
-                        type={"text"}
-                        placeholder={"제목"}
-                        onChange={(e) => setTitle(e.target.value)}
-                        value={title}
-                    ></WritePostInputBox>
-
-                    <WritingEditor
-                        value={contentOrigin}
-                        onChange={setContentOrigin}
-                    ></WritingEditor>
-                    <div className="mt-2">
-                        <Button
-                            type="button"
-                            className="photo-button"
-                            onClick={handleImgUpload}
-                        >
-                            이미지 업로드
-                        </Button>
-                    </div>
-                    <div>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={onchangeImageUpload}
-                            style={{ display: "none" }}
-                        />
-                        <div className="talk-new-photo-img-container mt-2">
-                            {uploadImg &&
-                                uploadImg.map((uploadImg, index) => (
-                                    <img
-                                        className="talk-new-photo-imgsize"
-                                        key={index}
-                                        src={uploadImg}
-                                        alt="업로드된 이미지"
-                                        onClick={() => handleRemoveImage(index)}
-                                    />
-                                ))}
-                        </div>
-                    </div>
-                    <div className="talk-new-button">
-                        <div className="talk-new-button-gap">
-                            <BorderButton
-                                btnName={"취소"}
-                                buttonColor={"red"}
-                                clickBtn={() => {
-                                    navigate(`/dorandoran/talks`);
-                                }}
-                            ></BorderButton>
-                        </div>
-                        <div className="talk-new-button-gap">
-                            <BorderButton
-                                btnName={"완료"}
-                                buttonColor={"black"}
-                                clickBtn={() =>
-                                    handleTalkUpdate(title, content)
-                                }
-                            ></BorderButton>
-                        </div>
-                    </div>
-                </div>
-            </Col>
-        </Row>
+    const formData = new FormData();
+    formData.append(
+      "talkData",
+      new Blob([JSON.stringify(talkData)], { type: "application/json" })
     );
+
+    newFiles.forEach((file) => formData.append("files", file));
+
+    try {
+      const response = await api.put(`/talks/${talkId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("게시글이 수정되었습니다.");
+      navigate(`/dorandoran/talks/detail/${talkId}`);
+    } catch (error) {
+      console.error("게시글 수정 실패", error);
+    }
+  };
+
+  return (
+    <Row className="row p-4 justify-content-center m-0">
+      <Col xs={12} sm={10} md={6} className="m-0 p-0">
+        <div className="talk-new-container">
+          <WritePostInputBox
+            type="text"
+            placeholder="제목"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+
+          <WritingEditor value={contentOrigin} onChange={setContentOrigin} />
+
+          <div className="mt-2">
+            <Button
+              type="button"
+              className="photo-button"
+              onClick={handleImgUpload}
+            >
+              이미지 업로드
+            </Button>
+          </div>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={onchangeImageUpload}
+            style={{ display: "none" }}
+          />
+
+          <div className="talk-new-photo-img-container mt-2">
+            {previewImgs.map((url, index) => (
+              <img
+                key={index}
+                className="talk-new-photo-imgsize"
+                src={url}
+                alt="업로드된 이미지"
+                onClick={() => handleRemoveImage(index)}
+              />
+            ))}
+          </div>
+
+          <div className="talk-new-button">
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName="취소"
+                buttonColor="red"
+                clickBtn={() => navigate("/dorandoran/talks")}
+              />
+            </div>
+            <div className="talk-new-button-gap">
+              <BorderButton
+                btnName="완료"
+                buttonColor="black"
+                clickBtn={handleTalkUpdate}
+              />
+            </div>
+          </div>
+        </div>
+      </Col>
+    </Row>
+  );
 };
 
 export default TalkUpdate;
