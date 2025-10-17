@@ -59,7 +59,7 @@ const TalkDetail = ({
 			if (!user || !id) return; // user나 id가 없으면 실행하지 않음
 
 			try {
-				const response = await api.get(`http://localhost:8080/explorations/bookmarks`, {
+				const response = await api.get(`/explorations/bookmarks`, {
 					params: {
 						memberId: user.id,
 						explorationId: id,
@@ -94,7 +94,7 @@ const TalkDetail = ({
 			try {
 				console.log("글쓴이Id:" + member.id);
 				// 확인을 누르면 서버에 삭제 요청을 보냄
-				await api.delete(`http://localhost:8080/explorations/${id}`);
+				await api.delete(`/explorations/${id}`);
 
 				// 3. 삭제 성공 시, 사용자에게 알리고 목록 페이지 등으로 이동시킵니다.
 				alert("삭제가 완료되었습니다.");
@@ -110,13 +110,13 @@ const TalkDetail = ({
 	const onBookmark = async () => {
 		try {
 			if (!isBookmarked) {
-				const response = await api.post(`http://localhost:8080/explorations/bookmarks`, {
+				const response = await api.post(`/explorations/bookmarks`, {
 					explorationId: id,
 					memberId: user.id,
 				});
 				setBookmarkCounts(bookmarkCounts + 1);
 			} else {
-				const response = await api.delete(`http://localhost:8080/explorations/bookmarks`, {
+				const response = await api.delete(`/explorations/bookmarks`, {
 					data: {
 						explorationId: id,
 						memberId: user.id,
@@ -130,12 +130,25 @@ const TalkDetail = ({
 		}
 	};
 
+	const reportPost = async (reason, postId, memberId) => {
+		try {
+			const response = await api.post("/explorations/reports", {
+				reason: reason,
+				postId: postId,
+				memberId: memberId,
+			});
+			alert("신고 완료");
+		} catch (err) {
+			console.error("문화재 탐방기 신고 요청 중 에러 발생", err);
+		}
+	};
+
 	const sanitizedContent = DOMPurify.sanitize(content);
 
 	return (
 		<Row className="h-100 justify-content-center align-items-center m-0">
 			<Col xs={11} sm={10} md={8} lg={6}>
-				<Card className="rounded-0 border-0">
+				<Card className="rounded-0 border-0 border-bottom">
 					<Card.Body>
 						<Card.Title className="mt-3">{title}</Card.Title>
 						<Row>
@@ -193,7 +206,7 @@ const TalkDetail = ({
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
 						<div className="row d-flex justify-content-between">
-							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-2 py-1">
+							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-1 py-1">
 								<div>
 									<BookmarkButton
 										count={bookmarkCounts}
@@ -208,7 +221,11 @@ const TalkDetail = ({
 									<CommentButton count={commentCount} />
 								</div>
 								<div>
-									<ReportButton />
+									<ReportButton
+										reportedPostId={id}
+										reportedMemberId={member.id}
+										reportPost={reportPost}
+									/>
 								</div>
 							</div>
 						</div>
