@@ -54,7 +54,7 @@ const TalkNew = () => {
       });
       alert("게시글을 작성했습니다.");
       console.log("담소 게시글을 작성했습니다.", response.data);
-      navigate("/talks");
+      navigate(`/dorandoran/talks/detail/${response.data.data}`);
     } catch (error) {
       console.error("담소 게시글을 작성하는 데 문제 발생", error.message);
     }

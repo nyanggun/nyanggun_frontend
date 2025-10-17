@@ -84,6 +84,7 @@ const TalkBoardDetail = () => {
         talkId: talkBoard.talkId,
         title: talkBoard.title,
         content: talkBoard.content,
+        talkPictureList: talkBoard.talkPictureList,
       },
     });
   };
