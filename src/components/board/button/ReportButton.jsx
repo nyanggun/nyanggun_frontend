@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Image } from "react-bootstrap";
 
+import BorderButton from "../BorderButton";
 import "./ReportButton.css";
 import ReportImage from "../../../assets/report-icon.svg";
 
@@ -8,6 +9,10 @@ const ReportModal = ({ onClose, reportPost, reportedPostId, reportedMemberId }) 
 	const [reason, setReason] = useState("");
 
 	const onSubmit = () => {
+		if (reason.trim() === "") {
+			alert("신고 사유를 입력해주세요."); // 사용자에게 알림
+			return; // 함수를 종료하여 제출 로직이 실행되지 않도록 함
+		}
 		reportPost(reason, reportedPostId, reportedMemberId);
 		onClose();
 	};
@@ -22,13 +27,9 @@ const ReportModal = ({ onClose, reportPost, reportedPostId, reportedMemberId }) 
 					onChange={(e) => setReason(e.target.value)}
 					style={{ width: "100%", padding: "8px" }}
 				/>
-				<div className="modal-buttons">
-					<button onClick={onClose} className="close-btn">
-						취소
-					</button>
-					<button onClick={onSubmit} className="submit-btn">
-						제출
-					</button>
+				<div className="modal-buttons d-flex justify-content-end pt-2 gap-1">
+					<BorderButton btnName="취소" clickBtn={onClose} buttonColor={"black"} />
+					<BorderButton btnName="제출" clickBtn={onSubmit} buttonColor={"red"} />
 				</div>
 			</div>
 		</div>

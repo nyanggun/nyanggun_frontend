@@ -134,7 +134,7 @@ const TalkDetail = ({
 		try {
 			const response = await api.post("/explorations/reports", {
 				reason: reason,
-				postId: postId,
+				contentId: postId,
 				memberId: memberId,
 			});
 			alert("신고 완료");
