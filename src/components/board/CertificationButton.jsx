@@ -1,18 +1,22 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 
-const CertificationButton = (props) => {
-  return (
-    <Button
-      className="my-4 rounded-3 px-5 border-0 w-100"
-      size="lg"
-      style={{ background: "#3D253B" }}
-      onClick={props.onClick}
-      disabled={props.disabled}
-    >
-      <span className="px-5">{props.text}</span>
-    </Button>
-  );
+const CertificationButton = ({ onClick, disabled, text }) => {
+	return (
+		<Button
+			className="my-4 rounded-3 px-5 border-0 w-100"
+			size="lg"
+			style={{ background: "#3D253B" }}
+			onClick={onClick}
+			disabled={disabled}
+		>
+			<Row>
+				<Col>
+					<span className="">{text}</span>
+				</Col>
+			</Row>
+		</Button>
+	);
 };
 
 export default CertificationButton;
