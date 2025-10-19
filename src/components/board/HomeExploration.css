@@ -1,0 +1,63 @@
+.home-exploration-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-exploration-img {
+    height: 50vh;
+    width: 22vw;
+    object-fit: cover;
+    object-position: center;
+}
+
+.home-exploration-img-box:hover img {
+    filter: brightness(60%) hue-rotate(-20deg);
+}
+.home-exploration-text {
+    width: 22vw;
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+.home-exploration-text-h6 {
+    margin: 10% 0%;
+    display: -webkit-box; /* flex처럼 동작 */
+    -webkit-line-clamp: 5; /* 최대 5줄까지만 표시 */
+    -webkit-box-orient: vertical; /* 세로 방향 */
+    overflow: hidden; /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis; /* ... 표시 */
+}
+
+.home-exploration-nickname {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.talk-profile-pic-icon {
+    width: 10%;
+    margin: 1%;
+}
+.home-exploration-nickname-h6 {
+    margin-top: 10px;
+}
+
+@media (max-width: 1200px) {
+    .home-exploration-container {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 2%;
+    }
+
+    .home-exploration-text {
+        width: auto;
+        margin: 0% 4%;
+    }
+
+    .home-exploration-img {
+        width: 50vw;
+        height: 40vh;
+    }
+}
