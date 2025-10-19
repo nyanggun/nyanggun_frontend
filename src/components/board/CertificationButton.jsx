@@ -10,7 +10,9 @@ const CertificationButton = (props) => {
       onClick={props.onClick}
       disabled={props.disabled}
     >
-      <span className="px-5">{props.text}</span>
+      <div className="d-flex justify-content-center">
+        <span className="">{props.text}</span>
+      </div>
     </Button>
   );
 };

@@ -33,7 +33,7 @@ const BadgeAcquisition = () => {
             className="mt-3 mb-3"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(5, minmax(150px, 1fr))", // 한 줄에 5개
+              gridTemplateColumns: "repeat(5, minmax(120px, 1fr))", // 한 줄에 5개
               placeContent: "center",
               width: "80%", // 그리드 자체 크기
               margin: "0 auto", // 가운데 정렬
@@ -43,8 +43,8 @@ const BadgeAcquisition = () => {
               <div
                 key={index}
                 style={{
-                  width: "100px",
-                  height: "100px",
+                  width: "5rem",
+                  height: "5rem",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
