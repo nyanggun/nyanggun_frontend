@@ -4,7 +4,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 25vw;
 }
 
 .home-heritage-img {
@@ -13,35 +12,39 @@
   object-fit: cover;
   object-position: center;
 }
-.home-heritage-img-box {
-  margin-top: 10%;
-}
 
 .home-heritage-img-box:hover img {
   filter: brightness(60%) hue-rotate(-20deg);
 }
 .home-heritage-text {
   width: 22vw;
-  margin: 4% 2%;
+  margin-top: 4%;
+  margin-bottom: 4%;
 }
 .home-heritage-text.h6 {
-  margin: 20% 0%;
+  margin: 10% 0%;
+  display: -webkit-box; /* flex처럼 동작 */
+  -webkit-line-clamp: 5; /* 최대 5줄까지만 표시 */
+  -webkit-box-orient: vertical; /* 세로 방향 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
+  text-overflow: ellipsis; /* ... 표시 */
 }
 
 @media (max-width: 1200px) {
   .home-heritage-container {
-    margin: 2% 2%;
-    scale: calc(1);
     display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 2%;
+  }
+
+  .home-heritage-text {
+    width: auto;
+    margin: 0% 4%;
   }
 
   .home-heritage-img {
     width: 50vw;
     height: 40vh;
-    object-fit: cover;
-    object-position: center;
-  }
-  .home-heritage-text {
-    margin: 5% 3%;
   }
 }
