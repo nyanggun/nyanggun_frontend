@@ -26,8 +26,8 @@ const HeritageEncyclopediaBoardList = () => {
           <Menu
             menuOne={"ㄱㄴㄷ순"}
             menuOneLink={"/heritages/name"}
-            menuTwoLink={"/heritages/popular"}
             menuTwo={"인기순"}
+            menuTwoLink={"/heritages/popular"}
           ></Menu>
         )}
       </div>

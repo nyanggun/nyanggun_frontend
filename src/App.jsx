@@ -4,7 +4,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthProvider";
 import ExplorationAndTalkPage from "./pages/board/ExplorationAndTalkPage";
 
-import BadgeAcquisition from "./pages/badge/BadgeAcquisition";
+import BadgeAcquisitionMap from "./pages/badge/BadgeAcquisitionMap";
+import BadgeBoard from "./pages/badge/BadgeBoard";
+import BadgeBox from "./pages/badge/BadgeBox";
 import ExplorationBoard from "./pages/board/Exploration/ExplorationBoard";
 import ExplorationDetailPage from "./pages/board/Exploration/ExplorationDetailPage";
 import ExplorationEdit from "./pages/board/Exploration/ExplorationEdit";
@@ -98,10 +100,11 @@ const App = () => {
               element={<HeritageEncyclopediaDetail />}
             />
           </Route>
-          <Route
-            path="badges"
-            element={<BadgeAcquisition></BadgeAcquisition>}
-          />
+          <Route path="/badges" element={<BadgeBoard />}>
+            <Route index element={<Navigate to="map" replace />} />
+            <Route path="map" element={<BadgeAcquisitionMap />} />
+            <Route path="badgebox" element={<BadgeBox />} />
+          </Route>
           <Route path="/photobox" element={<PhotoPage></PhotoPage>}>
             <Route index element={<Navigate to="list" replace />} />
             <Route path="list" element={<PhotoList></PhotoList>}></Route>
