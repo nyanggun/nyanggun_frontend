@@ -24,12 +24,21 @@
   width: 100%;
 }
 
+.home-heritage > div:nth-child(2) {
+  margin-top: 20%;
+}
+
+.home-heritage > div:nth-child(4) {
+  margin-top: 20%;
+}
+
 .home-event-title {
   color: white;
   z-index: 100;
   position: absolute;
   bottom: 120px;
   left: 8%;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 3px 3px 6px rgba(0, 0, 0, 1);
 }
 
 .home-heritage {
@@ -37,7 +46,6 @@
   height: 100vh;
   width: calc(50vw - 8px); /* 스크롤바 너비만큼 빼기 */
   grid-template-columns: 1fr 1fr;
-
   overflow-y: auto;
 }
 
@@ -56,6 +64,7 @@
 
 .home-event-title h4 {
   font-size: 2vw;
+  display: inline;
 }
 
 .home-event-title h6 {
@@ -89,8 +98,8 @@
   .home-heritage {
     display: flex;
     flex-direction: column;
-    height: auto;
     width: 100vw;
+    height: auto;
     margin: 1% 0%;
   }
 
@@ -123,5 +132,13 @@
   }
   .item2 {
     order: 1;
+  }
+
+  .home-heritage > div:nth-child(2) {
+    margin-top: 0;
+  }
+
+  .home-heritage > div:nth-child(4) {
+    margin-top: 0;
   }
 }
