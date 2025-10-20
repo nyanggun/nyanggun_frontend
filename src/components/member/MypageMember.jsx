@@ -3,38 +3,44 @@ import "./MyPageMember.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import BorderButton from "../board/BorderButton";
 
-/**
- * MypageMember 컴포넌트
- * - 사용자의 프로필 정보를 표시하고 수정 및 회원 탈퇴 기능을 제공
- * - profileData: 부모 컴포넌트에서 전달된 유저 정보
- * - handleEditInfo: 정보 수정 시 부모 컴포넌트로 변경 데이터를 전달하는 함수
- * - handleWithdrawal: 회원 탈퇴 시 부모 컴포넌트에서 처리하는 함수
- */
 const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
   const { user } = useContext(AuthContext);
 
-  // 수정 모드 상태
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     email: profileData.email || "",
     nickname: profileData.nickname || "",
     phoneNumber: profileData.phoneNumber || "",
     password: "",
+    profileImage: null, // 이미지 업로드용
   });
 
-  // 정보 수정 저장
+  // 파일 선택
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditData((prev) => ({ ...prev, profileImage: file }));
+    }
+  };
+
+  // 정보 저장
   const handleSave = () => {
-    handleEditInfo(editData);
+    const formData = new FormData();
+    formData.append("email", editData.email);
+    formData.append("nickname", editData.nickname);
+    formData.append("phoneNumber", editData.phoneNumber);
+    if (editData.password) formData.append("password", editData.password);
+    if (editData.profileImage)
+      formData.append("profileImage", editData.profileImage);
+
+    handleEditInfo(formData); // 부모로 FormData 전달
     setIsEditing(false);
     setEditData((prev) => ({ ...prev, password: "" }));
   };
 
-  // 회원 탈퇴
   const handleWithdrawalClick = () => {
     const confirmed = window.confirm("정말 회원 탈퇴하시겠습니까?");
-    if (confirmed) {
-      handleWithdrawal(); // 부모에서 실제 탈퇴 처리
-    }
+    if (confirmed) handleWithdrawal();
   };
 
   return (
@@ -42,16 +48,27 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
       {/* 아바타 */}
       <div className="mypage-avatar">
         <img
-          src={profileData.profileImagePath || "/assets/default_profile.svg"}
+          src={
+            editData.profileImage
+              ? URL.createObjectURL(editData.profileImage)
+              : profileData.profileImagePath || "/assets/comment_profile.svg"
+          }
           alt="프로필 이미지"
         />
+        {isEditing && (
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ marginTop: "8px" }}
+          />
+        )}
       </div>
 
       {/* 회원 정보 영역 */}
       <div className="mypage-info-area">
         {!isEditing ? (
           <>
-            {/* 일반 정보 표시 */}
             <div className="mypage-info-list">
               <p>
                 <strong>이메일</strong>{" "}
@@ -66,7 +83,6 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
               </p>
             </div>
 
-            {/* 로그인한 사용자만 수정/탈퇴 버튼 표시 */}
             {user?.id === profileData?.id && (
               <div className="mypage-action-buttons">
                 <BorderButton
@@ -76,7 +92,7 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
                 />
                 <BorderButton
                   btnName="회원탈퇴"
-                  clickBtn={handleWithdrawalClick} // confirm 처리
+                  clickBtn={handleWithdrawalClick}
                   buttonColor="red"
                 />
               </div>
@@ -84,9 +100,8 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
           </>
         ) : (
           <>
-            {/* 정보 수정 폼 */}
             <div className="mypage-edit-form">
-              {/** 이메일 */}
+              {/* 이메일 */}
               <div className="form-group d-flex align-items-center mb-2">
                 <label style={{ width: "80px" }}>이메일</label>
                 <input
@@ -99,7 +114,7 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
                 />
               </div>
 
-              {/** 닉네임 */}
+              {/* 닉네임 */}
               <div className="form-group d-flex align-items-center mb-2">
                 <label style={{ width: "80px" }}>닉네임</label>
                 <input
@@ -112,7 +127,7 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
                 />
               </div>
 
-              {/** 전화번호 */}
+              {/* 전화번호 */}
               <div className="form-group d-flex align-items-center mb-2">
                 <label style={{ width: "80px" }}>전화번호</label>
                 <input
@@ -125,7 +140,7 @@ const MypageMember = ({ profileData, handleEditInfo, handleWithdrawal }) => {
                 />
               </div>
 
-              {/** 비밀번호 */}
+              {/* 비밀번호 */}
               <div className="form-group d-flex align-items-center mb-2">
                 <label style={{ width: "80px" }}>비밀번호</label>
                 <input
