@@ -11,6 +11,7 @@ import ReportButton from "./button/ReportButton";
 import api from "../../config/apiConfig";
 import { Search } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import CommentButtonImage from "../../assets/comment.svg";
 
 const TalkDetail = ({
   talk,
@@ -77,26 +78,55 @@ const TalkDetail = ({
     >
       <Col xs={12} sm={10} md={8} lg={6}>
         <Card className="border-0">
-          <Card.Body className="pt-0 pb-0 px-3">
+          <Card.Body className="pt-0 pb-0 px-2">
             <Card.Title>{talk.title}</Card.Title>
-            <div className="d-flex align-items-center gap-2">
-              {talk.profile ? (
-                <div>프로필 사진이 있는 경우 이 부분을 고치세요.</div>
-              ) : (
-                <div className="talk-profile">
-                  <Image
-                    src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
-                    roundedCircle
-                    fluid
-                    className="talk-profile-pic border border-1"
-                  />
+
+            <div className="talk-name">
+              <div className="talk-name">
+                {talk.profile ? (
+                  <div>프로필 사진이 있는 경우 이 부분을 고치세요.</div>
+                ) : (
+                  <div className="talk-profile">
+                    <Image
+                      src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+                      roundedCircle
+                      fluid
+                      className="talk-profile-pic border border-1"
+                    />
+                  </div>
+                )}
+                <div>
+                  <span className="p-2">{talk.nickname}</span>
                 </div>
-              )}
-              <div>
-                <span>{talk.nickname}</span>
+                <div>
+                  <span className="small">{timeAgo}</span>
+                </div>
               </div>
               <div>
-                <span className="small">{timeAgo}</span>
+                {/* 현재 페이지가 상세 페이지일때만 버튼 노출 */}
+                {currentPath.startsWith("/dorandoran/talks/detail") ||
+                currentPath.startsWith("/photobox/detail") ? (
+                  talk.memberId === userData.user?.id ||
+                  userData.user?.role === "ROLE_ADMIN" ? (
+                    <div className="comment-btn-delete">
+                      <BorderButton
+                        btnName="수정"
+                        buttonColor="black"
+                        clickBtn={onUpdateTalk}
+                      />
+                      <span> </span>
+                      <BorderButton
+                        btnName="삭제"
+                        buttonColor="red"
+                        clickBtn={onDeleteTalk}
+                      />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )
+                ) : (
+                  <div></div>
+                )}
               </div>
             </div>
             {talk.photoBoxPicturePath ? (
@@ -146,7 +176,16 @@ const TalkDetail = ({
             {talk.tags && talk.tags.length > 0 ? (
               <div className="tags">
                 {talk.tags.map((tag, index) => (
-                  <span key={index}>{tag} </span>
+                  <span
+                    key={index}
+                    onClick={() =>
+                      navigate(
+                        `/photobox/search?keyword=${tag.replace("#", "")}`
+                      )
+                    }
+                  >
+                    {tag}
+                  </span>
                 ))}
               </div>
             ) : (
@@ -175,7 +214,12 @@ const TalkDetail = ({
                 {/* 사진함은 댓글이 없으므로 해당 아이콘을 보이지 않게 합니다. */}
                 {talk.commentCount > -1 ? (
                   <div className="icon-border d-flex align-items-center gap-1 pt-1 ps-2 pe-2 pb-1 me-1">
-                    <Image fluid className="icons" src={TextIcon} width="15" />
+                    <Image
+                      fluid
+                      className="icons"
+                      src={CommentButtonImage}
+                      width="15"
+                    />
                     <span className="small">{talk.commentCount}</span>
                   </div>
                 ) : (
@@ -211,30 +255,6 @@ const TalkDetail = ({
                 ></ReportButton>
               </div>
               {/* 게시글 작성 아이디 = 유저 번호 */}
-
-              {/* 현재 페이지가 상세 페이지일때만 버튼 노출 */}
-              {currentPath.startsWith("/dorandoran/talks/detail") ||
-              currentPath.startsWith("/photobox/detail") ? (
-                talk.memberId === userData.user?.id ? (
-                  <div className="comment-btn-delete">
-                    <BorderButton
-                      btnName="수정"
-                      buttonColor="black"
-                      clickBtn={onUpdateTalk}
-                    />
-                    <span> </span>
-                    <BorderButton
-                      btnName="삭제"
-                      buttonColor="red"
-                      clickBtn={onDeleteTalk}
-                    />
-                  </div>
-                ) : (
-                  <div></div>
-                )
-              ) : (
-                <div></div>
-              )}
             </div>
 
             <hr className="border-1 p-0"></hr>

@@ -38,7 +38,7 @@ const HamburgerMenu = ({ onButtonClick }) => {
                   className="hamburger-user"
                   onClick={() => {
                     onButtonClick();
-                    navigate("/");
+                    navigate("/mypage");
                   }}
                 >
                   <Image
@@ -80,10 +80,6 @@ const HamburgerMenu = ({ onButtonClick }) => {
                 />
                 <div>
                   <div className="hamburger-login">
-                    <div className="hamburger-login-text">
-                      로그인이 필요합니다.
-                    </div>
-
                     <BorderButton
                       btnName={"로그인하기"}
                       clickBtn={() => {
@@ -161,8 +157,19 @@ const HamburgerMenu = ({ onButtonClick }) => {
             <div className="hamburger-menu-lines">
               <hr className="hamburger-line semi-white"></hr>
             </div>
-
-            <div className="hamburger-menu-text">1:1 문의</div>
+            {userData.user?.role == "ROLE_ADMIN" ? (
+              <div
+                className="hamburger-menu-text"
+                onClick={() => {
+                  onButtonClick();
+                  navigate("/admin");
+                }}
+              >
+                관리자 기능
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </Col>
       </Row>

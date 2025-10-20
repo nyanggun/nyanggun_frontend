@@ -8,6 +8,7 @@ import "./TalkBoardDetail.css";
 import api from "../../../config/apiConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { Row, Col } from "react-bootstrap";
 
 //대댓글 처리 메소드
 //서버에서 댓글 목록들을 불러온 후 계층 구조로 변환합니다.
@@ -181,7 +182,7 @@ const TalkBoardDetail = () => {
   };
 
   return (
-    <div>
+    <div className="talk-board-container">
       <div>
         {talkBoard && (
           <TalkDetail
@@ -192,53 +193,60 @@ const TalkBoardDetail = () => {
           />
         )}
       </div>
-      <div className="comments">
-        <div className="comments-input">
-          <CommentInput onSubmit={handleCommentSubmit}></CommentInput>
-        </div>
+      <div>
+        <Row className="justify-content-center align-items-center m-0 mb-3">
+          <Col xs={12} sm={10} md={8} lg={6}>
+            <div>
+              <CommentInput onSubmit={handleCommentSubmit}></CommentInput>
+            </div>
+          </Col>
+        </Row>
         {talkBoardComment.length > 0 ? (
-          <div className="comments-list">
-            {talkBoardComment.map((comment) => (
-              <div key={comment.talkCommentId}>
-                <Comment
-                  nickname={comment.nickname}
-                  content={comment.content}
-                  createdAt={comment.createdAt}
-                  memberId={comment.memberId}
-                  talkCommentId={comment.talkCommentId}
-                  onCommentSubmit={handleCommentSubmit}
-                  onUpdateComment={handleUpdateComment}
-                  onDeleteComment={handleDeleteComment}
-                  reportComment={reportComment}
-                  reportedCommentId={comment.id}
-                  reportedMemberId={userData.user?.id}
-                />
+          <Row className="justify-content-center align-items-center m-0">
+            <Col xs={12} sm={10} md={8} lg={6}>
+              {talkBoardComment.map((comment) => (
+                <div key={comment.talkCommentId}>
+                  <Comment
+                    nickname={comment.nickname}
+                    content={comment.content}
+                    createdAt={comment.createdAt}
+                    memberId={comment.memberId}
+                    talkCommentId={comment.talkCommentId}
+                    onCommentSubmit={handleCommentSubmit}
+                    onUpdateComment={handleUpdateComment}
+                    onDeleteComment={handleDeleteComment}
+                    reportComment={reportComment}
+                    reportedCommentId={comment.id}
+                    reportedMemberId={userData.user?.id}
+                  />
 
-                {/* 대댓글 */}
-                {comment.replies.map((reply) => (
-                  <div
-                    key={reply.talkCommentId}
-                    style={{ marginLeft: "7%" }} // 들여쓰기
-                  >
-                    <Comment
-                      nickname={reply.nickname}
-                      content={reply.content}
-                      createdAt={reply.createdAt}
-                      talkCommentId={reply.talkCommentId}
-                      memberId={comment.memberId}
-                      onCommentSubmit={handleCommentSubmit}
-                      onUpdateComment={handleUpdateComment}
-                      onDeleteComment={handleDeleteComment}
-                      activeParentCommentId={activeParentCommentId}
-                      setActiveParentCommentId={setActiveParentCommentId}
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+                  {/* 대댓글 */}
+                  {comment.replies.map((reply) => (
+                    <div
+                      key={reply.talkCommentId}
+                      style={{ marginLeft: "7%" }} // 들여쓰기
+                      className="ms-5 mt-0 border-start ps-3"
+                    >
+                      <Comment
+                        nickname={reply.nickname}
+                        content={reply.content}
+                        createdAt={reply.createdAt}
+                        talkCommentId={reply.talkCommentId}
+                        memberId={comment.memberId}
+                        onCommentSubmit={handleCommentSubmit}
+                        onUpdateComment={handleUpdateComment}
+                        onDeleteComment={handleDeleteComment}
+                        activeParentCommentId={activeParentCommentId}
+                        setActiveParentCommentId={setActiveParentCommentId}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </Col>
+          </Row>
         ) : (
-          <div className="comments-none">댓글이 없습니다.</div>
+          <div></div>
         )}
       </div>
     </div>

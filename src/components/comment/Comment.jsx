@@ -113,7 +113,8 @@ const Comment = ({
               <ReportCommentButton></ReportCommentButton>
             </div>
           </div>
-          {memberId === userData.user?.id ? (
+          {memberId === userData.user?.id ||
+          userData.user?.role === "ROLE_ADMIN" ? (
             <div className="comment-btn-delete">
               <BorderButton
                 btnName={"수정"}
