@@ -136,7 +136,6 @@ const ExplorationDetailPage = () => {
 			<div>{exploration && <ExplorationPost {...exploration} />}</div>
 			<Row className="justify-content-center">
 				<Col className="col-11 col-sm-10 col-md-8 mb-3">
-					<h4>댓글</h4>
 					<CommentInput onSubmit={onSubmit} />
 				</Col>
 			</Row>
