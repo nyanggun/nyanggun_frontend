@@ -91,6 +91,14 @@ const HamburgerMenu = ({ onButtonClick }) => {
                         navigate("/login");
                       }}
                     ></BorderButton>
+                    <div className="me-2"></div>
+                    <BorderButton
+                      btnName={"회원가입"}
+                      clickBtn={() => {
+                        onButtonClick();
+                        navigate("/register");
+                      }}
+                    ></BorderButton>
                   </div>
                 </div>
               </div>

@@ -175,6 +175,11 @@ const TalkBoardDetail = () => {
     }
   };
 
+  //담소 댓글을 신고하는 메소드 입니다.
+  const reportComment = () => {
+    console.log("댓글 신고 전송하기");
+  };
+
   return (
     <div>
       <div>
@@ -204,6 +209,9 @@ const TalkBoardDetail = () => {
                   onCommentSubmit={handleCommentSubmit}
                   onUpdateComment={handleUpdateComment}
                   onDeleteComment={handleDeleteComment}
+                  reportComment={reportComment}
+                  reportedCommentId={comment.id}
+                  reportedMemberId={userData.user?.id}
                 />
 
                 {/* 대댓글 */}
