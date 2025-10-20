@@ -10,9 +10,9 @@ const AdminPage = () => {
 			<div className="py-3">
 				<Menu
 					menuOne={"신고"}
-					menuTwo={"유저 제재"}
+					menuTwo={"유저"}
 					menuOneLink={"/admin/reports"}
-					menuTwoLink={"/admin/user-sanction"}
+					menuTwoLink={"/admin/users"}
 				></Menu>
 			</div>
 			<main className="mt-3">

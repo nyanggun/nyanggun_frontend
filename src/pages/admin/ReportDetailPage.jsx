@@ -87,7 +87,7 @@ const ReportDetailPage = () => {
 					></BorderButton>
 					{report && report.reportState == "PENDING" ? (
 						<BorderButton
-							btnName={""}
+							btnName={"처리중"}
 							buttonColor="red"
 							clickBtn={() => {
 								changeState();
