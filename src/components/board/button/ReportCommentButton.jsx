@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Button, Image } from "react-bootstrap";
 
 import BorderButton from "../BorderButton";
-import "./ReportButton.css";
+import "./ReportCommentButton.css";
 import ReportImage from "../../../assets/report-icon.svg";
-
+import WarningRed from "../../../assets/warning-red.svg";
 const ReportModal = ({
   onClose,
-  reportPost,
+  reportComment,
   reportedPostId,
   reportedMemberId,
 }) => {
@@ -17,7 +17,7 @@ const ReportModal = ({
       alert("신고 사유를 입력해주세요."); // 사용자에게 알림
       return; // 함수를 종료하여 제출 로직이 실행되지 않도록 함
     }
-    reportPost(reason, reportedPostId, reportedMemberId);
+    reportComment(reason, reportedPostId, reportedMemberId);
     onClose();
   };
   return (
@@ -48,36 +48,42 @@ const ReportModal = ({
   );
 };
 
-const ReportButton = ({ reportedPostId, reportedMemberId, reportPost }) => {
+const ReportButton = ({
+  reportedCommentId,
+  reportedMemberId,
+  reportComment,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
-      <div className="report-button-round">
+      <div>
         <Button
           variant=""
           size="sm"
+          className="report-comment-button"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation;
             openModal();
           }}
         >
-          <Image
-            className="report-btn-img fluid"
-            src={ReportImage}
-            style={{ width: "17px", height: "20px" }}
-          />
+          <div className="comment-btn-box">
+            <img src={WarningRed} width={15}></img>
+            <span className="comment-font-red">댓글 신고</span>
+          </div>
         </Button>
       </div>
       {isModalOpen && (
         <ReportModal
           onClose={closeModal}
-          reportPost={reportPost}
-          reportedPostId={reportedPostId}
+          reportComment={reportComment}
+          reportedCommentId={reportedCommentId}
           reportedMemberId={reportedMemberId}
         />
       )}

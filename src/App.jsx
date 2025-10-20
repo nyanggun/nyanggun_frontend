@@ -4,7 +4,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthProvider";
 import ExplorationAndTalkPage from "./pages/board/ExplorationAndTalkPage";
 
-import BadgeAcquisition from "./pages/badge/BadgeAcquisition";
+import BadgeAcquisitionMap from "./pages/badge/BadgeAcquisitionMap";
+import BadgeBoard from "./pages/badge/BadgeBoard";
+import BadgeBox from "./pages/badge/BadgeBox";
 import ExplorationBoard from "./pages/board/Exploration/ExplorationBoard";
 import ExplorationDetailPage from "./pages/board/Exploration/ExplorationDetailPage";
 import ExplorationEdit from "./pages/board/Exploration/ExplorationEdit";
@@ -34,95 +36,70 @@ import HeritageEncyclopediaDetail from "./pages/board/HeritageEncyclopedia/Herit
 import PhotoSearchResult from "./pages/board/photo/PhotoSearchResult";
 import ExplorationSearchResult from "./pages/board/Exploration/ExplorationSearchResult";
 import Home from "./pages/home/Home";
+import AdminPage from "./pages/admin/AdminPage";
+import ReportPage from "./pages/admin/ReportPage";
+import ReportDetailPage from "./pages/admin/ReportDetailPage";
+import MyPage from "./pages/user/MyPage";
 
 const App = () => {
-  return (
-    <>
-      <AuthProvider>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home></Home>}></Route>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
-            <Route index element={<Navigate to="explorations" replace />} />
-            <Route path="explorations" element={<ExplorationBoard />}></Route>
-            <Route
-              path="explorations/search"
-              element={<ExplorationSearchResult></ExplorationSearchResult>}
-            />
-            <Route
-              path="explorations/:id"
-              element={<ExplorationDetailPage />}
-            />
-            <Route path="explorations/:id/edit" element={<ExplorationEdit />} />
-            <Route
-              path="explorations/new"
-              element={<NewExploration></NewExploration>}
-            ></Route>
-            <Route
-              path="talks"
-              element={<TalkBoardList></TalkBoardList>}
-            ></Route>
-            <Route
-              path="talks/detail/:talkId"
-              element={<TalkBoardDetail></TalkBoardDetail>}
-            ></Route>
-            <Route path="talks/new" element={<TalkNew></TalkNew>}></Route>
-            <Route
-              path="talks/update"
-              element={<TalkUpdate></TalkUpdate>}
-            ></Route>
-            <Route
-              path="talks/search"
-              element={<TalkSearchResult></TalkSearchResult>}
-            />
-          </Route>
-          <Route path="/heritages" element={<HeritageEncyclopediaBoard />}>
-            <Route index element={<Navigate to="name" replace />} />
-            <Route
-              path="name"
-              element={<HeritageEncyclopediaBoardNameList />}
-            />
-            <Route
-              path="popular"
-              element={<HeritageEncyclopediaBoardPopularList />}
-            />
-            <Route
-              path="search"
-              element={<HeritageEncyclopediaBoardSearchList />}
-            />
-            <Route
-              path="detail/:HeritageEncyclopediaId"
-              element={<HeritageEncyclopediaDetail />}
-            />
-          </Route>
-          <Route
-            path="badges"
-            element={<BadgeAcquisition></BadgeAcquisition>}
-          />
-          <Route path="/photobox" element={<PhotoPage></PhotoPage>}>
-            <Route index element={<Navigate to="list" replace />} />
-            <Route path="list" element={<PhotoList></PhotoList>}></Route>
-            <Route
-              path="detail/:photoId"
-              element={<PhotoDetail></PhotoDetail>}
-            ></Route>
-            <Route path="new" element={<PhotoNew></PhotoNew>} />
-            <Route path="update" element={<PhotoUpdate></PhotoUpdate>} />
-            <Route
-              path="search"
-              element={<PhotoSearchResult></PhotoSearchResult>}
-            />
-          </Route>
-        </Routes>
-        <Footer />
-        <NavigationBar></NavigationBar>
-        <ChatbotButton />
-      </AuthProvider>
-    </>
-  );
+	return (
+		<>
+			<AuthProvider>
+				<Header />
+				<Routes>
+					<Route path="/" element={<Home></Home>}></Route>
+					<Route path="/admin" element={<AdminPage />}>
+						<Route index element={<Navigate to="reports" replace />} />
+						<Route path="reports" element={<ReportPage />} />
+						<Route path="reports/:id" element={<ReportDetailPage />} />
+					</Route>
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/logout" element={<Logout />} />
+					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/dorandoran" element={<ExplorationAndTalkPage />}>
+						<Route index element={<Navigate to="explorations" replace />} />
+						<Route path="explorations" element={<ExplorationBoard />}></Route>
+						<Route
+							path="explorations/search"
+							element={<ExplorationSearchResult></ExplorationSearchResult>}
+						/>
+						<Route path="explorations/:id" element={<ExplorationDetailPage />} />
+						<Route path="explorations/:id/edit" element={<ExplorationEdit />} />
+						<Route path="explorations/new" element={<NewExploration></NewExploration>}></Route>
+						<Route path="talks" element={<TalkBoardList></TalkBoardList>}></Route>
+						<Route path="talks/detail/:talkId" element={<TalkBoardDetail></TalkBoardDetail>}></Route>
+						<Route path="talks/new" element={<TalkNew></TalkNew>}></Route>
+						<Route path="talks/update" element={<TalkUpdate></TalkUpdate>}></Route>
+						<Route path="talks/search" element={<TalkSearchResult></TalkSearchResult>} />
+					</Route>
+					<Route path="/heritages" element={<HeritageEncyclopediaBoard />}>
+						<Route index element={<Navigate to="name" replace />} />
+						<Route path="name" element={<HeritageEncyclopediaBoardNameList />} />
+						<Route path="popular" element={<HeritageEncyclopediaBoardPopularList />} />
+						<Route path="search" element={<HeritageEncyclopediaBoardSearchList />} />
+						<Route path="detail/:HeritageEncyclopediaId" element={<HeritageEncyclopediaDetail />} />
+					</Route>
+					<Route path="/badges" element={<BadgeBoard />}>
+						<Route index element={<Navigate to="map" replace />} />
+						<Route path="map" element={<BadgeAcquisitionMap />} />
+						<Route path="badgebox" element={<BadgeBox />} />
+					</Route>
+					<Route path="/photobox" element={<PhotoPage></PhotoPage>}>
+						<Route index element={<Navigate to="list" replace />} />
+						<Route path="list" element={<PhotoList></PhotoList>}></Route>
+						<Route path="detail/:photoId" element={<PhotoDetail></PhotoDetail>}></Route>
+						<Route path="new" element={<PhotoNew></PhotoNew>} />
+						<Route path="update" element={<PhotoUpdate></PhotoUpdate>} />
+						<Route path="search" element={<PhotoSearchResult></PhotoSearchResult>} />
+					</Route>
+					<Route path="/mypage" element={<MyPage />} />
+				</Routes>
+				<Footer />
+				<NavigationBar></NavigationBar>
+				<ChatbotButton />
+			</AuthProvider>
+		</>
+	);
 };
 
 export default App;

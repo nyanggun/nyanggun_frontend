@@ -206,7 +206,7 @@ const TalkDetail = ({
 
                 <ReportButton
                   reportedPostId={talk.content ? talk.talkId : talk.id}
-                  reportedMemberId={userData.user.id}
+                  reportedMemberId={userData.user?.id}
                   reportPost={reportPost}
                 ></ReportButton>
               </div>
