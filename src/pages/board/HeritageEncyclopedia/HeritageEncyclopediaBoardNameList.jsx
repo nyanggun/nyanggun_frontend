@@ -24,8 +24,6 @@ const HeritageEncyclopediaBoardList = () => {
     fetchHeritageEncyclopedia(page);
   }, [page]);
 
-  const onSearch = () => {};
-
   return (
     <Row className="h-100 justify-content-center align-items-center m-0">
       <Col xs={12} sm={10} md={8} lg={6}>
