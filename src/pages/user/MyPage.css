@@ -1,0 +1,180 @@
+/* ----------------------------------- */
+/* 1. 레이아웃 및 컨테이너 */
+/* ----------------------------------- */
+.mypage-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 16px;
+  min-height: 100vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 약간의 그림자 추가 */
+}
+
+.mypage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px; /* 헤더와 프로필 섹션 사이 간격 조정 */
+  border-bottom: 1px solid #f0f0f0; /* 얇은 구분선 */
+}
+
+.mypage-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ----------------------------------- */
+/* 2. 프로필 섹션 */
+/* ----------------------------------- */
+.mypage-profile {
+  text-align: center;
+  padding: 24px 0;
+  margin-bottom: 20px;
+}
+
+.mypage-avatar {
+    display: inline-block; /* 중앙 정렬 유지 */
+    margin-bottom: 15px;
+}
+
+.mypage-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f0f0f0; /* 은은한 테두리 */
+}
+
+.mypage-info {
+    max-width: 250px; /* 정보 블록의 최대 너비를 제한하여 가운데 정렬시킴 */
+    margin: 0 auto;
+    text-align: left; /* 정보 내용 자체는 좌측 정렬 */
+}
+
+.mypage-info h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.mypage-info p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  justify-content: space-between; /* 레이블과 값을 양쪽으로 분리 */
+}
+/* 레이블 스타일 (이메일/전화번호) */
+.mypage-info p strong {
+    font-weight: 600;
+    color: #333;
+    min-width: 70px;
+}
+
+
+/* ----------------------------------- */
+/* 3. 버튼 */
+/* ----------------------------------- */
+.mypage-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mypage-buttons button {
+  padding: 8px 18px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.info-edit-btn {
+    /* 정보 수정 버튼 (이미지처럼 밝은 배경색) */
+    background-color: #f0f0f0; 
+    color: #333;
+    border: none;
+}
+
+.withdrawal-btn {
+    /* 회원 탈퇴 버튼 (이미지처럼 테두리 강조) */
+    background-color: #fff;
+    color: #8b0000;
+    border: 1px solid #8b0000;
+}
+.withdrawal-btn:hover {
+    background-color: #ffeaea;
+}
+
+
+/* ----------------------------------- */
+/* 4. 탭 메뉴 */
+/* ----------------------------------- */
+.mypage-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #ddd;
+}
+
+.mypage-tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: none;
+  font-weight: 500;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mypage-tabs .active {
+  /* 이미지 요청에 따른 짙은 빨간색 적용 */
+  border-bottom: 2px solid #8b0000;
+  color: #8b0000;
+  font-weight: 600;
+}
+
+
+/* ----------------------------------- */
+/* 5. 콘텐츠 영역 (게시글/사진) */
+/* ----------------------------------- */
+.mypage-content {
+    flex-grow: 1; /* 스크롤 가능하도록 높이 확보 */
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+.mypage-post-card {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+  margin-bottom: 5px;
+}
+.mypage-post-card:last-child {
+    border-bottom: none;
+}
+
+.mypage-post-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.mypage-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.mypage-photo-grid img {
+  width: 100%;
+  border-radius: 8px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
