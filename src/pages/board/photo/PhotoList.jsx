@@ -100,7 +100,10 @@ const PhotoList = () => {
               {photoBoard.map((item) => (
                 <div
                   onClick={() => {
-                    navigate(`/photobox/detail/${item.photoBoxId}`);
+                    console.log("클릭함");
+                    navigate(`/photobox/detail/${item.photoBoxId}`, {
+                      replace: true,
+                    });
                   }}
                   key={item.photoBoxId}
                   className="masonry-item"

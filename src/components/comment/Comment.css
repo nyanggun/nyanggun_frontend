@@ -39,6 +39,9 @@
 .comment-btn {
   all: unset;
 }
+.comment-btn-box {
+  display: flex;
+}
 
 .comment-profile-pic {
   width: 25px;

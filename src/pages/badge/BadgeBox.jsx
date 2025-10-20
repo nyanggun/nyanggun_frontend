@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Image, Container } from "react-bootstrap";
-import "./BadgeAcquisition.css";
+import "./BadgeBoard.css";
 import api from "../../config/apiConfig";
+import { useNavigate } from "react-router-dom";
 
 const BadgeAcquisition = () => {
+  const navigate = useNavigate();
   const [badgeList, setBadgesList] = useState([]);
   const fetchBadges = async () => {
     try {
@@ -28,46 +30,32 @@ const BadgeAcquisition = () => {
     >
       <Row className="justify-content-center align-items-center w-100 m-0">
         <Col xs={12} sm={10} md={8} lg={8} className="text-center">
-          {/* 🟡 배지 그리드 시작 */}
-          <div
-            className="mt-3 mb-3"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(5, minmax(120px, 1fr))", // 한 줄에 5개
-              placeContent: "center",
-              width: "80%", // 그리드 자체 크기
-              margin: "0 auto", // 가운데 정렬
-            }}
-          >
+          {/* 배지 그리드 */}
+          <div className="badgebox-grid">
             {badgeList.map((badge, index) => (
               <div
+                className="badgebox-map-parent"
+                onClick={() =>
+                  navigate(`/heritages/detail/${badge.heritageEncyclopediaId}`)
+                }
                 key={index}
-                style={{
-                  width: "5rem",
-                  height: "5rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#f8f9fa",
-                  borderRadius: "10px",
-                }}
               >
-                <Image
-                  src={badge.badgeImg}
-                  alt={badge.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
-                />
+                <div className="badgebox-map-child">
+                  <Image
+                    fluid
+                    className="badgebox-image"
+                    src={badge.badgeImg}
+                    alt={badge.badgeName}
+                  />
+                </div>
                 <div>
-                  <span>{badge.name}</span>
+                  <p className="badgebox-text">
+                    <strong>{badge.badgeName}</strong>
+                  </p>
                 </div>
               </div>
             ))}
           </div>
-          {/* 🟡 배지 그리드 끝 */}
         </Col>
       </Row>
     </Container>

@@ -1,7 +1,7 @@
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { useState, useEffect, useCallback } from "react";
 import { InputGroup, Form, Row, Col, Image, Modal } from "react-bootstrap";
-import "./BadgeAcquisition.css";
+import "./BadgeBoard";
 import GeoAltIcon from "../../assets/geo-alt-icon.svg";
 import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";
@@ -184,7 +184,7 @@ const BadgeAcquisition = () => {
 
   // 상태 변화 확인용
   useEffect(() => {
-    console.log("🟢 heritageList 변경됨:", heritageList);
+    console.log("heritageList 변경됨:", heritageList);
   }, [heritageList]);
 
   //----------------------------------------------------------------------
@@ -240,7 +240,7 @@ const BadgeAcquisition = () => {
   return (
     <>
       <Row className="h-100 justify-content-center align-items-center m-0">
-        <Col xs={12} sm={10} md={8} lg={6}>
+        <Col xs={12} sm={10} md={8} lg={5}>
           <InputGroup className="flex-nowrap my-4 ba-border">
             <InputGroup.Text>
               <Image fluid className="icons" src={GeoAltIcon} />

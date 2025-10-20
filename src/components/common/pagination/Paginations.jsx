@@ -1,10 +1,14 @@
 //페이지네이션 컴포넌트입니다.
-import React from "react";
+import React, { useEffect } from "react";
 import Pagination from "react-bootstrap/Pagination";
 import "./Paginations.css";
 
 //onPageChange : 현재 사용자가 무슨 페이지를 눌렀는지 부모 컴포넌트에 알리는 콜백함수입니다.
 const Paginations = ({ currentPage, totalPage, onPageChange }) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   if (totalPage <= 1) return null;
 
   // 페이지 범위 계산
