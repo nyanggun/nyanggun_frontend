@@ -81,7 +81,7 @@ const HamburgerMenu = ({ onButtonClick }) => {
                 <div>
                   <div className="hamburger-login">
                     <BorderButton
-                      btnName={"로그인하기"}
+                      btnName={"로그인"}
                       clickBtn={() => {
                         onButtonClick();
                         navigate("/login");
@@ -143,12 +143,15 @@ const HamburgerMenu = ({ onButtonClick }) => {
               onClick={() => {
                 onButtonClick();
                 navigate("/photobox");
-              }}
+              }}    
             >
               사진함
             </div>
 
-            <div className="hamburger-menu-text">문화재 증표함</div>
+            <div className="hamburger-menu-text"   onClick={() => {
+                onButtonClick();
+                navigate("/badges/badgebox");
+              }}>문화재 증표함</div>
 
             <div className="hamburger-menu-text">사냥꾼 이벤트</div>
 

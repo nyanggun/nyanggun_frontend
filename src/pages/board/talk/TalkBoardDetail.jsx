@@ -177,8 +177,18 @@ const TalkBoardDetail = () => {
   };
 
   //담소 댓글을 신고하는 메소드 입니다.
-  const reportComment = () => {
-    console.log("댓글 신고 전송하기");
+  const reportComment = async (reason, postId, memberId ) => {
+    console.log(reason, postId, memberId);
+     try {
+        const response = await api.post("/talks/reports/comments", {
+          reason: reason,
+          postId:postId,
+          memberId: memberId,
+        })
+        alert("담소 댓글 신고 완료");
+    } catch (err) {
+      console.error("담소 댓글 신고 요청 중 에러 발생", err);
+    }
   };
 
   return (
@@ -216,7 +226,7 @@ const TalkBoardDetail = () => {
                     onUpdateComment={handleUpdateComment}
                     onDeleteComment={handleDeleteComment}
                     reportComment={reportComment}
-                    reportedCommentId={comment.id}
+                    reportedPostId={comment.talkCommentId}
                     reportedMemberId={userData.user?.id}
                   />
 
@@ -238,6 +248,9 @@ const TalkBoardDetail = () => {
                         onDeleteComment={handleDeleteComment}
                         activeParentCommentId={activeParentCommentId}
                         setActiveParentCommentId={setActiveParentCommentId}
+                        reportComment={reportComment}
+                        reportedPostId={reply.talkCommentId}
+                        reportedMemberId={userData.user?.id}
                       />
                     </div>
                   ))}
