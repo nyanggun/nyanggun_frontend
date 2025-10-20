@@ -39,6 +39,7 @@ import Home from "./pages/home/Home";
 import AdminPage from "./pages/admin/AdminPage";
 import ReportPage from "./pages/admin/ReportPage";
 import ReportDetailPage from "./pages/admin/ReportDetailPage";
+import MyPage from "./pages/user/MyPage";
 
 const App = () => {
 	return (
@@ -82,7 +83,7 @@ const App = () => {
 						<Route index element={<Navigate to="map" replace />} />
 						<Route path="map" element={<BadgeAcquisitionMap />} />
 						<Route path="badgebox" element={<BadgeBox />} />
-					</Route>{" "}
+					</Route>
 					<Route path="/photobox" element={<PhotoPage></PhotoPage>}>
 						<Route index element={<Navigate to="list" replace />} />
 						<Route path="list" element={<PhotoList></PhotoList>}></Route>
@@ -91,6 +92,7 @@ const App = () => {
 						<Route path="update" element={<PhotoUpdate></PhotoUpdate>} />
 						<Route path="search" element={<PhotoSearchResult></PhotoSearchResult>} />
 					</Route>
+					<Route path="/mypage" element={<MyPage />} />
 				</Routes>
 				<Footer />
 				<NavigationBar></NavigationBar>
