@@ -1,7 +1,7 @@
 import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { useState, useEffect, useCallback } from "react";
 import { InputGroup, Form, Row, Col, Image, Modal } from "react-bootstrap";
-import "./BadgeAcquisition.css";
+import "./BadgeBoard";
 import GeoAltIcon from "../../assets/geo-alt-icon.svg";
 import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";

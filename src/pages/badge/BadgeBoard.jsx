@@ -1,5 +1,5 @@
 import { Image } from "react-bootstrap";
-import "./BadgeAcquisition.css";
+import "./BadgeBoard.css";
 import SmileFace from "../../assets/smile-face.svg";
 import Menu from "../../components/common/menu/Menu";
 import { Outlet } from "react-router-dom";
