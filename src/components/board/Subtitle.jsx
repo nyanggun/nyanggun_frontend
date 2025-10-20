@@ -6,7 +6,7 @@ import "./Subtitle.css";
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
-const Subtitle = ({ text, onSearchBoard }) => {
+const Subtitle = ({ text, onSearchBoard, moveTo }) => {
   const [searchParams] = useSearchParams();
 
   const [keyword, setKeyword] = useState("");

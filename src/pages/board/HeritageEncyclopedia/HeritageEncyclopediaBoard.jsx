@@ -2,7 +2,6 @@ import "./HeritageEncyclopedia.css";
 import Subtitle from "../../../components/board/Subtitle";
 import Menu from "../../../components/common/menu/Menu";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const HeritageEncyclopediaBoardList = () => {
   const navigate = useNavigate();
@@ -15,12 +14,14 @@ const HeritageEncyclopediaBoardList = () => {
   return (
     <div>
       <div className="">
-        <div className="mb-3">
-          <Subtitle
-            moveTo={"/heritages/name"}
-            text={"문화재 도감"}
-            onSearchBoard={onSearch}
-          />
+        <div className="d-flex justify-content-center">
+          <div className="mb-4 w-50">
+            <Subtitle
+              moveTo={"/heritages/name"}
+              text={"문화재 도감"}
+              onSearchBoard={onSearch}
+            />
+          </div>
         </div>
         {!isSearchPage && (
           <Menu
