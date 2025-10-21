@@ -20,6 +20,9 @@ const Comment = ({
   onCommentSubmit,
   onUpdateComment,
   onDeleteComment,
+    reportComment,
+  reportedPostId,
+  reportedMemberId,
 }) => {
   const userData = useContext(AuthContext);
   const [isCommentAdd, setCommentAdd] = useState(false);
@@ -110,10 +113,13 @@ const Comment = ({
               </span>
             </div>
             <div className="comment-btn">
-              <ReportCommentButton></ReportCommentButton>
+              <ReportCommentButton  reportComment={reportComment}
+              reportedPostId={reportedPostId}
+              reportedMemberId={reportedMemberId}></ReportCommentButton>
             </div>
           </div>
-          {memberId === userData.user?.id ? (
+          {memberId === userData.user?.id ||
+          userData.user?.role === "ROLE_ADMIN" ? (
             <div className="comment-btn-delete">
               <BorderButton
                 btnName={"수정"}

@@ -1,3 +1,6 @@
+.talk-board-container {
+  margin-bottom: 5%;
+}
 .comments {
   display: flex;
   flex-direction: column;
@@ -12,7 +15,9 @@
 
 .comments-input {
   padding: 0 2% 0 2%;
-  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -27,7 +32,7 @@
   }
 }
 
-.comments-none{
-  margin : 10% 0;
-  margin-bottom : 15%;
+.comments-none {
+  margin: 10% 0;
+  margin-bottom: 15%;
 }
