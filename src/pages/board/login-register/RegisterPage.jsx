@@ -1,8 +1,12 @@
 // pages/RegisterPage.jsx
 import React, { useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Card, Alert, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig"; // 인터셉터가 설정된 axios 사용
+import CertificationButton from "../../../components/board/CertificationButton";
+import LoginInput from "../../../components/logininput/LoginInput";
+import Menu from "../../../components/common/menu/Menu";
+import SmileFace from "../../../assets/smile-face.svg";
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -29,7 +33,6 @@ const RegisterPage = () => {
 
 	// 회원가입 처리 - apiConfig 사용
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // 기본 속성을 막는다. ajax axios 로 회원가입을 진행하기 때문
 		setMessage({ text: "", type: "" }); // 가입 결과 보여주는 영역을 초기화
 		setLoading(true);
 		try {
@@ -59,68 +62,73 @@ const RegisterPage = () => {
 		}
 	};
 	return (
-		<div className="row justify-content-center">
-			<div className="col-md-6">
-				<Card>
+		<div className="row justify-content-center m-0 p-0">
+			<div className="justify-content-center d-flex align-items-center">
+				<div className="" xs={1}>
+					<Image src={SmileFace} />
+				</div>
+				<div className="">
+					<h2 className=""></h2>
+				</div>
+			</div>
+			<Menu
+				menuOne={"로그인"}
+				menuOneLink={"/login"}
+				menuTwo={"회원가입"} /*chooseMenu={handleMenuChange}*/
+				menuTwoLink={"/register"}
+			></Menu>
+			<div className="col-md-6 m-0 mt-4">
+				<Card className="border-0 m-0">
 					<Card.Body>
-						<h3 className="text-center mb-4">회원가입</h3>
-
 						{/* 메시지 표시 (성공/실패) */}
 						{message.text && <Alert variant={message.type}>{message.text}</Alert>}
 
 						<Form onSubmit={handleSubmit}>
 							{/* 아이디 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>이메일</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="이메일"
 									type="text"
 									name="email"
 									value={formData.email}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
-
-							{/* 비밀번호 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>비밀번호</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="비밀번호"
 									type="password"
 									name="password"
 									value={formData.password}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
-
-							{/* 이름 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>닉네임</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="닉네임"
 									type="text"
 									name="nickname"
 									value={formData.nickname}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
-
-							{/* 전화번호 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>전화번호</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="전화번호"
 									type="text"
 									name="phoneNumber"
 									value={formData.phoneNumber}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
-
 							{/* 회원가입 버튼 */}
-							<Button variant="primary" type="submit" className="w-100" disabled={loading}>
-								{loading ? "가입 중..." : "회원가입"}
-							</Button>
+							<CertificationButton
+								disabled={loading}
+								text={loading ? "가입 중..." : "회원가입"}
+								onClick={() => {
+									handleSubmit();
+								}}
+							/>
 						</Form>
 					</Card.Body>
 				</Card>

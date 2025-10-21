@@ -1,11 +1,15 @@
 // pages/user/LoginPage.jsx
 import React, { useState, useContext } from "react";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import api from "../../../config/apiConfig";
 // 공통 컴포넌트 import
 import ErrorAlert from "../../../components/common/ErrorAlert";
+import CertificationButton from "../../../components/board/CertificationButton";
+import Menu from "../../../components/common/menu/Menu";
+import SmileFace from "../../../assets/smile-face.svg";
+import LoginInput from "../../../components/logininput/LoginInput";
 
 const LoginPage = () => {
 	const navigate = useNavigate();
@@ -32,7 +36,7 @@ const LoginPage = () => {
 
 	// 로그인 처리
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
+		// e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
 		setError(""); // 에러 메세지 보여주는 부분 초기화
 		setLoading(true);
 		try {
@@ -70,44 +74,58 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className="row justify-content-center">
-			<div className="col-md-6">
-				<Card>
+		<div className="row justify-content-center m-0 p-0">
+			<div className="justify-content-center d-flex align-items-center">
+				<div className="" xs={1}>
+					<Image src={SmileFace} />
+				</div>
+				<div className="">
+					<h2 className=""></h2>
+				</div>
+			</div>
+			<Menu
+				menuOne={"로그인"}
+				menuOneLink={"/login"}
+				menuTwo={"회원가입"} /*chooseMenu={handleMenuChange}*/
+				menuTwoLink={"/register"}
+			></Menu>
+			<div className="col-md-6 m-0 mt-4">
+				<Card className="border-0 m-0 p-0">
 					<Card.Body>
-						<h3 className="text-center mb-4">로그인</h3>
-
 						{/* 에러 메시지 표시 - ErrorAlert 컴포넌트 사용 */}
 						{error && <ErrorAlert message={error} variant="danger" onRetry={handleRetry} />}
 
 						<Form onSubmit={handleSubmit}>
 							{/* 아이디 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>아이디</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="이메일"
 									type="text"
 									name="email"
 									value={formData.email}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
 
 							{/* 비밀번호 입력 */}
 							<Form.Group className="mb-3">
-								<Form.Label>비밀번호</Form.Label>
-								<Form.Control
+								<LoginInput
+									title="비밀번호"
 									type="password"
 									name="password"
 									value={formData.password}
 									onChange={handleChange}
-									required
 								/>
 							</Form.Group>
 
 							{/* 로그인 버튼 */}
-							<Button variant="primary" type="submit" className="w-100" disabled={loading}>
-								{loading ? "로그인 중..." : "로그인"}
-							</Button>
+							<CertificationButton
+								disabled={loading}
+								text={loading ? "로그인 중..." : "로그인"}
+								onClick={() => {
+									handleSubmit();
+								}}
+							/>
 						</Form>
 					</Card.Body>
 				</Card>
