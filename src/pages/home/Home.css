@@ -1,144 +1,144 @@
 .home-main {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .home-event {
-    position: relative;
-    display: flex;
+  position: relative;
+  display: flex;
 }
 .home-img {
-    width: calc(50vw - 8px); /* 스크롤바 너비만큼 빼기 */
-    height: 100vh;
-    object-fit: cover;
-    object-position: center;
+  width: calc(50vw - 8px); /* 스크롤바 너비만큼 빼기 */
+  height: 100vh;
+  object-fit: cover;
+  object-position: center;
 }
 .home-event-box {
-    position: relative;
+  position: relative;
 }
 .home-event-box:hover {
-    filter: brightness(60%) hue-rotate(-20deg);
+  filter: brightness(60%) hue-rotate(-20deg);
 }
 
 .home-event-next {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .home-heritage > div:nth-child(2) {
-    margin-top: 20%;
+  margin-top: 20%;
 }
 
 .home-heritage > div:nth-child(4) {
-    margin-top: 20%;
+  margin-top: 20%;
 }
 
 .home-event-title {
-    color: white;
-    z-index: 100;
-    position: absolute;
-    bottom: 120px;
-    left: 8%;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 3px 3px 6px rgba(0, 0, 0, 1);
+  color: white;
+  z-index: 100;
+  position: absolute;
+  bottom: 120px;
+  left: 8%;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 3px 3px 6px rgba(0, 0, 0, 1);
 }
 
 .home-heritage {
-    display: grid;
-    height: 100vh;
-    width: calc(50vw - 8px); /* 스크롤바 너비만큼 빼기 */
-    grid-template-columns: 1fr 1fr;
-    overflow-y: auto;
+  display: grid;
+  height: 100vh;
+  width: calc(50vw - 8px); /* 스크롤바 너비만큼 빼기 */
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
 }
 
 /* 크롬, 사파리, 오페라 스크롤바 지우기*/
 .home-heritage::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .home-heritage-margin {
-    margin-top: 20%;
+  margin-top: 20%;
 }
 
 .home-event-title h1 {
-    font-size: 3vw;
+  font-size: 3vw;
 }
 
 .home-event-title h4 {
-    font-size: 2vw;
-    display: inline;
+  font-size: 2vw;
+  display: inline;
 }
 
 .home-event-title h6 {
-    font-size: 1.5vw;
+  font-size: 1.5vw;
 }
 
 /*컨텐츠 순서 변경하기*/
 /*인덱스를 준다*/
 .item1 {
-    order: 1;
+  order: 1;
 }
 .item2 {
-    order: 2;
+  order: 2;
 }
 
 @media (max-width: 1200px) {
-    .home-event {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-    .home-img {
-        width: 100vw;
-        object-fit: cover;
-        object-position: top;
-    }
-    .home-heritage-margin {
-        margin: 0 0;
-    }
+  .home-event {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .home-img {
+    width: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .home-heritage-margin {
+    margin: 0 0;
+  }
 
-    .home-heritage {
-        display: flex;
-        flex-direction: column;
-        width: 100vw;
-        height: auto;
-        margin: 1% 0%;
-    }
+  .home-heritage {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin: 1% 0%;
+  }
 
-    .home-event-title {
-        color: white;
-        z-index: 100;
-        position: absolute;
-        bottom: 70px; /* 이미지 하단에서 10% 위치 */
-        left: 6%;
-    }
-    .home-event-next {
-        display: flex;
-        flex-direction: column;
-    }
+  .home-event-title {
+    color: white;
+    z-index: 100;
+    position: absolute;
+    bottom: 70px; /* 이미지 하단에서 10% 위치 */
+    left: 6%;
+  }
+  .home-event-next {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .home-event-title h1 {
-        font-size: 6vw;
-    }
+  .home-event-title h1 {
+    font-size: 6vw;
+  }
 
-    .home-event-title h4 {
-        font-size: 5vw;
-    }
+  .home-event-title h4 {
+    font-size: 5vw;
+  }
 
-    .home-event-title h6 {
-        font-size: 4vw;
-    }
+  .home-event-title h6 {
+    font-size: 4vw;
+  }
 
-    .item1 {
-        order: 2;
-    }
-    .item2 {
-        order: 1;
-    }
+  .item1 {
+    order: 2;
+  }
+  .item2 {
+    order: 1;
+  }
 
-    .home-heritage > div:nth-child(2) {
-        margin-top: 0;
-    }
+  .home-heritage > div:nth-child(2) {
+    margin-top: 0;
+  }
 
-    .home-heritage > div:nth-child(4) {
-        margin-top: 0;
-    }
+  .home-heritage > div:nth-child(4) {
+    margin-top: 0;
+  }
 }

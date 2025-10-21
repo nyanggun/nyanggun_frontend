@@ -6,11 +6,14 @@ import "./PhotoPage.css";
 import WritePostButton from "../../../components/board/WritePostButton";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import PhotoList from "./PhotoList";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const PhotoPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isPostListPage = location.pathname === "/photobox/list";
+  const userData = useContext(AuthContext);
   const handleSearch = (keyword, cursor = null) => {
     navigate(
       `/photobox/search?keyword=${encodeURIComponent(keyword)}&cursor=${cursor}`
@@ -30,7 +33,7 @@ const PhotoPage = () => {
       <div>
         <Outlet></Outlet>
       </div>
-      {isPostListPage ? (
+      {isPostListPage && userData.user?.id ? (
         <div>
           <WritePostButton location="/photobox"></WritePostButton>
         </div>
