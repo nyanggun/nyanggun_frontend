@@ -13,7 +13,7 @@ const ExplorationDetailPage = () => {
 	const { user } = useContext(AuthContext);
 	// useParams를 사용해 URL의 id 파라미터 값을 가져옵니다.
 	const { id } = useParams();
-
+    const userData = useContext(AuthContext);
 	const [exploration, setExploration] = useState(null); // 단일 게시물 데이터
 	const [explorationComments, setExplorationComments] = useState([]);
 	const [replyExplorationComments, setReplyExplorationComments] = useState({});
@@ -130,6 +130,22 @@ const ExplorationDetailPage = () => {
 	if (loading) return <div>로딩 중...</div>;
 	if (error) return <div>오류가 발생했습니다.</div>;
 
+    
+  //탐방기 댓글을 신고하는 메소드 입니다.
+  const reportComment = async (reason, postId, memberId ) => {
+    console.log(reason, postId, memberId);
+     try {
+        const response = await api.post("/exploration-comments/reports/comments", {
+          reason: reason,
+          postId:postId,
+          memberId: memberId,
+        })
+        alert("탐방기 댓글 신고 완료");
+    } catch (err) {
+      console.error("탐방기 댓글 신고 요청 중 에러 발생", err);
+    }
+  };
+
 	// 데이터 로딩이 완료되면 ExplorationPost 컴포넌트에 props로 넘겨 렌더링합니다.
 	return (
 		<div>
@@ -160,6 +176,9 @@ const ExplorationDetailPage = () => {
 										onUpdateComment={onUpdateComment}
 										onDeleteComment={onDeleteComment}
 										onCommentSubmit={onSubmit}
+                                        reportComment={reportComment}
+                                        reportedPostId={explorationComment.id}
+                                        reportedMemberId={userData.user?.id}
 									/>
 									{/* 3. replies 변수가 존재하고, 길이가 0보다 클 때만 대댓글 영역을 렌더링합니다. */}
 									{replies && replies.length > 0 && (
@@ -173,6 +192,9 @@ const ExplorationDetailPage = () => {
 														onUpdateComment={onUpdateComment}
 														onDeleteComment={onDeleteComment}
 														onCommentSubmit={onSubmit}
+                                                         reportComment={reportComment}
+                                                        reportedPostId={replyComment.id}
+                                                        reportedMemberId={userData.user?.id}
 													/>
 												</div>
 											))}

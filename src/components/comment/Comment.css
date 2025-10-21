@@ -48,5 +48,6 @@
   height: 25px;
 }
 .comment-add {
-  margin: 2% 5%;
+  margin: 2% 0%;
+  margin-left: 5%;
 }

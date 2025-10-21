@@ -49,7 +49,7 @@ const ReportModal = ({
 };
 
 const ReportButton = ({
-  reportedCommentId,
+  reportedPostId,
   reportedMemberId,
   reportComment,
 }) => {
@@ -69,7 +69,7 @@ const ReportButton = ({
           className="report-comment-button"
           onClick={(e) => {
             e.preventDefault();
-            e.stopPropagation;
+            e.stopPropagation();
             openModal();
           }}
         >
@@ -83,7 +83,7 @@ const ReportButton = ({
         <ReportModal
           onClose={closeModal}
           reportComment={reportComment}
-          reportedCommentId={reportedCommentId}
+          reportedPostId={reportedPostId}
           reportedMemberId={reportedMemberId}
         />
       )}
