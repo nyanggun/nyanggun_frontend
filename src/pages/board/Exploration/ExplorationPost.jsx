@@ -146,11 +146,11 @@ const TalkDetail = ({
 	const sanitizedContent = DOMPurify.sanitize(content);
 
 	return (
-		<Row className="h-100 justify-content-center align-items-center m-0">
+		<Row className="h-100 justify-content-center align-items-center p-0 m-0">
 			<Col xs={11} sm={10} md={8} lg={6}>
 				<Card className="rounded-0 border-0 border-bottom">
-					<Card.Body>
-						<Card.Title className="mt-3">{title}</Card.Title>
+					<Card.Body className="m-0 p-0">
+						<Card.Title className="">{title}</Card.Title>
 						<Row>
 							<Col xs={7} sm={7} className="d-flex justify-content-start align-items-center gap-2">
 								<div className="talk-profile">
@@ -205,7 +205,7 @@ const TalkDetail = ({
 						<Card.Text as="div" className="">
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
-						<div className="row d-flex justify-content-between">
+						<div className="row d-flex justify-content-between m-0">
 							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-1 py-1">
 								<div>
 									<BookmarkButton
