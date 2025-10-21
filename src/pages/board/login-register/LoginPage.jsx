@@ -6,6 +6,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import api from "../../../config/apiConfig";
 // 공통 컴포넌트 import
 import ErrorAlert from "../../../components/common/ErrorAlert";
+import CertificationButton from "../../../components/board/CertificationButton";
 
 const LoginPage = () => {
 	const navigate = useNavigate();
@@ -32,7 +33,7 @@ const LoginPage = () => {
 
 	// 로그인 처리
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
+		// e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
 		setError(""); // 에러 메세지 보여주는 부분 초기화
 		setLoading(true);
 		try {
@@ -71,8 +72,8 @@ const LoginPage = () => {
 
 	return (
 		<div className="row justify-content-center">
-			<div className="col-md-6">
-				<Card>
+			<div className="col-md-6 m-0">
+				<Card className="border-0 m-0 p-0">
 					<Card.Body>
 						<h3 className="text-center mb-4">로그인</h3>
 
@@ -105,9 +106,13 @@ const LoginPage = () => {
 							</Form.Group>
 
 							{/* 로그인 버튼 */}
-							<Button variant="primary" type="submit" className="w-100" disabled={loading}>
-								{loading ? "로그인 중..." : "로그인"}
-							</Button>
+							<CertificationButton
+								disabled={loading}
+								text={loading ? "로그인 중..." : "로그인"}
+								onClick={() => {
+									handleSubmit();
+								}}
+							/>
 						</Form>
 					</Card.Body>
 				</Card>
