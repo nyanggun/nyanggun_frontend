@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig"; // 인터셉터가 설정된 axios 사용
+import CertificationButton from "../../../components/board/CertificationButton";
 
 const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -29,7 +30,6 @@ const RegisterPage = () => {
 
 	// 회원가입 처리 - apiConfig 사용
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // 기본 속성을 막는다. ajax axios 로 회원가입을 진행하기 때문
 		setMessage({ text: "", type: "" }); // 가입 결과 보여주는 영역을 초기화
 		setLoading(true);
 		try {
@@ -59,9 +59,9 @@ const RegisterPage = () => {
 		}
 	};
 	return (
-		<div className="row justify-content-center">
-			<div className="col-md-6">
-				<Card>
+		<div className="row justify-content-center m-0 p-0">
+			<div className="col-md-6 m-0">
+				<Card className="border-0 m-0">
 					<Card.Body>
 						<h3 className="text-center mb-4">회원가입</h3>
 
@@ -118,9 +118,13 @@ const RegisterPage = () => {
 							</Form.Group>
 
 							{/* 회원가입 버튼 */}
-							<Button variant="primary" type="submit" className="w-100" disabled={loading}>
-								{loading ? "가입 중..." : "회원가입"}
-							</Button>
+							<CertificationButton
+								disabled={loading}
+								text={loading ? "가입 중..." : "회원가입"}
+								onClick={() => {
+									handleSubmit();
+								}}
+							/>
 						</Form>
 					</Card.Body>
 				</Card>

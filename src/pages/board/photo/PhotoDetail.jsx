@@ -53,6 +53,11 @@ const PhotoDetail = () => {
     getPhotoDetail();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    getPhotoDetail();
+  }, [photoId]);
+
   //게시글을 북마크하는 메소드 입니다.
   //만약 북마크를 이미 한 상태이면 북마크를 해제합니다.
   const onClickBookmark = async () => {

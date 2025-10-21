@@ -134,7 +134,7 @@ const TalkDetail = ({
 		try {
 			const response = await api.post("/explorations/reports", {
 				reason: reason,
-				contentId: postId,
+				postId: postId,
 				memberId: memberId,
 			});
 			alert("신고 완료");
@@ -170,12 +170,12 @@ const TalkDetail = ({
 							</Col>
 							<Col xs={5} sm={5} className="d-flex justify-content-end align-items-center gap-1 py-1">
 								<div className="">
-									{user.id == member.id && (
+									{user && user.id == member.id && (
 										<BorderButton btnName="수정" buttonColor="black" clickBtn={editExploration} />
 									)}
 								</div>
 								<div className="">
-									{user.id == member.id && (
+									{user && user.id == member.id && (
 										<BorderButton btnName="삭제" buttonColor="red" clickBtn={deleteExploration} />
 									)}
 								</div>

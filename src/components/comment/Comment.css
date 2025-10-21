@@ -39,11 +39,15 @@
 .comment-btn {
   all: unset;
 }
+.comment-btn-box {
+  display: flex;
+}
 
 .comment-profile-pic {
   width: 25px;
   height: 25px;
 }
 .comment-add {
-  margin: 2% 5%;
+  margin: 2% 0%;
+  margin-left: 5%;
 }
