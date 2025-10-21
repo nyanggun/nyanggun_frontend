@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import ChatbotWindow from "./ChatbotWindow";
-import chatbotIcon from "/src/assets/chatbot_click.svg";
+import chatbotIcon from "../../../assets/images/toad.png";
 import "./ChatbotButton.css";
 
 const ChatbotButton = () => {
