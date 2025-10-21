@@ -6,7 +6,6 @@ import "./BadgeBoard.css";
 import GeoAltIcon from "../../assets/geo-alt-icon.svg";
 import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";
-import { createPortal } from "react-dom";
 
 const ACTIVE_RADIUS = 20000; // 획득 가능한 문화재 반경 세팅
 
