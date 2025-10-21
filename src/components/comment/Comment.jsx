@@ -20,7 +20,7 @@ const Comment = ({
   onCommentSubmit,
   onUpdateComment,
   onDeleteComment,
-    reportComment,
+  reportComment,
   reportedPostId,
   reportedMemberId,
 }) => {
@@ -113,9 +113,11 @@ const Comment = ({
               </span>
             </div>
             <div className="comment-btn">
-              <ReportCommentButton  reportComment={reportComment}
-              reportedPostId={reportedPostId}
-              reportedMemberId={reportedMemberId}></ReportCommentButton>
+              <ReportCommentButton
+                reportComment={reportComment}
+                reportedPostId={reportedPostId}
+                reportedMemberId={reportedMemberId}
+              ></ReportCommentButton>
             </div>
           </div>
           {memberId === userData.user?.id ||
