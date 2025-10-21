@@ -146,19 +146,19 @@ const TalkDetail = ({
 	const sanitizedContent = DOMPurify.sanitize(content);
 
 	return (
-		<Row className="h-100 justify-content-center align-items-center p-0 m-0">
-			<Col xs={11} sm={10} md={8} lg={6}>
-				<Card className="rounded-0 border-0 border-bottom">
+		<Row className="h-100 justify-content-center align-items-center p-0 m-0 mb-2">
+			<Col xs={11} sm={10} md={8} lg={6} className="p-0 pb-3 border-bottom">
+				<Card className="rounded-0 border-0">
 					<Card.Body className="m-0 p-0">
-						<Card.Title className="">{title}</Card.Title>
+						<Card.Title className="p-0 m-0">{title}</Card.Title>
 						<Row>
 							<Col xs={7} sm={7} className="d-flex justify-content-start align-items-center gap-2">
-								<div className="talk-profile">
+								<div className="talk-profile p-0">
 									<Image
 										src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
 										roundedCircle
 										fluid
-										className="talk-profile-pic border border-1"
+										className="talk-profile-pic border border-1 p-0"
 									/>
 								</div>
 								<div>
@@ -206,7 +206,7 @@ const TalkDetail = ({
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
 						<div className="row d-flex justify-content-between m-0">
-							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-1 py-1">
+							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-1 p-0 m-0">
 								<div>
 									<BookmarkButton
 										count={bookmarkCounts}
