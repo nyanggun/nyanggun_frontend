@@ -177,15 +177,15 @@ const TalkBoardDetail = () => {
   };
 
   //담소 댓글을 신고하는 메소드 입니다.
-  const reportComment = async (reason, postId, memberId ) => {
+  const reportComment = async (reason, postId, memberId) => {
     console.log(reason, postId, memberId);
-     try {
-        const response = await api.post("/talks/reports/comments", {
-          reason: reason,
-          postId:postId,
-          memberId: memberId,
-        })
-        alert("담소 댓글 신고 완료");
+    try {
+      const response = await api.post("/talks/reports/comments", {
+        reason: reason,
+        postId: postId,
+        memberId: memberId,
+      });
+      alert("담소 댓글 신고 완료");
     } catch (err) {
       console.error("담소 댓글 신고 요청 중 에러 발생", err);
     }
@@ -231,29 +231,30 @@ const TalkBoardDetail = () => {
                   />
 
                   {/* 대댓글 */}
-                  {comment.replies.map((reply) => (
-                    <div
-                      key={reply.talkCommentId}
-                      style={{ marginLeft: "7%" }} // 들여쓰기
-                      className="ms-5 mt-0 border-start ps-3"
-                    >
-                      <Comment
-                        nickname={reply.nickname}
-                        content={reply.content}
-                        createdAt={reply.createdAt}
-                        talkCommentId={reply.talkCommentId}
-                        memberId={comment.memberId}
-                        onCommentSubmit={handleCommentSubmit}
-                        onUpdateComment={handleUpdateComment}
-                        onDeleteComment={handleDeleteComment}
-                        activeParentCommentId={activeParentCommentId}
-                        setActiveParentCommentId={setActiveParentCommentId}
-                        reportComment={reportComment}
-                        reportedPostId={reply.talkCommentId}
-                        reportedMemberId={userData.user?.id}
-                      />
-                    </div>
-                  ))}
+                  <div
+                    style={{ marginLeft: "7%" }} // 들여쓰기
+                    className="ms-5 mt-0 border-start ps-3"
+                  >
+                    {comment.replies.map((reply) => (
+                      <div key={reply.talkCommentId}>
+                        <Comment
+                          nickname={reply.nickname}
+                          content={reply.content}
+                          createdAt={reply.createdAt}
+                          talkCommentId={reply.talkCommentId}
+                          memberId={comment.memberId}
+                          onCommentSubmit={handleCommentSubmit}
+                          onUpdateComment={handleUpdateComment}
+                          onDeleteComment={handleDeleteComment}
+                          activeParentCommentId={activeParentCommentId}
+                          setActiveParentCommentId={setActiveParentCommentId}
+                          reportComment={reportComment}
+                          reportedPostId={reply.talkCommentId}
+                          reportedMemberId={userData.user?.id}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </Col>
