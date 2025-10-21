@@ -35,7 +35,7 @@ const ExplorationBoard = () => {
 			{explorations.map((exploration) => (
 				// Link 컴포넌트로 감싸고, to 속성에 동적 URL을 지정합니다.
 				// 클릭 시 페이지 새로고침이 일어나지 않도록 a 태그 대신 Link를 사용합니다.
-				<Row className="justify-content-center">
+				<Row className="justify-content-center p-0 m-0">
 					<Col xs={12} sm={12} md={10} lg={12} className="">
 						<Link
 							key={exploration.id}

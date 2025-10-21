@@ -181,7 +181,7 @@ const TalkDetail = ({
 								</div>
 							</Col>
 						</Row>
-						<Carousel interval={null} className="my-3 bg-light rounded">
+						<Carousel interval={null} className="my-3 bg-light rounded p-0 m-0">
 							{/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
 							{imageNameList.map((imageName, index) => (
 								// 2. 각 이미지마다 Carousel.Item을 생성합니다.
