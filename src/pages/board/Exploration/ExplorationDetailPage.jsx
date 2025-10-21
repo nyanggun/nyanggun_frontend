@@ -150,12 +150,12 @@ const ExplorationDetailPage = () => {
 		<div className="p-0 m-0">
 			<div className="pb-3">{exploration && <ExplorationPost {...exploration} />}</div>
 			<Row className="justify-content-center p-0 m-0">
-				<Col className="col-11 col-sm-10 col-md-8 mb-3">
+				<Col lg={6} className="col-11 col-sm-10 col-md-8 mb-3">
 					<CommentInput onSubmit={onSubmit} />
 				</Col>
 			</Row>
 			<Row className="justify-content-center">
-				<Col className="col-11 col-sm-10 col-md-8">
+				<Col lg={6} className="col-11 col-sm-10 col-md-8">
 					{explorationComments
 						// 1. 렌더링하기 전에 원댓글(parentCommentId가 없는 댓글)만 필터링합니다.
 						//    - `comment &&` 체크를 추가하여 배열에 혹시 있을지 모를 null, undefined 값으로 인한 오류를 방지합니다.
