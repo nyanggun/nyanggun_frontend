@@ -34,6 +34,9 @@ const ExplorationBoard = () => {
 	};
 
 	const handleNavigateToDetail = (id) => {
+		if (event.target.closest('button, a, [role="button"]')) {
+			return;
+		}
 		navigate(`${id}`);
 	};
 
