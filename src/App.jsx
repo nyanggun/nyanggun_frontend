@@ -138,8 +138,8 @@ const App = () => {
         </div>
         <Footer />
         <ChatbotButton />
+        <NavigationBar></NavigationBar>
       </AuthProvider>
-      <NavigationBar></NavigationBar>
     </div>
   );
 };
