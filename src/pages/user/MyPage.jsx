@@ -2,59 +2,86 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../config/apiConfig";
-import { useNavigate, useParams } from "react-router-dom"; 
-
-import MyPageMember from "../../components/member/MyPageMember"; 
+import { useNavigate, useParams } from "react-router-dom";
+import MyPageMember from "../../components/member/MypageMember";
 import Menu from "../../components/common/menu/Menu";
 import Subtitle from "../../components/board/Subtitle";
 import commentProfile from "../../assets/comment-profile.svg";
-import "./MyPage.css"; 
+import "./MyPage.css";
 
 const MyPage = () => {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { userId } = useParams(); 
-  const targetId = userId || (user ? user.id : null);
+
+  const { id } = useParams();
 
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 상위 메뉴 / 하위 탭 상태
   const [activeSection, setActiveSection] = useState("도란도란");
   const [activeTab, setActiveTab] = useState("책갈피");
 
-  // 사진함 상태
   const [myPhotos, setMyPhotos] = useState([]);
   const [bookmarkedPhotos, setBookmarkedPhotos] = useState([]);
   const [commentedPhotos, setCommentedPhotos] = useState([]);
 
-  // ---------------- API ----------------
-  const getProfileData = useCallback(async () => {
-    if (!targetId) { setLoading(false); return; }
-    try {
-      const response = await api.get(`/mypage/${targetId}`);
-      setProfileData({
-        ...response.data,
-        profileImagePath: response.data.profileImagePath || commentProfile,
-      });
-    } catch (error) {
-      console.error("프로필 정보를 불러오는 중 오류:", error.message);
-      setProfileData(null);
-    } finally {
-      setLoading(false);
+  // ---------------- 리다이렉트 처리 ----------------
+  useEffect(() => {
+    //   if (!id) {
+    //     // 로그인 안 되어 있으면 로그인 페이지로 이동
+    //     navigate("/login");
+    //     return;
+    //   }
+
+    // id가 없으면 본인 페이지로 이동
+    if (!id && user?.id) {
+      navigate(`/mypage/${user.id}`, { replace: true });
     }
-  }, [targetId]);
+    // id가 있으면 그대로 사용 → 다른 유저 페이지 가능
+  }, [id, user, navigate]);
 
-  useEffect(() => { if (targetId) getProfileData(); }, [targetId, getProfileData]);
+  // ---------------- API ----------------
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const response = await api.get(`/mypage/${id}`);
+        setProfileData({
+          ...response.data,
+          profileImagePath: response.data.profileImagePath || commentProfile,
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error("프로필 정보를 불러오는 중 오류:", error.message);
+        setProfileData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProfileData();
+  }, [id]);
 
-  // 사진함 데이터
+  // ---------------- 핸들러 ----------------
+  const handleWithdrawal = async () => {
+    if (!user || user.id !== profileData.id) return;
+    if (!window.confirm("정말 회원 탈퇴하시겠습니까?")) return;
+    try {
+        await api.delete(`/mypage/${id}/delete`);
+        alert("회원 탈퇴가 완료되었습니다.");
+        setUser(null);
+        navigate("/");
+    } catch (error) {
+        console.error("회원 탈퇴 중 오류:", error.message);
+        alert("회원 탈퇴에 실패했습니다.");
+    }
+};
+// ---------------- 사진함 API ----------------
   const fetchPhotoData = useCallback(async () => {
-    if (!targetId) return;
+    if (!id) return;
     try {
       const [myRes, bookmarkRes, commentRes] = await Promise.all([
-        api.get(`/mypage/${targetId}/photos`),
-        api.get(`/mypage/${targetId}/photos/bookmarked`),
-        api.get(`/mypage/${targetId}/photos/commented`),
+        api.get(`/mypage/${id}/photos`),
+        api.get(`/mypage/${id}/photos/bookmarked`),
+        api.get(`/mypage/${id}/photos/commented`),
       ]);
       setMyPhotos(myRes.data || []);
       setBookmarkedPhotos(bookmarkRes.data || []);
@@ -62,70 +89,77 @@ const MyPage = () => {
     } catch (error) {
       console.error("사진 데이터 로딩 실패:", error.message);
     }
-  }, [targetId]);
+  }, [id]);
 
   useEffect(() => {
-    if (activeSection === "사진함" && targetId) fetchPhotoData();
-  }, [activeSection, targetId, fetchPhotoData]);
+    if (activeSection === "사진함" && id) fetchPhotoData();
+  }, [activeSection, id, fetchPhotoData]);
 
-  // ---------------- 핸들러 ----------------
-  const handleWithdrawal = async () => {
-    if (!user || user.id !== profileData.id) return;
-    if (!window.confirm("정말 회원 탈퇴하시겠습니까?")) return;
-    try {
-      await api.delete(`/mypage/${user.id}/leave`);
-      alert("회원 탈퇴가 완료되었습니다.");
-      setUser(null);
-      navigate("/");
-    } catch (error) {
-      console.error("회원 탈퇴 중 오류:", error.message);
-      alert("회원 탈퇴에 실패했습니다.");
-    }
-  };
+  // const handleSanction = async (targetUserId) => {
+  //   if (!user || user.role !== "ROLE_ADMIN" || user.id === targetUserId) return;
+  //   if (!window.confirm(`사용자 ID ${targetUserId}을 제재하시겠습니까?`))
+  //     return;
 
-  const handleSanction = async (targetUserId) => {
-    if (!user || user.role !== 'ROLE_ADMIN' || user.id === targetUserId) return;
-    if (!window.confirm(`사용자 ID ${targetUserId}을 제재하시겠습니까?`)) return;
-
-    try {
-      const reason = prompt("제재 사유를 입력하세요:");
-      if (!reason) { alert("사유 입력이 필요합니다."); return; }
-      await api.post(`/admin/users/${targetUserId}/sanction`, { reason });
-      alert(`사용자 ID ${targetUserId} 제재 완료`);
-      getProfileData();
-    } catch (error) {
-      console.error("사용자 제재 중 오류:", error.message);
-      alert("제재 실패. 관리자 권한 및 백엔드 확인 필요.");
-    }
-  };
+  //   try {
+  //     const reason = prompt("제재 사유를 입력하세요:");
+  //     if (!reason) {
+  //       alert("사유 입력이 필요합니다.");
+  //       return;
+  //     }
+  //     await api.post(`/admin/users/${targetUserId}/sanction`, { reason });
+  //     alert(`사용자 ID ${targetUserId} 제재 완료`);
+  //     loadProfileData();
+  //   } catch (error) {
+  //     console.error("사용자 제재 중 오류:", error.message);
+  //     alert("제재 실패. 관리자 권한 및 백엔드 확인 필요.");
+  //   }
+  // };
 
   const handleEditInfo = async (formData) => {
-    if (!user || user.id !== profileData.id) return;
-    try {
-      const response = await api.put(`/mypage/${user.id}/profileupdate`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setProfileData({
-        ...response.data,
-        profileImagePath: response.data.profileImagePath || profileData.profileImagePath || commentProfile,
-      });
-      setUser(prev => ({
-        ...prev,
-        nickname: response.data.nickname,
-        profileImagePath: response.data.profileImagePath
-      }));
-      alert("회원 정보가 수정되었습니다.");
-    } catch (error) {
-      console.error("회원 정보 수정 실패:", error.message);
-      alert("정보 수정에 실패했습니다.");
-    }
-  };
+        if (!user || user.id !== profileData.id) return;
+        try {
+            // 경로 변수 {id}를 실제 변수 ${id}로 수정하여 API 호출
+            const response = await api.put(`/mypage/${id}/profileupdate`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            
+            // 프로필 정보 업데이트
+            setProfileData({
+                ...response.data,
+                profileImagePath:
+                    response.data.profileImagePath ||
+                    profileData.profileImagePath ||
+                    commentProfile,
+            });
+            
+            // 전역 사용자 정보 업데이트 (닉네임, 이미지 경로)
+            setUser((prev) => ({
+                ...prev,
+                nickname: response.data.nickname,
+                profileImagePath: response.data.profileImagePath,
+            }));
+            
+            alert("회원 정보가 수정되었습니다.");
+        } catch (error) {
+            console.error("회원 정보 수정 실패:", error.message);
+            alert("정보 수정에 실패했습니다.");
+        }
+    };
 
   // ---------------- 렌더링 ----------------
-  if (loading) return <p style={{ textAlign: "center", padding: "50px" }}>프로필 정보를 불러오는 중입니다...</p>;
-  if (!profileData) return <p style={{ textAlign: "center", padding: "50px" }}>조회할 프로필 정보가 없습니다.</p>;
+  if (loading)
+    return (
+      <p style={{ textAlign: "center", padding: "50px" }}>
+        프로필 정보를 불러오는 중입니다...
+      </p>
+    );
+  if (!profileData)
+    return (
+      <p style={{ textAlign: "center", padding: "50px" }}>
+        조회할 프로필 정보가 없습니다.
+      </p>
+    );
 
-  // 사진함 콘텐츠 렌더러
   const renderPhotoContent = () => {
     let data = [];
     if (activeTab === "내사진") data = myPhotos;
@@ -133,11 +167,15 @@ const MyPage = () => {
     else if (activeTab === "댓글단사진") data = commentedPhotos;
 
     if (!data || data.length === 0)
-      return <p style={{ textAlign: "center", padding: "20px" }}>게시글이 없습니다.</p>;
+      return (
+        <p style={{ textAlign: "center", padding: "20px" }}>
+          게시글이 없습니다.
+        </p>
+      );
 
     return (
       <div className="mypage-photo-grid">
-        {data.map(photo => (
+        {data.map((photo) => (
           <img
             key={photo.id}
             src={photo.imagePath}
@@ -153,10 +191,14 @@ const MyPage = () => {
   return (
     <div className="mypage-container">
       <div className="mypage-header" style={{ margin: "40px 0" }}>
-        <Subtitle 
-          text={user && user.id === profileData.id ? "내 정보" : `${profileData.nickname}님의 정보`} 
-          showIcon={true} 
-          showSearch={false} 
+        <Subtitle
+          text={
+            user && user.id === profileData.id
+              ? "내 정보"
+              : `${profileData.nickname}님의 정보`
+          }
+          showIcon={true}
+          showSearch={false}
         />
       </div>
 
@@ -164,7 +206,7 @@ const MyPage = () => {
         profileData={profileData}
         handleEditInfo={handleEditInfo}
         handleWithdrawal={handleWithdrawal}
-        handleSanction={handleSanction}
+      //  handleSanction={handleSanction}
         currentUser={user}
       />
 
@@ -179,48 +221,67 @@ const MyPage = () => {
         }}
       />
 
-      {/* 하위 탭 */}
       <div className="mypage-tabs d-flex justify-content-center gap-3 mt-3">
-        {activeSection === "도란도란" && ["책갈피","내게시글","내댓글"].map(tab => (
-          <button
-            key={tab}
-            className={`menu-item ${activeTab === tab ? "active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >{tab}</button>
-        ))}
-        {activeSection === "사진함" && ["내사진","북마크사진","댓글단사진"].map(tab => (
-          <button
-            key={tab}
-            className={`menu-item ${activeTab === tab ? "active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >{tab}</button>
-        ))}
-        {activeSection === "도감" && ["책갈피"].map(tab => (
-          <button
-            key={tab}
-            className={`menu-item ${activeTab === tab ? "active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >{tab}</button>
-        ))}
+        {activeSection === "도란도란" &&
+          ["책갈피", "내게시글", "내댓글"].map((tab) => (
+            <button
+              key={tab}
+              className={`menu-item ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        {activeSection === "사진함" &&
+          ["내사진", "북마크사진", "댓글단사진"].map((tab) => (
+            <button
+              key={tab}
+              className={`menu-item ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        {activeSection === "도감" &&
+          ["책갈피"].map((tab) => (
+            <button
+              key={tab}
+              className={`menu-item ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
       </div>
 
-      {/* 콘텐츠 영역 */}
       <div className="mypage-content">
-        {activeSection === "도란도란" && activeTab === "책갈피" && profileData.bookmarkedPosts?.length > 0 &&
-          profileData.bookmarkedPosts.map(item => (
-            <div key={item.id} className="mypage-post-card" onClick={() => navigate(`/dorandoran/explorations/${item.id}`)}>
+        {activeSection === "도란도란" &&
+          activeTab === "책갈피" &&
+          profileData.bookmarkedPosts?.length > 0 &&
+          profileData.bookmarkedPosts.map((item) => (
+            <div
+              key={item.id}
+              className="mypage-post-card"
+              onClick={() => navigate(`/dorandoran/explorations/${item.id}`)}
+            >
               {item.title || item.content}
             </div>
-        ))}
+          ))}
 
         {activeSection === "사진함" && renderPhotoContent()}
 
-        {activeSection === "도감" && activeTab === "책갈피" && profileData.bookmarkedHeritages?.length > 0 &&
-          profileData.bookmarkedHeritages.map(item => (
-            <div key={item.id} className="mypage-post-card" onClick={() => navigate(`/heritages/detail/${item.id}`)}>
+        {activeSection === "도감" &&
+          activeTab === "책갈피" &&
+          profileData.bookmarkedHeritages?.length > 0 &&
+          profileData.bookmarkedHeritages.map((item) => (
+            <div
+              key={item.id}
+              className="mypage-post-card"
+              onClick={() => navigate(`/heritages/detail/${item.id}`)}
+            >
               {item.name || item.title}
             </div>
-        ))}
+          ))}
       </div>
     </div>
   );

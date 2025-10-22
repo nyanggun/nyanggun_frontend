@@ -1,220 +1,285 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Row, Col } from "react-bootstrap";
-import "./MyPageMember.css";
+// src/components/member/MypageMember.jsx
+import React, { useEffect, useState } from "react";
 import BorderButton from "../board/BorderButton";
-import { AuthContext } from "../../contexts/AuthContext"; // 로그인 사용자 정보를 가져오기 위한 Context
+import "./MyPageMember.css";
 
-const MypageMember = ({ 
-    profileData,           // 조회할 회원 정보
-    handleEditInfo,        // 정보 수정 API 호출 함수
-    handleWithdrawal,      // 회원 탈퇴 API 호출 함수
-    handleSanction         // 관리자 제재 API 호출 함수
+/**
+ * Props:
+ * - profileData: 조회된 사용자 정보 (id, email, nickname, phoneNumber, profileImagePath, role 등)
+ * - handleEditInfo(formData): 부모로 FormData 전송 -> 서버에 multipart/form-data PUT 요청
+ * - handleWithdrawal(): 부모에서 탈퇴 처리
+ * - handleSanction(targetId): 부모에서 관리자 제재 처리
+ * - currentUser: 현재 로그인 사용자 객체 (id, role 등)
+ */
+const MypageMember = ({
+  profileData,
+  handleEditInfo,
+  handleWithdrawal,
+  handleSanction,
+  currentUser,
 }) => {
-    // 현재 로그인 사용자 정보 가져오기
-    const { user } = useContext(AuthContext);
+  // 현재 로그인 사용자
+  const user = currentUser;
 
-    // 수정 모드 상태 관리
-    const [isEditing, setIsEditing] = useState(false);
+  // 수정 모드 상태
+  const [isEditing, setIsEditing] = useState(false);
 
-    // 수정 폼 데이터 상태
-    const [editData, setEditData] = useState({
-        email: profileData.email || "",
-        nickname: profileData.nickname || "",
-        phoneNumber: profileData.phoneNumber || "",
-        password: "",       // 새 비밀번호 (변경 시 입력)
-        profileImage: null, // 이미지 업로드용 File 객체
+  // 로컬 편집 폼 상태 (비밀번호 확인 포함)
+  const [editData, setEditData] = useState({
+    email: profileData.email || "",
+    nickname: profileData.nickname || "",
+    phoneNumber: profileData.phoneNumber || "",
+    password: "",
+    passwordConfirm: "",
+    profileImageFile: null,
+  });
+
+  // profileData 바뀌면 폼 리셋
+  useEffect(() => {
+    setEditData({
+      email: profileData.email || "",
+      nickname: profileData.nickname || "",
+      phoneNumber: profileData.phoneNumber || "",
+      password: "",
+      passwordConfirm: "",
+      profileImageFile: null,
     });
+    setIsEditing(false);
+  }, [profileData]);
 
-    // profileData가 바뀔 때마다 editData 초기화
-    useEffect(() => {
-        setEditData({
-            email: profileData.email || "",
-            nickname: profileData.nickname || "",
-            phoneNumber: profileData.phoneNumber || "",
-            password: "",
-            profileImage: null,
-        });
-        setIsEditing(false); // 기본 모드는 정보 표시 모드
-    }, [profileData]);
+  // 파일 선택 핸들러
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setEditData((p) => ({ ...p, profileImageFile: file }));
+  };
 
-    // ------------------ 파일 선택 ------------------
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            // 선택한 파일을 상태에 저장
-            setEditData((prev) => ({ ...prev, profileImage: file }));
-        }
+  // 저장: 비밀번호 확인 검사, FormData 구성 후 부모 핸들러 호출
+  const handleSave = () => {
+    // 비밀번호가 입력되었을 때 확인 값 비교
+    if (editData.password || editData.passwordConfirm) {
+      if (editData.password !== editData.passwordConfirm) {
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }
+      if (editData.password.length < 6) {
+        // 최소 6자 길이 제한 검사
+        alert("비밀번호는 최소 6자 이상이어야 합니다.");
+        return;
+      }
+    }
+
+    const formData = new FormData();
+
+    // 1. DTO 객체 생성 및 JSON 변환
+    // 백엔드 컨트롤러는 @RequestPart("dto")로 JSON 형태의 DTO를 기대합니다.
+    // 따라서 닉네임, 전화번호, 비밀번호 등의 텍스트 데이터는 하나의 객체로 묶어야 합니다.
+    const memberDto = {
+      // 이메일 필드는 수정이 비활성화(disabled)되어 있지만, DTO 구조를 위해 현재 값을 포함합니다.
+      email: editData.email,
+      nickname: editData.nickname,
+      phoneNumber: editData.phoneNumber,
     };
 
-    // ------------------ 정보 저장 ------------------
-    const handleSave = () => {
-        const formData = new FormData();
-        formData.append("email", editData.email);
-        formData.append("nickname", editData.nickname);
-        formData.append("phoneNumber", editData.phoneNumber);
-        if (editData.password) formData.append("password", editData.password);
-        if (editData.profileImage) formData.append("profileImage", editData.profileImage);
+    if (editData.password) {
+      // 비밀번호가 입력된 경우에만 DTO에 포함시켜 전송합니다.
+      memberDto.password = editData.password;
+    }
 
-        // 부모 컴포넌트로 FormData 전달
-        handleEditInfo(formData);
+    // 2. JSON 객체를 Blob 형태로 FormData에 'dto' 키로 추가
+    formData.append("dto", JSON.stringify(memberDto));
 
-        // 수정 완료 후 상태 초기화
-        setIsEditing(false);
-        setEditData((prev) => ({ ...prev, password: "" })); // 비밀번호 초기화
-    };
+    // 3. 프로필 이미지 파일을 'profileImage' 키로 추가
+    // 이는 백엔드 컨트롤러의 @RequestPart(value = "profileImage", required = false)와 매칭됩니다.
+    // 파일이 없는 경우(null)는 전송하지 않습니다.
+    if (editData.profileImageFile) {
+      formData.append("profileImage", editData.profileImageFile);
+    }
 
-    // ------------------ 회원 탈퇴 ------------------
-    const handleWithdrawalClick = () => {
-        const confirmed = window.confirm("정말 회원 탈퇴하시겠습니까?");
-        if (confirmed) handleWithdrawal(); // 탈퇴 API 호출
-    };
+    // 부모 컴포넌트의 handleEditInfo 함수를 호출하여 FormData를 서버로 전송합니다.
+    handleEditInfo(formData);
 
-    // ------------------ 관리자 제재 ------------------
-    const handleSanctionClick = () => {
-        handleSanction(profileData.id); // 제재 API 호출
-    };
+    // UI 상태 초기화
+    setIsEditing(false);
+    setEditData((p) => ({ ...p, password: "", passwordConfirm: "" }));
+  };
 
-    // ------------------ 권한 체크 ------------------
-    const isOwner = user?.id === profileData?.id;                     // 본인 계정인지
-    const isViewingOtherUserAsAdmin = user?.role === "ROLE_ADMIN" && !isOwner; // 관리자 권한 & 타인 계정
+  // 회원탈퇴(본인만)
+  const onWithdrawClick = () => {
+    if (!user || user.id !== profileData.id) {
+      alert("본인만 탈퇴할 수 있습니다.");
+      return;
+    }
+    if (window.confirm("정말 회원 탈퇴하시겠습니까?")) {
+      handleWithdrawal();
+    }
+  };
 
-    return (
-        <div className="mypage-member-section">
-            {/* ------------------ 아바타 영역 ------------------ */}
-            <div className="mypage-avatar">
-                <img
-                    src={
-                        isEditing && editData.profileImage
-                            ? URL.createObjectURL(editData.profileImage) // 수정 중 새 이미지 미리보기
-                            : profileData.profileImagePath || "/assets/comment-profile.svg" // 기본 이미지
-                    }
-                    alt="프로필 이미지"
+  // 관리자 제재: 관리자만 보이게, 타인 계정에만(자기 자신 제재 불가)
+  const onSanctionClick = () => {
+    if (!user || user.role !== "ROLE_ADMIN") {
+      alert("관리자 권한이 필요합니다.");
+      return;
+    }
+    if (user.id === profileData.id) {
+      alert("자기 자신을 제재할 수 없습니다.");
+      return;
+    }
+    if (
+      window.confirm(
+        `${profileData.nickname} (${profileData.id}) 을 제재하시겠습니까?`
+      )
+    ) {
+      handleSanction(profileData.id);
+    }
+  };
+
+  const isOwner = user?.id === profileData?.id;
+  const isAdminViewingOther = user?.role === "ROLE_ADMIN" && !isOwner;
+
+  return (
+    <div className="mypage-member-section">
+      {/* Avatar */}
+      <div className="mypage-avatar">
+        <img
+          src={
+            isEditing && editData.profileImageFile
+              ? URL.createObjectURL(editData.profileImageFile)
+              : profileData.profileImagePath || "/assets/comment-profile.svg"
+          }
+          alt="프로필"
+        />
+        {isEditing && isOwner && (
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ marginTop: 8 }}
+          />
+        )}
+      </div>
+
+      {/* Info area */}
+      <div className="mypage-info-area">
+        {!isEditing ? (
+          <>
+            <div className="mypage-info-list">
+              <p>
+                <strong>이메일</strong>{" "}
+                {profileData.email || "등록된 이메일 없음"}
+              </p>
+              <p>
+                <strong>닉네임</strong> {profileData.nickname || "사용자"}
+              </p>
+              <p>
+                <strong>전화번호</strong>{" "}
+                {profileData.phoneNumber || "등록된 번호 없음"}
+              </p>
+            </div>
+
+            <div className="mypage-action-buttons">
+              {/* 본인이면 수정/탈퇴 노출 */}
+              {isOwner && (
+                <>
+                  <BorderButton
+                    btnName="정보수정"
+                    clickBtn={() => setIsEditing(true)}
+                    buttonColor="black"
+                  />
+                  <BorderButton
+                    btnName="회원탈퇴"
+                    clickBtn={onWithdrawClick}
+                    buttonColor="red"
+                  />
+                </>
+              )}
+
+              {/* 관리자(타인 조회시) 제재 버튼 */}
+              {isAdminViewingOther && (
+                <BorderButton
+                  btnName="사용자 제재"
+                  clickBtn={onSanctionClick}
+                  buttonColor="red"
                 />
-                {isEditing && isOwner && ( // 본인이 수정 모드일 때만 파일 업로드 input 표시
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        style={{ marginTop: "8px" }}
-                    />
-                )}
+              )}
             </div>
+          </>
+        ) : (
+          // 편집 폼 (본인만)
+          isOwner && (
+            <div className="mypage-edit-form">
+              {/* 이메일은 수정 불가(비활성)로 표시 */}
+              <div className="form-group d-flex align-items-center mb-2">
+                <label style={{ width: 80 }}>이메일</label>
+                <input type="text" value={editData.email} disabled />
+              </div>
 
-            {/* ------------------ 회원 정보 영역 ------------------ */}
-            <div className="mypage-info-area">
-                {!isEditing ? (
-                    <>
-                        {/* -------- 정보 표시 모드 -------- */}
-                        <div className="mypage-info-list">
-                            <p>
-                                <strong>이메일</strong>{" "}
-                                {profileData.email || "등록된 이메일 없음"}
-                            </p>
-                            <p>
-                                <strong>닉네임</strong> {profileData.nickname || "사용자"}
-                            </p>
-                            <p>
-                                <strong>전화번호</strong>{" "}
-                                {profileData.phoneNumber || "등록된 번호 없음"}
-                            </p>
-                        </div>
+              <div className="form-group d-flex align-items-center mb-2">
+                <label style={{ width: 80 }}>닉네임</label>
+                <input
+                  type="text"
+                  value={editData.nickname}
+                  onChange={(e) =>
+                    setEditData((p) => ({ ...p, nickname: e.target.value }))
+                  }
+                />
+              </div>
 
-                        {/* -------- 버튼 영역 -------- */}
-                        <div className="mypage-action-buttons">
-                            {/* 본인일 경우: 정보 수정 / 회원 탈퇴 버튼 */}
-                            {isOwner && (
-                                <>
-                                    <BorderButton
-                                        btnName="정보수정"
-                                        clickBtn={() => setIsEditing(true)}
-                                        buttonColor="black"
-                                    />
-                                    <BorderButton
-                                        btnName="회원탈퇴"
-                                        clickBtn={handleWithdrawalClick}
-                                        buttonColor="red"
-                                    />
-                                </>
-                            )}
+              <div className="form-group d-flex align-items-center mb-2">
+                <label style={{ width: 80 }}>전화번호</label>
+                <input
+                  type="text"
+                  value={editData.phoneNumber}
+                  onChange={(e) =>
+                    setEditData((p) => ({ ...p, phoneNumber: e.target.value }))
+                  }
+                />
+              </div>
 
-                            {/* 관리자이며 타인 계정일 경우: 사용자 제재 버튼 */}
-                            {isViewingOtherUserAsAdmin && (
-                                <BorderButton
-                                    btnName="사용자 제재"
-                                    clickBtn={handleSanctionClick}
-                                    buttonColor="red"
-                                />
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    // -------- 수정 모드 --------
-                    isOwner && (
-                        <div className="mypage-edit-form">
-                            <div className="form-group d-flex align-items-center mb-2">
-                                <label style={{ width: "80px" }}>이메일</label>
-                                <input
-                                    type="text"
-                                    value={editData.email}
-                                    onChange={(e) =>
-                                        setEditData({ ...editData, email: e.target.value })
-                                    }
-                                    placeholder="이메일"
-                                />
-                            </div>
-                            <div className="form-group d-flex align-items-center mb-2">
-                                <label style={{ width: "80px" }}>닉네임</label>
-                                <input
-                                    type="text"
-                                    value={editData.nickname}
-                                    onChange={(e) =>
-                                        setEditData({ ...editData, nickname: e.target.value })
-                                    }
-                                    placeholder="닉네임"
-                                />
-                            </div>
-                            <div className="form-group d-flex align-items-center mb-2">
-                                <label style={{ width: "80px" }}>전화번호</label>
-                                <input
-                                    type="text"
-                                    value={editData.phoneNumber}
-                                    onChange={(e) =>
-                                        setEditData({ ...editData, phoneNumber: e.target.value })
-                                    }
-                                    placeholder="전화번호"
-                                />
-                            </div>
-                            <div className="form-group d-flex align-items-center mb-2">
-                                <label style={{ width: "80px" }}>비밀번호</label>
-                                <input
-                                    type="password"
-                                    value={editData.password}
-                                    onChange={(e) =>
-                                        setEditData({ ...editData, password: e.target.value })
-                                    }
-                                    placeholder="새 비밀번호 (변경 시에만 입력)"
-                                />
-                            </div>
+              <div className="form-group d-flex align-items-center mb-2">
+                <label style={{ width: 80 }}>비밀번호</label>
+                <input
+                  type="password"
+                  value={editData.password}
+                  onChange={(e) =>
+                    setEditData((p) => ({ ...p, password: e.target.value }))
+                  }
+                  placeholder="변경 시에만 입력"
+                />
+              </div>
 
-                            {/* 저장 / 취소 버튼 */}
-                            <div className="mypage-form-buttons d-flex gap-2 justify-content-start mt-3">
-                                <BorderButton
-                                    btnName="저장"
-                                    clickBtn={handleSave}
-                                    buttonColor="green"
-                                />
-                                <BorderButton
-                                    btnName="취소"
-                                    clickBtn={() => setIsEditing(false)}
-                                    buttonColor="gray"
-                                />
-                            </div>
-                        </div>
-                    )
-                )}
+              <div className="form-group d-flex align-items-center mb-2">
+                <label style={{ width: 80 }}>비밀번호 확인</label>
+                <input
+                  type="password"
+                  value={editData.passwordConfirm}
+                  onChange={(e) =>
+                    setEditData((p) => ({
+                      ...p,
+                      passwordConfirm: e.target.value,
+                    }))
+                  }
+                  placeholder="다시 입력"
+                />
+              </div>
+
+              <div className="mypage-form-buttons d-flex gap-2 justify-content-end mt-3">
+                <BorderButton
+                  btnName="저장"
+                  clickBtn={handleSave}
+                  buttonColor="green"
+                />
+                <BorderButton
+                  btnName="취소"
+                  clickBtn={() => setIsEditing(false)}
+                  buttonColor="gray"
+                />
+              </div>
             </div>
-        </div>
-    );
+          )
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default MypageMember;
