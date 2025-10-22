@@ -195,21 +195,26 @@ const ExplorationDetailPage = () => {
 									{/* 3. replies 변수가 존재하고, 길이가 0보다 클 때만 대댓글 영역을 렌더링합니다. */}
 									{replies && replies.length > 0 && (
 										<div className="ms-5 mt-3 border-start ps-3">
-											{replies.map((replyComment) => (
-												<div key={replyComment.id} className="mb-2">
-													<Comment
-														{...replyComment}
-														id={replyComment.id}
-														talkCommentId={replyComment.id}
-														onUpdateComment={onUpdateComment}
-														onDeleteComment={onDeleteComment}
-														onCommentSubmit={onSubmit}
-														reportComment={reportComment}
-														reportedPostId={replyComment.id}
-														reportedMemberId={userData.user?.id}
-													/>
-												</div>
-											))}
+											{replies
+												.slice() // 원본 배열(state) 유지를 위해 복사
+												// 댓글 객체에 'createdAt' 같은 타임스탬프 필드가 있다고 가정합니다.
+												// (b - a)는 내림차순 (최신순)
+												.sort((b, a) => new Date(b.createdAt) - new Date(a.createdAt))
+												.map((replyComment) => (
+													<div key={replyComment.id} className="mb-2">
+														<Comment
+															{...replyComment}
+															id={replyComment.id}
+															talkCommentId={replyComment.id}
+															onUpdateComment={onUpdateComment}
+															onDeleteComment={onDeleteComment}
+															onCommentSubmit={onSubmit}
+															reportComment={reportComment}
+															reportedPostId={replyComment.id}
+															reportedMemberId={userData.user?.id}
+														/>
+													</div>
+												))}
 										</div>
 									)}
 								</div>
