@@ -13,7 +13,7 @@ const BadgeAcquisition = () => {
           textDecoration: "none", // 밑줄 제거
           color: "inherit", // 글자색 유지
         }}
-      >
+      y>
         <div className="justify-content-center d-flex align-items-center">
           <div className="" xs={1}>
             <Image src={SmileFace} />
