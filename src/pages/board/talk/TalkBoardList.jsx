@@ -4,11 +4,13 @@ import api from "../../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
 import "./TalkBoardList.css";
 import { AuthContext } from "../../../contexts/AuthContext";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 const TalkBoardList = () => {
   const userData = useContext(AuthContext);
   const [talkBoard, setTalkBoard] = useState([]);
   const navigate = useNavigate();
+  const [isScrollLoading, setIsScrollLoading] = useState(false);
 
   // let cursor = null;
   // let hasNext = false;
@@ -18,6 +20,7 @@ const TalkBoardList = () => {
 
   // 담소 게시글을 가져오는 메소드 입니다.
   const getTalkBoard = async () => {
+    setIsScrollLoading(true);
     console.log("tempCursor: ", cursor);
     console.log("tempHasNext: ", hasNext);
 
@@ -48,6 +51,10 @@ const TalkBoardList = () => {
         "담소 게시글을 가져오는 데 오류가 발생했습니다.",
         error.message
       );
+    } finally {
+      setTimeout(() => {
+        setIsScrollLoading(false);
+      }, 1000);
     }
   };
   useEffect(() => {
@@ -81,8 +88,15 @@ const TalkBoardList = () => {
           ))}
         </div>
       ) : (
-        <div className="talk-list-none">
-          <h3>담소 게시물이 없습니다.</h3>
+        !isScrollLoading && (
+          <div className="talk-list-none">
+            <h3>담소 게시물이 없습니다.</h3>
+          </div>
+        )
+      )}
+      {isScrollLoading && (
+        <div className="loading-overlay">
+          <LoadingSpinner size="sm" message="사진 불러오는 중..." />
         </div>
       )}
     </div>

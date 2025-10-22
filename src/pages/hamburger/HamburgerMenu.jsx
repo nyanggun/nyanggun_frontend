@@ -38,7 +38,7 @@ const HamburgerMenu = ({ onButtonClick }) => {
                   className="hamburger-user"
                   onClick={() => {
                     onButtonClick();
-                    navigate("/mypage");
+                    navigate(`/mypage/${userData.user.id}`);
                   }}
                 >
                   <Image
@@ -143,19 +143,20 @@ const HamburgerMenu = ({ onButtonClick }) => {
               onClick={() => {
                 onButtonClick();
                 navigate("/photobox");
-              }}    
+              }}
             >
               사진함
             </div>
 
-            <div className="hamburger-menu-text"   onClick={() => {
+            <div
+              className="hamburger-menu-text"
+              onClick={() => {
                 onButtonClick();
                 navigate("/badges/badgebox");
-              }}>문화재 증표함</div>
-
-            <div className="hamburger-menu-text">사냥꾼 이벤트</div>
-
-            <div className="hamburger-menu-text">사냥꾼 상점</div>
+              }}
+            >
+              문화재 증표함
+            </div>
 
             <div className="hamburger-menu-lines">
               <hr className="hamburger-line semi-white"></hr>

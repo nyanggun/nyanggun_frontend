@@ -31,6 +31,10 @@
   height: 5rem;
 }
 
+.modal-pop {
+  position: relative;
+}
+
 /* 증표함 */
 .badgebox-grid {
   display: grid;

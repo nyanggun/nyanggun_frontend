@@ -50,3 +50,14 @@
   justify-content: center;
   align-items: center;
 }
+@media (max-width: 768px) {
+  .photos-container .masonry-item {
+    width: 48%; /* 2열 */
+  }
+}
+
+@media (min-width: 769px) {
+  .photos-container .masonry-item {
+    width: 200px; /* 3열 이상 고정 크기 */
+  }
+}

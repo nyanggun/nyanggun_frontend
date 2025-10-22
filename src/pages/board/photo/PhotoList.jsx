@@ -7,6 +7,7 @@ import { Row, Col } from "react-bootstrap";
 import { Outlet, useNavigate } from "react-router-dom";
 import api from "../../../config/apiConfig";
 import { AuthContext } from "../../../contexts/AuthContext";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 const PhotoList = () => {
   const navigate = useNavigate();
@@ -17,9 +18,11 @@ const PhotoList = () => {
   // ref를 사용하여 최신 값 유지
   const cursor = useRef(null);
   const hasNext = useRef(true);
+  const [isScrollLoading, setIsScrollLoading] = useState(false);
 
   const onRequestAppend = async () => {
     if (hasNext.current === false) return;
+    setIsScrollLoading(true);
     try {
       // console.log("커서 요청 2:");
       const response2 = await api.get("/photobox", {
@@ -48,6 +51,10 @@ const PhotoList = () => {
         "사진 목록을 불러오는 중 오류가 발생했습니다.",
         error.message
       );
+    } finally {
+      setTimeout(() => {
+        setIsScrollLoading(false);
+      }, 1000);
     }
   };
 
@@ -121,6 +128,11 @@ const PhotoList = () => {
             </div>
           )}
         </Col>
+        {isScrollLoading && (
+          <div className="loading-overlay">
+            <LoadingSpinner size="sm" message="사진 불러오는 중..." />
+          </div>
+        )}
       </Row>
     </div>
   );

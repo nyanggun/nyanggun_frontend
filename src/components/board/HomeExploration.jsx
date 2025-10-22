@@ -56,10 +56,10 @@ const HomeExploration = ({ exploration, onClick }) => {
 
         <div className="home-exploration-nickname">
           <Image
-            src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+            src={`https://picsum.photos/400/300?random=${exploration.member.id}`}
             roundedCircle
             fluid
-            className="talk-profile-pic-icon border border-1"
+            className="talk-profile-pic-icon border "
           />
           <h6 className="home-exploration-nickname-h6">
             {exploration.member.nickname}
