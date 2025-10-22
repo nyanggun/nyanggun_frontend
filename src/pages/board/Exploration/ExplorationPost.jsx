@@ -217,7 +217,7 @@ const TalkDetail = ({
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
 						{location.pathname.startsWith("/dorandoran/explorations/") && (
-							<div>
+							<div className="pb-3">
 								<AutoSearchMap keyword={relatedHeritage} />
 							</div>
 						)}
