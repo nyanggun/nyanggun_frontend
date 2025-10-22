@@ -2,13 +2,15 @@ import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import { useState, useEffect, useCallback } from "react";
 import { InputGroup, Form, Row, Col, Image, Modal } from "react-bootstrap";
 import "./BadgeBoard";
+import "./BadgeBoard.css";
 import GeoAltIcon from "../../assets/geo-alt-icon.svg";
 import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";
 
+const ACTIVE_RADIUS = 20000; // 획득 가능한 문화재 반경 세팅
+
 // 거리 계산 함수 (Haversine Formula)
 // 위경도가 lat1, lon1인 위치A, 위경도가 lat2, lon2인 위치B 사이의 거리를 구할 때 사용
-const ACTIVE_RADIUS = 5000; // 획득 가능한 문화재 반경 세팅
 const getDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371000; // 지구 반지름 (m)
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -212,7 +214,6 @@ const BadgeAcquisition = () => {
       ); // 가장 가까운 문화재 id 서버로 전달
       if (response.data.success) {
         const heritageId = response.data.data.hunterBadge.id;
-        alert(`${nearest.name} 배지 획득`);
 
         //6. 획득한 증표 표시(acquired 상태 변경)
         setHeritageList((prev) => {
@@ -315,11 +316,12 @@ const BadgeAcquisition = () => {
       </Row>
       {/* 증표 획득시 띄워주는 모달 */}
       {acquiredBadge && (
+        //React 렌더링 트리를 완전히 벗어나서 body 최상단에 Modal을 강제로 붙여 주는 함수
         <Modal
           className="text-center"
           show={showModal}
           onHide={() => setShowModal(false)}
-          centered
+          container={document.body} // transform 영향 벗어나게
         >
           <Modal.Header closeButton>
             <Modal.Title>
@@ -329,18 +331,16 @@ const BadgeAcquisition = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {acquiredBadge && (
-              <div>
-                <img
-                  className="modal-badge-img mb-3"
-                  src={acquiredBadge.imgUrl}
-                  alt={acquiredBadge.namge}
-                />
-                <h5>
-                  <strong>{acquiredBadge.name}</strong>
-                </h5>
-              </div>
-            )}
+            <div>
+              <img
+                className="modal-badge-img mb-3"
+                src={acquiredBadge.imgUrl}
+                alt={acquiredBadge.namge}
+              />
+              <h5>
+                <strong>{acquiredBadge.name}</strong>
+              </h5>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <CertificationButton
