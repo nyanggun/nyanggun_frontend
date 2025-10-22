@@ -116,6 +116,11 @@ const ExplorationDetailPage = () => {
 	};
 
 	const onDeleteComment = async (commentId) => {
+		if (confirm("삭제하시겠습니까?")) {
+			alert("삭제되었습니다");
+		} else {
+			return;
+		}
 		try {
 			const response = await api.delete(`http://localhost:8080/exploration-comments/${commentId}`);
 			setExplorationComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
