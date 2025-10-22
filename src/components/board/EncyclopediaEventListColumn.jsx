@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row, Image } from "react-bootstrap";
 import BookmarkButton from "./BookmarkButton";
-import MemberButton from "./MemberButton";
 import { Link } from "react-router-dom";
 import api from "../../config/apiConfig";
+import "./EncyclopediaEventListColumn.css";
 
 const EncyclopediaEventListColumn = ({ heritage }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -40,15 +40,19 @@ const EncyclopediaEventListColumn = ({ heritage }) => {
   };
 
   return (
-    <Row className="g-0 pb-1 h-25 mt-4 justify-content-center">
+    <Row className="g-0 pb-4 h-25 mt-4 justify-content-center">
       <Col>
         <Link
+          className="heritage-link"
           key={heritage.id}
           to={`/heritages/detail/${heritage.id}`}
-          style={{ textDecoration: "none", color: "inherit" }}
         >
-          <div className="m-0 p-0 text-center">
-            <Image src={heritage.imageUrl} fluid></Image>
+          <div className="m-0 p-0 text-center heritage-container">
+            <Image
+              className="heritage-img"
+              src={heritage.imageUrl}
+              fluid
+            ></Image>
           </div>
           <div className="m-0 p-1">
             <div>
