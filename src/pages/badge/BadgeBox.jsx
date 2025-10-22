@@ -3,11 +3,9 @@ import { Row, Col, Image, Container } from "react-bootstrap";
 import "./BadgeBoard.css";
 import api from "../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
-import { _getSelectionAffectedTableWidget } from "ckeditor5";
 
 const BadgeAcquisition = () => {
   const navigate = useNavigate();
-  const [acquiredBadge, setAcquiredBadge] = useState(null);
   const [badgeList, setBadgesList] = useState([]);
 
   const fetchBadges = async () => {
@@ -19,13 +17,22 @@ const BadgeAcquisition = () => {
 
       // 획득하지 않은 배지(회색) + 획득한 배지(칼라)
       const allBadgesResponse = allBadges.data.data;
-      const acquiredBadgesResponse = new Set(acquiredBadges.data.data);
+      // Set → Array로 변환 후 badgeId만 추출
+      const acquiredBadgesResponse = acquiredBadges.data.data;
+      const acquiredBadgeIds = Array.from(acquiredBadgesResponse).map(
+        (b) => b.badgeId
+      );
+
+      // Set으로 다시 만들기 (빠른 has() 조회용)
+      const acquiredIdsSet = new Set(acquiredBadgeIds);
 
       // 획득 여부 알려 주기 위해 acquired : false 속성 추가
       const attachAcquiredToAllBadges = allBadgesResponse.map((badge) => ({
-        ...allBadges,
-        acquired: acquiredBadgesResponse.has(badge.badgeId),
+        ...badge,
+        acquired: acquiredIdsSet.has(badge.badgeId),
       }));
+
+      console.log(attachAcquiredToAllBadges);
 
       // 획득 증표 는 acquired 속성 true로 변경
       setBadgesList(attachAcquiredToAllBadges);
@@ -62,18 +69,19 @@ const BadgeAcquisition = () => {
                 key={index}
               >
                 <div className="badgebox-map-child">
+                  {console.log(badge)}
                   <Image
                     fluid
                     className={`badgebox-image ${
                       badge.acquired ? "unlocked" : "locked"
                     }`}
-                    src={badge.badgeImg}
-                    alt={badge.badgeName}
+                    src={badge.imgUrl}
+                    alt={badge.name}
                   />
                 </div>
                 <div>
                   <p className="badgebox-text">
-                    <strong>{badge.badgeName}</strong>
+                    <strong>{badge.name}</strong>
                   </p>
                 </div>
               </div>
