@@ -148,7 +148,7 @@ const TalkDetail = ({
 
 	return (
 		<Row className="h-100 justify-content-center align-items-center p-0 m-0 mb-2">
-			<Col xs={11} sm={10} md={8} lg={6} className="p-0 pb-3 border-bottom">
+			<Col className="p-0 pb-3 border-bottom">
 				<Card className="rounded-0 border-0">
 					<Card.Body className="m-0 p-0">
 						<Card.Title className="p-0 m-0">{title}</Card.Title>
