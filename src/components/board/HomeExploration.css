@@ -36,7 +36,8 @@
   align-items: center;
 }
 .talk-profile-pic-icon {
-  width: 10%;
+  width: 30px;
+  height: 30px;
   margin: 1%;
 }
 .home-exploration-nickname-h6 {
@@ -63,5 +64,10 @@
   .home-exploration-img {
     width: 50vw;
     height: 40vh;
+  }
+  .talk-profile-pic-icon {
+    width: 20px;
+    height: 20px;
+    margin: 1%;
   }
 }

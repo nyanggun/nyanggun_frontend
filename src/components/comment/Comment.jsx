@@ -62,7 +62,7 @@ const Comment = ({
           {/* 프로필이 없을 경우 기본 프로필 출력 */}
           {profile == null ? (
             <Image
-              src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+              src={`https://picsum.photos/400/300?random=${memberId}`}
               roundedCircle
               className="comment-profile-pic border border-1"
             />

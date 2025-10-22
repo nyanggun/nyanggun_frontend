@@ -82,7 +82,10 @@ const TalkDetail = ({
             <Card.Title>{talk.title}</Card.Title>
 
             <div className="talk-name">
-              <div className="talk-name" onCl>
+              <div
+                className="talk-name"
+                onClick={() => navigate(`/mypage/${talk.memberId}`)}
+              >
                 {talk.profile ? (
                   <div>프로필 사진이 있는 경우 이 부분을 고치세요.</div>
                 ) : (

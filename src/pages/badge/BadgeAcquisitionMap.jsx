@@ -6,6 +6,7 @@ import "./BadgeBoard.css";
 import GeoAltIcon from "../../assets/geo-alt-icon.svg";
 import CertificationButton from "../../components/board/CertificationButton";
 import api from "../../config/apiConfig";
+import confetti from "canvas-confetti";
 
 const ACTIVE_RADIUS = 20000; // 획득 가능한 문화재 반경 세팅
 
@@ -203,7 +204,14 @@ const BadgeAcquisition = () => {
     },
     [fetchAddress]
   );
-
+  const handleFirework = () => {
+    confetti({
+      particleCount: 150,
+      spread: 80,
+      origin: { y: 0.7 },
+      zIndex: 9999999,
+    });
+  };
   // 5. 인증하기 버튼 클릭했을 때 발생하는 이벤트
   // 인증하기 버튼 누르면 저장
   const handleAquire = async () => {
@@ -232,6 +240,7 @@ const BadgeAcquisition = () => {
           imgUrl: nearest.imgUrl,
         });
         setShowModal(true);
+        handleFirework();
       }
     } catch (error) {
       alert("서버 오류 발생! 배지를 획득할 수 없습니다:", error);
@@ -318,7 +327,7 @@ const BadgeAcquisition = () => {
       {acquiredBadge && (
         //React 렌더링 트리를 완전히 벗어나서 body 최상단에 Modal을 강제로 붙여 주는 함수
         <Modal
-          className="text-center"
+          className="modal-pop text-center"
           show={showModal}
           onHide={() => setShowModal(false)}
           container={document.body} // transform 영향 벗어나게

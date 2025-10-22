@@ -242,7 +242,7 @@ const TalkBoardDetail = () => {
                           content={reply.content}
                           createdAt={reply.createdAt}
                           talkCommentId={reply.talkCommentId}
-                          memberId={comment.memberId}
+                          memberId={reply.memberId}
                           onCommentSubmit={handleCommentSubmit}
                           onUpdateComment={handleUpdateComment}
                           onDeleteComment={handleDeleteComment}
