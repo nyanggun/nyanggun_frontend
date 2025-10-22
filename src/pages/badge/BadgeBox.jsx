@@ -3,7 +3,7 @@ import { Row, Col, Image, Container } from "react-bootstrap";
 import "./BadgeBoard.css";
 import api from "../../config/apiConfig";
 import { useNavigate } from "react-router-dom";
-import { _getSelectionAffectedTableWidget } from "ckeditor5";
+//import { _getSelectionAffectedTableWidget } from "ckeditor5";
 
 const BadgeAcquisition = () => {
   const navigate = useNavigate();
