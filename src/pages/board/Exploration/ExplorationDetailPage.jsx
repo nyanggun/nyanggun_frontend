@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // useParams 훅 import
 import api from "../../../config/apiConfig";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 
 import ExplorationPost from "./ExplorationPost";
 import Comment from "../../../components/comment/Comment";
@@ -35,6 +36,7 @@ const ExplorationDetailPage = () => {
 					}),
 				]);
 
+				console.log(explorationResponse.data);
 				// 두 요청이 모두 성공하면, 한 번에 상태를 업데이트합니다.
 				setExploration(explorationResponse.data);
 				setExplorationComments(commentResponse.data.data);
@@ -134,6 +136,9 @@ const ExplorationDetailPage = () => {
 
 	if (loading) return <div>로딩 중...</div>;
 	if (error) return <div>오류가 발생했습니다.</div>;
+	if (!exploration) {
+		return <div className="text-center p-5">탐방기 데이터를 찾을 수 없습니다.</div>;
+	}
 
 	//탐방기 댓글을 신고하는 메소드 입니다.
 	const reportComment = async (reason, postId, memberId) => {
@@ -156,6 +161,7 @@ const ExplorationDetailPage = () => {
 			<div className="pb-3">
 				{exploration && <ExplorationPost {...exploration} commentCount={explorationComments.length} />}
 			</div>
+
 			<Row className="justify-content-center p-0 m-0">
 				<Col lg={6} className="col-11 col-sm-10 col-md-8 mb-3">
 					<CommentInput onSubmit={onSubmit} />

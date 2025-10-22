@@ -12,6 +12,7 @@ import RelatedHeritageButton from "../../../components/board/button/RelatedHerit
 import CommentButton from "../../../components/board/button/CommentButton";
 import ReportButton from "../../../components/board/button/ReportButton";
 import BorderButton from "../../../components/board/BorderButton";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 
 const TalkDetail = ({
 	id,
@@ -28,7 +29,6 @@ const TalkDetail = ({
 	const { user } = useContext(AuthContext);
 	const [isBookmarked, setIsBookmarked] = useState(false);
 	const [bookmarkCounts, setBookmarkCounts] = useState(bookmarkCount);
-	const [commentCounts, setCommentCounts] = useState(commentCount);
 
 	//시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
 	//서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
@@ -148,7 +148,7 @@ const TalkDetail = ({
 
 	return (
 		<Row className="h-100 justify-content-center align-items-center p-0 m-0 mb-2">
-			<Col className="p-0 pb-3 border-bottom">
+			<Col xs={11} sm={10} md={8} lg={6} className="p-0 pb-3 border-bottom">
 				<Card className="rounded-0 border-0">
 					<Card.Body className="m-0 p-0">
 						<Card.Title className="p-0 m-0">{title}</Card.Title>
@@ -169,18 +169,28 @@ const TalkDetail = ({
 									<span className="small">{timeAgo}</span>
 								</div>
 							</Col>
-							<Col xs={5} sm={5} className="d-flex justify-content-end align-items-center gap-1 py-1">
-								<div className="">
-									{user && user.id == member.id && (
-										<BorderButton btnName="수정" buttonColor="black" clickBtn={editExploration} />
-									)}
-								</div>
-								<div className="">
-									{user && user.id == member.id && (
-										<BorderButton btnName="삭제" buttonColor="red" clickBtn={deleteExploration} />
-									)}
-								</div>
-							</Col>
+							{location.pathname.startsWith("/dorandoran/explorations/") && (
+								<Col xs={5} sm={5} className="d-flex justify-content-end align-items-center gap-1 py-1">
+									<div className="">
+										{user && user.id == member.id && (
+											<BorderButton
+												btnName="수정"
+												buttonColor="black"
+												clickBtn={editExploration}
+											/>
+										)}
+									</div>
+									<div className="">
+										{user && user.id == member.id && (
+											<BorderButton
+												btnName="삭제"
+												buttonColor="red"
+												clickBtn={deleteExploration}
+											/>
+										)}
+									</div>
+								</Col>
+							)}
 						</Row>
 						<Carousel interval={null} className="my-3 bg-light rounded p-0 m-0">
 							{/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
@@ -206,8 +216,13 @@ const TalkDetail = ({
 						<Card.Text as="div" className="">
 							<div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 						</Card.Text>
+						{location.pathname.startsWith("/dorandoran/explorations/") && (
+							<div>
+								<AutoSearchMap keyword={relatedHeritage} />
+							</div>
+						)}
 						<div className="row d-flex justify-content-between m-0">
-							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-1 p-0 m-0">
+							<div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-2 p-0 m-0">
 								<div>
 									<BookmarkButton
 										count={bookmarkCounts}
@@ -238,3 +253,81 @@ const TalkDetail = ({
 };
 
 export default TalkDetail;
+
+// AutoSearchMap.jsx
+
+const AutoSearchMap = ({ keyword }) => {
+	const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+	const [center, setCenter] = useState(null);
+	const [mapLoaded, setMapLoaded] = useState(false);
+
+	useEffect(() => {
+		// 1. 유효한 검색어(searchQuery)를 보장합니다.
+		//    keyword prop이 null, undefined, ""인 경우 "서울"을 기본값으로 사용합니다.
+		const searchQuery = keyword || "서울";
+
+		// 2. 맵 라이브러리가 로드되지 않았거나,
+		//    Google Places API가 준비되지 않았으면 검색을 실행하지 않습니다.
+		if (!mapLoaded || !window.google || !window.google.maps || !window.google.maps.places) {
+			console.log("맵 준비 안됨:", {
+				mapLoaded,
+				hasGoogle: !!window.google,
+				hasPlaces: !!window.google?.maps?.places,
+				keyword,
+			});
+			setCenter(null); // 조건 미충족 시 마커 제거
+			return;
+		}
+
+		// 3. searchQuery는 항상 유효한 값이므로 !keyword 체크가 필요 없습니다.
+		console.log("장소 검색 시도:", searchQuery);
+		const service = new window.google.maps.places.PlacesService(document.createElement("div"));
+
+		const request = {
+			query: searchQuery, // 4. 보장된 searchQuery 변수를 사용합니다.
+			fields: ["name", "geometry", "formatted_address"],
+		};
+
+		// 키워드로 장소 검색 실행
+		service.findPlaceFromQuery(request, (results, status) => {
+			if (status === window.google.maps.places.PlacesServiceStatus.OK && results[0]) {
+				const place = results[0];
+				const location = place.geometry.location;
+				setCenter({ lat: location.lat(), lng: location.lng() });
+				console.log("📍 검색 결과:", place.name, place.formatted_address);
+			} else {
+				console.error("❌ 검색 실패:", status, " (검색어: ", searchQuery, ")");
+				setCenter(null); // 검색 실패 시 마커 제거
+			}
+		});
+	}, [mapLoaded, keyword]);
+
+	if (!apiKey) {
+		console.error("Google Maps API 키가 없습니다. apiKey 변수에 키를 입력하세요.");
+		return <div>API 키가 설정되지 않았습니다.</div>;
+	}
+
+	return (
+		<APIProvider
+			apiKey={apiKey}
+			libraries={["places"]}
+			onLoad={() => {
+				console.log("Google Maps API Provider 로드됨");
+				setMapLoaded(true);
+			}}
+		>
+			<Map
+				style={{ width: "100%", height: "400px" }} // 높이는 필요에 맞게 조절
+				defaultZoom={14}
+				// center가 null이면 서울, 아니면 검색된 위치로 중심 이동
+				center={center || { lat: 37.5665, lng: 126.978 }}
+				gestureHandling={"greedy"}
+				disableDefaultUI={true}
+			>
+				{/* 검색 결과(center)가 있을 때만 마커 표시 */}
+				{center && <Marker position={center} />}
+			</Map>
+		</APIProvider>
+	);
+};
