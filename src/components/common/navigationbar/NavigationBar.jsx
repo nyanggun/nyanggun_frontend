@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import {
   House,
@@ -13,12 +13,23 @@ import {
 } from "react-bootstrap-icons";
 import "./NavigationBar.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 const NavigationBar = () => {
   const [hover, setHover] = useState("");
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  const badgeOnclick = () => {
+    if (!user) {
+      alert("로그인이 필요한 페이지 입니다.");
+      navigate("/login");
+    } else {
+      navigate("/badges");
+    }
+  };
 
   return (
     <>
@@ -60,10 +71,10 @@ const NavigationBar = () => {
           <div
             className={`navBtn ${
               currentPath.startsWith("/badges") ? "active" : ""
-            }`}
+            } ${user ? "" : "logout"}`}
             onMouseEnter={() => setHover("badge")}
             onMouseLeave={() => setHover("")}
-            onClick={() => navigate("/badges")}
+            onClick={badgeOnclick}
           >
             <YinYang width={40} height={40} />
             <div>사냥꾼 증표</div>
