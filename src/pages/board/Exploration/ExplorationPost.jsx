@@ -28,6 +28,7 @@ const TalkDetail = ({
 	const { user } = useContext(AuthContext);
 	const [isBookmarked, setIsBookmarked] = useState(false);
 	const [bookmarkCounts, setBookmarkCounts] = useState(bookmarkCount);
+	const [commentCounts, setCommentCounts] = useState(commentCount);
 
 	//시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
 	//서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.

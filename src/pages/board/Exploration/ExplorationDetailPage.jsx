@@ -153,7 +153,9 @@ const ExplorationDetailPage = () => {
 	// 데이터 로딩이 완료되면 ExplorationPost 컴포넌트에 props로 넘겨 렌더링합니다.
 	return (
 		<div className="p-0 m-0">
-			<div className="pb-3">{exploration && <ExplorationPost {...exploration} />}</div>
+			<div className="pb-3">
+				{exploration && <ExplorationPost {...exploration} commentCount={explorationComments.length} />}
+			</div>
 			<Row className="justify-content-center p-0 m-0">
 				<Col lg={6} className="col-11 col-sm-10 col-md-8 mb-3">
 					<CommentInput onSubmit={onSubmit} />
