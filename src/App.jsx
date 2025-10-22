@@ -40,6 +40,7 @@ import ReportPage from "./pages/admin/ReportPage";
 import ReportDetailPage from "./pages/admin/ReportDetailPage";
 import MyPage from "./pages/user/myPage";
 import "./App.css";
+import UserListPage from "./pages/admin/UserListPage";
 
 const App = () => {
   return (
@@ -53,6 +54,7 @@ const App = () => {
               <Route index element={<Navigate to="reports" replace />} />
               <Route path="reports" element={<ReportPage />} />
               <Route path="reports/:id" element={<ReportDetailPage />} />
+              <Route path="users" element={<UserListPage></UserListPage>} />
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/logout" element={<Logout />} />

@@ -158,10 +158,6 @@ const HamburgerMenu = ({ onButtonClick }) => {
               문화재 증표함
             </div>
 
-            <div className="hamburger-menu-text">사냥꾼 이벤트</div>
-
-            <div className="hamburger-menu-text">사냥꾼 상점</div>
-
             <div className="hamburger-menu-lines">
               <hr className="hamburger-line semi-white"></hr>
             </div>
