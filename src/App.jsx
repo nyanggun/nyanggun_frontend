@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-
 import { AuthProvider } from "./contexts/AuthProvider";
 import ExplorationAndTalkPage from "./pages/board/ExplorationAndTalkPage";
 
@@ -39,7 +38,7 @@ import Home from "./pages/home/Home";
 import AdminPage from "./pages/admin/AdminPage";
 import ReportPage from "./pages/admin/ReportPage";
 import ReportDetailPage from "./pages/admin/ReportDetailPage";
-import MyPage from "./pages/user/MyPage";
+import MyPage from "./pages/user/myPage";
 import "./App.css";
 
 const App = () => {
@@ -134,12 +133,13 @@ const App = () => {
               />
             </Route>
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/mypage/:id" element={<MyPage />} />
           </Routes>
         </div>
         <Footer />
-        <NavigationBar></NavigationBar>
         <ChatbotButton />
       </AuthProvider>
+      <NavigationBar></NavigationBar>
     </div>
   );
 };

@@ -48,7 +48,7 @@ const HomeExploration = ({ exploration, onClick }) => {
       </div>
 
       <div className="home-exploration-text">
-        <div classname="home-exploraton-flex">
+        <div className="home-exploraton-flex">
           <h4>{exploration.title}</h4>
           <h6 className="home-exploration-text-h6">{content}</h6>
           <h6>{timeAgo}</h6>
