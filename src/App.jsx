@@ -139,6 +139,7 @@ const App = () => {
         <Footer />
         <ChatbotButton />
       </AuthProvider>
+      <NavigationBar></NavigationBar>
     </div>
   );
 };

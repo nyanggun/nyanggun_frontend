@@ -82,16 +82,16 @@ const TalkDetail = ({
             <Card.Title>{talk.title}</Card.Title>
 
             <div className="talk-name">
-              <div className="talk-name">
+              <div className="talk-name" onCl>
                 {talk.profile ? (
                   <div>프로필 사진이 있는 경우 이 부분을 고치세요.</div>
                 ) : (
                   <div className="talk-profile">
                     <Image
-                      src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+                      src={`https://picsum.photos/400/300?random=${talk.memberId}`}
                       roundedCircle
                       fluid
-                      className="talk-profile-pic border border-1"
+                      className="talk-profile-pic border border-0"
                     />
                   </div>
                 )}
