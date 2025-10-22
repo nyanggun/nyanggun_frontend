@@ -15,7 +15,7 @@ const HeritageEncyclopediaBoardList = () => {
     <div>
       <div className="">
         <div className="d-flex justify-content-center">
-          <div className="mb-4 w-50">
+          <div className="mb-4 w-50 input-box">
             <Subtitle
               moveTo={"/heritages/name"}
               text={"문화재 도감"}
@@ -32,7 +32,7 @@ const HeritageEncyclopediaBoardList = () => {
           ></Menu>
         )}
       </div>
-      <main>
+      <main class="mb-5">
         <Outlet />
       </main>
     </div>
