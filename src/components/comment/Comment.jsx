@@ -120,8 +120,9 @@ const Comment = ({
               ></ReportCommentButton>
             </div>
           </div>
-          {memberId === userData.user?.id ||
-          userData.user?.role === "ROLE_ADMIN" ? (
+          {(memberId === userData.user?.id ||
+            userData.user?.role === "ROLE_ADMIN") &&
+          !isUpdateMode ? (
             <div className="comment-btn-delete">
               <BorderButton
                 btnName={"수정"}
@@ -129,13 +130,13 @@ const Comment = ({
                 clickBtn={() => {
                   setIsUpdateMode(true);
                 }}
-              ></BorderButton>
+              />
               <span> </span>
               <BorderButton
                 btnName={"삭제"}
                 buttonColor={"red"}
                 clickBtn={() => onDeleteComment(talkCommentId)}
-              ></BorderButton>
+              />
             </div>
           ) : (
             <div></div>

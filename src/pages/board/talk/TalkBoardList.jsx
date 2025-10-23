@@ -96,7 +96,7 @@ const TalkBoardList = () => {
       )}
       {isScrollLoading && (
         <div className="loading-overlay">
-          <LoadingSpinner size="sm" message="사진 불러오는 중..." />
+          <LoadingSpinner message="사진 불러오는 중..." />
         </div>
       )}
     </div>

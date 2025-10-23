@@ -51,3 +51,16 @@
   margin: 2% 0%;
   margin-left: 5%;
 }
+.form-update-box {
+  display: grid;
+  grid-template-columns: 6fr 1fr;
+  justify-content: content;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.form-control-update {
+  margin: 0;
+  padding: 5px 10px;
+}
