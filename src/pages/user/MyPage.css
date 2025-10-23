@@ -7,7 +7,6 @@
   margin: 0 auto;
   background-color: #fff;
   min-height: 100vh;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .mypage-header {
@@ -15,7 +14,6 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0;
 }
 .mypage-header .form-input-container,
 .mypage-header .col-9 {
@@ -35,7 +33,7 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #f0f0f0;
+
 }
 
 .mypage-info {

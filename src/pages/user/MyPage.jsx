@@ -65,16 +65,16 @@ const MyPage = () => {
     if (!user || user.id !== profileData.id) return;
     if (!window.confirm("정말 회원 탈퇴하시겠습니까?")) return;
     try {
-        await api.delete(`/mypage/${id}/delete`);
-        alert("회원 탈퇴가 완료되었습니다.");
-        setUser(null);
-        navigate("/");
+      await api.delete(`/mypage/${id}/delete`);
+      alert("회원 탈퇴가 완료되었습니다.");
+      setUser(null);
+      navigate("/");
     } catch (error) {
-        console.error("회원 탈퇴 중 오류:", error.message);
-        alert("회원 탈퇴에 실패했습니다.");
+      console.error("회원 탈퇴 중 오류:", error.message);
+      alert("회원 탈퇴에 실패했습니다.");
     }
-};
-// ---------------- 사진함 API ----------------
+  };
+  // ---------------- 사진함 API ----------------
   const fetchPhotoData = useCallback(async () => {
     if (!id) return;
     try {
@@ -116,35 +116,46 @@ const MyPage = () => {
   // };
 
   const handleEditInfo = async (formData) => {
-        if (!user || user.id !== profileData.id) return;
-        try {
-            // 경로 변수 {id}를 실제 변수 ${id}로 수정하여 API 호출
-            const response = await api.put(`/mypage/${id}/profileupdate`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            
-            // 프로필 정보 업데이트
-            setProfileData({
-                ...response.data,
-                profileImagePath:
-                    response.data.profileImagePath ||
-                    profileData.profileImagePath ||
-                    commentProfile,
-            });
-            
-            // 전역 사용자 정보 업데이트 (닉네임, 이미지 경로)
-            setUser((prev) => ({
-                ...prev,
-                nickname: response.data.nickname,
-                profileImagePath: response.data.profileImagePath,
-            }));
-            
-            alert("회원 정보가 수정되었습니다.");
-        } catch (error) {
-            console.error("회원 정보 수정 실패:", error.message);
-            alert("정보 수정에 실패했습니다.");
+    if (!user || user.id !== profileData.id) return; // 1. ID 유효성 검사 로직
+    if (!id || id === "undefined" || isNaN(Number(id))) {
+      console.error("멤버 ID가 유효하지 않아 요청을 중단합니다:", id);
+      alert("회원 정보를 가져올 수 없습니다. 다시 시도해 주세요.");
+      return;
+    }
+
+    try {
+      // API 호출
+      const response = await api.patch(
+        `/mypage/${id}/profileupdate`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-    };
+      ); // 2. 캐시 무력화 로직 (새로 추가됨)
+      const newImagePath = response.data.profileImagePath;
+      const cacheBustedPath = newImagePath
+        ? `${newImagePath}?t=${Date.now()}`
+        : profileData.profileImagePath || commentProfile;
+
+      setProfileData(() => ({
+        ...response.data,
+        profileImagePath: cacheBustedPath,
+      })); // setUser에 캐시 무력화 경로 적용
+
+      setUser((prev) => ({
+        ...prev,
+        nickname: response.data.nickname,
+        profileImagePath: cacheBustedPath,
+      }));
+
+      alert("회원 정보가 수정되었습니다.");
+    } catch (error) {
+      console.error("회원 정보 수정 실패:", error.message);
+      alert("정보 수정에 실패했습니다.");
+    }
+  };
 
   // ---------------- 렌더링 ----------------
   if (loading)
@@ -178,7 +189,7 @@ const MyPage = () => {
         {data.map((photo) => (
           <img
             key={photo.id}
-            src={photo.imagePath}
+            src={photo.profileImagePath}
             alt={photo.title || ""}
             style={{ cursor: "pointer" }}
             onClick={() => navigate(`/photobox/detail/${photo.id}`)}
@@ -206,7 +217,7 @@ const MyPage = () => {
         profileData={profileData}
         handleEditInfo={handleEditInfo}
         handleWithdrawal={handleWithdrawal}
-      //  handleSanction={handleSanction}
+        // handleSanction={handleSanction}
         currentUser={user}
       />
 
