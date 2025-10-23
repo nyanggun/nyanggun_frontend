@@ -189,13 +189,14 @@ const TalkDetail = ({
                     )}
                   </div>
                   <div className="">
-                    {user && user.id == member.id && (
-                      <BorderButton
-                        btnName="삭제"
-                        buttonColor="red"
-                        clickBtn={deleteExploration}
-                      />
-                    )}
+                    {(user && user.id == member.id) ||
+                      (user.role == "ROLE_ADMIN" && (
+                        <BorderButton
+                          btnName="삭제"
+                          buttonColor="red"
+                          clickBtn={deleteExploration}
+                        />
+                      ))}
                   </div>
                 </Col>
               )}
@@ -226,11 +227,14 @@ const TalkDetail = ({
             <Card.Text as="div" className="">
               <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
             </Card.Text>
-            {location.pathname.startsWith("/dorandoran/explorations/") && (
-              <div className="pb-3 pt-3">
-                <AutoSearchMap keyword={relatedHeritage} />
-              </div>
-            )}
+            {location.pathname.startsWith("/dorandoran/explorations/") &&
+              !location.pathname.startsWith(
+                "/dorandoran/explorations/search"
+              ) && (
+                <div className="pb-3 pt-3">
+                  <AutoSearchMap keyword={relatedHeritage} />
+                </div>
+              )}
             <div className="row d-flex justify-content-between m-0">
               <div className="col-xs-12 col-sm-8 d-flex justify-content-start align-items-center gap-2 p-0 m-0 mt-3">
                 <div>
