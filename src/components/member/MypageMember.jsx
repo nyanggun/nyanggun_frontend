@@ -61,42 +61,33 @@ const MypageMember = ({
         alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         return;
       }
-      if (editData.password.length < 6) {
-        // 최소 6자 길이 제한 검사
-        alert("비밀번호는 최소 6자 이상이어야 합니다.");
-        return;
-      }
     }
 
     const formData = new FormData();
 
-    // 1. DTO 객체 생성 및 JSON 변환
-    // 백엔드 컨트롤러는 @RequestPart("dto")로 JSON 형태의 DTO를 기대합니다.
-    // 따라서 닉네임, 전화번호, 비밀번호 등의 텍스트 데이터는 하나의 객체로 묶어야 합니다.
+    // 1. DTO 객체 생성
     const memberDto = {
-      // 이메일 필드는 수정이 비활성화(disabled)되어 있지만, DTO 구조를 위해 현재 값을 포함합니다.
       email: editData.email,
       nickname: editData.nickname,
       phoneNumber: editData.phoneNumber,
     };
 
-    if (editData.password) {
-      // 비밀번호가 입력된 경우에만 DTO에 포함시켜 전송합니다.
-      memberDto.password = editData.password;
-    }
+    if (editData.password) memberDto.password = editData.password;
 
-    // 2. JSON 객체를 Blob 형태로 FormData에 'dto' 키로 추가
-    formData.append("dto", JSON.stringify(memberDto));
+    // JSON Blob으로 추가
+    formData.append(
+      "dto",
+      new Blob([JSON.stringify(memberDto)], { type: "application/json" })
+    );
 
-    // 3. 프로필 이미지 파일을 'profileImage' 키로 추가
-    // 이는 백엔드 컨트롤러의 @RequestPart(value = "profileImage", required = false)와 매칭됩니다.
-    // 파일이 없는 경우(null)는 전송하지 않습니다.
+    // 프로필 이미지 파일 추가
     if (editData.profileImageFile) {
       formData.append("profileImage", editData.profileImageFile);
     }
 
     // 부모 컴포넌트의 handleEditInfo 함수를 호출하여 FormData를 서버로 전송합니다.
     handleEditInfo(formData);
+    console.log(formData);
 
     // UI 상태 초기화
     setIsEditing(false);
@@ -135,25 +126,19 @@ const MypageMember = ({
 
   const isOwner = user?.id === profileData?.id;
   const isAdminViewingOther = user?.role === "ROLE_ADMIN" && !isOwner;
+  console.log(profileData.profileImagePath);
 
   return (
     <div className="mypage-member-section">
       {/* Avatar */}
       <div className="mypage-avatar">
-        <img
-          src={
-            isEditing && editData.profileImageFile
-              ? URL.createObjectURL(editData.profileImageFile)
-              : profileData.profileImagePath || "/assets/comment-profile.svg"
-          }
-          alt="프로필"
-        />
+        <img src={profileData.profileImagePath} alt="프로필" />
         {isEditing && isOwner && (
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            style={{ marginTop: 8 }}
+            className="mypage-file-input"
           />
         )}
       </div>
