@@ -1,7 +1,7 @@
 // src/components/member/MypageMember.jsx
 import React, { useEffect, useState } from "react";
 import BorderButton from "../board/BorderButton";
-import "./MyPageMember.css";
+import "./MypageMember.css";
 
 /**
  * Props:
