@@ -38,7 +38,7 @@ import Home from "./pages/home/Home";
 import AdminPage from "./pages/admin/AdminPage";
 import ReportPage from "./pages/admin/ReportPage";
 import ReportDetailPage from "./pages/admin/ReportDetailPage";
-import MyPage from "./pages/user/myPage";
+import MyPage from "./pages/user/MyPage";
 import "./App.css";
 import UserListPage from "./pages/admin/UserListPage";
 
