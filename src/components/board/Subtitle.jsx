@@ -37,7 +37,7 @@ const Subtitle = ({ text, onSearchBoard, moveTo }) => {
           </div>
         </div>
       </Link>
-      <Row className="justify-content-center p-0 m-0">
+      {!location.pathname.startsWith("/mypage") && (<Row className="justify-content-center p-0 m-0">
         <Col
           className="d-flex justify-content-center align-items-center m-0 rounded-5 border border-dark"
           xs={9}
@@ -55,7 +55,8 @@ const Subtitle = ({ text, onSearchBoard, moveTo }) => {
           />
           <Image as="Button" src={FindImage} onClick={handleClick} />
         </Col>
-      </Row>
+      </Row>)}
+      
     </div>
   );
 };
