@@ -1,165 +1,55 @@
-/* ----------------------------------- */
-/* 1. 레이아웃 및 컨테이너 */
-/* ----------------------------------- */
-.mypage-container {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  background-color: #fff;
-  min-height: 100vh;
-}
-
-.mypage-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 10px;
-}
-.mypage-header .form-input-container,
-.mypage-header .col-9 {
-  display: none !important;
-}
-
-/* ----------------------------------- */
-/* 2. 프로필 섹션 */
-/* ----------------------------------- */
-.mypage-avatar {
-  display: inline-block;
-  margin: 24px 0 15px;
-}
-
-.mypage-avatar img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-
-}
-
 .mypage-info {
-  max-width: 250px;
-  margin: 0 auto;
-  text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    align-items: center;
+    margin: 0px 10px 0 0;
 }
-
-.mypage-info h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: center;
+.mypage-menu {
+    text-align: right;
+    padding-right: 10%;
+    font-size: 18px;
+    margin-bottom: 0;
 }
-
-.mypage-info p {
-  margin: 8px 0;
-  font-size: 14px;
-  color: #555;
-  display: flex;
-  justify-content: space-between;
+.mypage-menu-content {
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: 0;
 }
-
-.mypage-info p strong {
-  font-weight: 600;
-  color: #333;
-  min-width: 70px;
+.mypage-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 3%;
 }
-
-/* ----------------------------------- */
-/* 3. 버튼 */
-/* ----------------------------------- */
-.mypage-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+.mypage-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3% 0%;
 }
-
-.mypage-buttons button {
-  padding: 8px 18px;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+.mypage-button {
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+    margin-right: 10%;
+    margin-bottom: 3%;
 }
-
-.info-edit-btn {
-  background-color: #f0f0f0; 
-  color: #333;
-  border: none;
+.mypage-input {
+    margin: 3px;
+    border: 1px solid #868f98;
+    width: 85%;
+    box-sizing: border-box;
+    border-radius: 20px;
+    font-size: 18px;
+    padding-left: 10px;
+    outline: none;
 }
-
-.withdrawal-btn {
-  background-color: #fff;
-  color: #8b0000;
-  border: 1px solid #8b0000;
+.mypage-input:focus {
+    box-shadow: none;
+    outline: none;
 }
-
-.withdrawal-btn:hover {
-  background-color: #ffeaea;
-}
-
-/* ----------------------------------- */
-/* 4. 탭 메뉴 */
-/* ----------------------------------- */
-.mypage-tabs {
-  display: flex;
-  justify-content: space-around;
-  border-bottom: 1px solid #ddd;
-}
-
-.mypage-tabs button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  background: none;
-  font-weight: 500;
-  color: #777;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.mypage-tabs .active {
-  border-bottom: 2px solid #8b0000;
-  color: #8b0000;
-  font-weight: 600;
-}
-
-/* ----------------------------------- */
-/* 5. 콘텐츠 영역 (게시글/사진) */
-/* ----------------------------------- */
-.mypage-content {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding-top: 10px;
-}
-
-.mypage-post-card {
-  border-bottom: 1px solid #eee;
-  padding: 12px 0;
-  margin-bottom: 5px;
-}
-
-.mypage-post-card:last-child {
-  border-bottom: none;
-}
-
-.mypage-post-image {
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 8px;
-  max-height: 150px;
-  object-fit: cover;
-}
-
-.mypage-photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-}
-
-.mypage-photo-grid img {
-  width: 100%;
-  border-radius: 8px;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+.mypage-input:disabled {
+    background-color: transparent;
+    color: black;
+    border: 1px solid transparent;
 }

@@ -188,16 +188,16 @@ const TalkDetail = ({
                       />
                     )}
                   </div>
-                  <div className="">
-                    {(user && user.id == member.id) ||
-                      (user.role == "ROLE_ADMIN" && (
-                        <BorderButton
-                          btnName="삭제"
-                          buttonColor="red"
-                          clickBtn={deleteExploration}
-                        />
-                      ))}
-                  </div>
+                <div>
+                 { (user && (user.id === member.id || user.role === "ROLE_ADMIN")) && (
+                <BorderButton
+                    btnName="삭제"
+               buttonColor="red"
+                clickBtn={deleteExploration}
+                />
+                 )}
+            </div>
+
                 </Col>
               )}
             </Row>
