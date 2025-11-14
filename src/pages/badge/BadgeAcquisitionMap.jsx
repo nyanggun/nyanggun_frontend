@@ -42,7 +42,8 @@ const BadgeAcquisition = () => {
   const [showModal, setShowModal] = useState(false);
   const [acquiredBadge, setAcquiredBadge] = useState(null);
 
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  // const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const apiKey = "AIzaSyCQwlAIbxMQcF8YpFXzM4qJknK3imyZlKU";
 
   //----------------------------------------------------------------------
   // 1. 내 위치 가져오기 (mount 시 1회 실행)
