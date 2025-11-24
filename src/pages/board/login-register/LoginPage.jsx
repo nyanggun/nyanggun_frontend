@@ -12,126 +12,138 @@ import SmileFace from "../../../assets/smile-face.svg";
 import LoginInput from "../../../components/logininput/LoginInput";
 
 const LoginPage = () => {
-	const navigate = useNavigate();
-	const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
-	// 폼 상태 관리
-	const [formData, setFormData] = useState({
-		email: "",
-		password: "",
-	});
+    // 폼 상태 관리
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
 
-	const [error, setError] = useState(""); // 에러 메시지 상태 추가
-	const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(""); // 에러 메시지 상태 추가
+    const [loading, setLoading] = useState(false);
 
-	// 입력 변경 처리
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		});
-		// 입력 시 에러 메시지 초기화
-		if (error) setError("");
-	};
+    // 입력 변경 처리
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+        // 입력 시 에러 메시지 초기화
+        if (error) setError("");
+    };
 
-	// 로그인 처리
-	const handleSubmit = async (e) => {
-		// e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
-		setError(""); // 에러 메세지 보여주는 부분 초기화
-		setLoading(true);
-		try {
-			//1. 로그인 API 호출
-			const loginResponse = await api.post("/auth/login", formData);
-			//2. JWT 토큰 추출 및 localstorage에 저장
-			const token = loginResponse.headers["authorization"];
-			if (token) {
-				const jwtToken = token.replace("Bearer ", "");
-				localStorage.setItem("token", jwtToken);
-			}
-			//3. 내 정보 조회
-			// API Server 에서 인증한 회원의 정보를 조회하여 localstorage에 저장
-			const userResponse = await api.get("/api/members/me");
-			// 4. context에 사용자 정보(로그인한 회원정보)를 저장 후 홈으로 이동
-			if (userResponse.data.success) {
-				login(userResponse.data.data); //첫번째 data는 axios 응답 data이고 두번째는 ApiResponseDto의 data(실제 회원 정보))
-				navigate("/"); //홈으로 이동
-			}
-		} catch (error) {
-			console.error("로그인 실패:", error);
-			//ApiResponseDto의 에러 메세지 활용
-			const errorMessage = error.response?.data?.message || "아이디 또는 비밀번호가 올바르지 않습니다";
-			setError(errorMessage);
-			alert(errorMessage);
-		} finally {
-			setLoading(false);
-		}
-	};
+    // 로그인 처리
+    const handleSubmit = async (e) => {
+        // e.preventDefault(); // ajax axios 방식으로 로그인 처리 (기존 전송을 막는다)
+        setError(""); // 에러 메세지 보여주는 부분 초기화
+        setLoading(true);
+        try {
+            //1. 로그인 API 호출
+            const loginResponse = await api.post("/auth/login", formData);
+            //2. JWT 토큰 추출 및 localstorage에 저장
+            const token = loginResponse.headers["authorization"];
+            if (token) {
+                const jwtToken = token.replace("Bearer ", "");
+                localStorage.setItem("token", jwtToken);
+            }
+            //3. 내 정보 조회
+            // API Server 에서 인증한 회원의 정보를 조회하여 localstorage에 저장
+            const userResponse = await api.get("/api/members/me");
+            // 4. context에 사용자 정보(로그인한 회원정보)를 저장 후 홈으로 이동
+            if (userResponse.data.success) {
+                if (userResponse.data.data.state === "DISABLED") {
+                    alert("제재된 유저입니다. 관리자에게 문의하세요.");
+                } else {
+                    login(userResponse.data.data); //첫번째 data는 axios 응답 data이고 두번째는 ApiResponseDto의 data(실제 회원 정보))
+                    navigate("/"); //홈으로 이동
+                }
+            }
+        } catch (error) {
+            console.error("로그인 실패:", error);
+            //ApiResponseDto의 에러 메세지 활용
+            const errorMessage =
+                error.response?.data?.message ||
+                "아이디 또는 비밀번호가 올바르지 않습니다";
+            setError(errorMessage);
+            alert(errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-	// 재시도 함수
-	const handleRetry = () => {
-		setError("");
-		setFormData({ email: "", password: "" });
-	};
+    // 재시도 함수
+    const handleRetry = () => {
+        setError("");
+        setFormData({ email: "", password: "" });
+    };
 
-	return (
-		<div className="row justify-content-center m-0 p-0">
-			<div className="justify-content-center d-flex align-items-center">
-				<div className="" xs={1}>
-					<Image src={SmileFace} />
-				</div>
-				<div className="">
-					<h2 className=""></h2>
-				</div>
-			</div>
-			<Menu
-				menuOne={"로그인"}
-				menuOneLink={"/login"}
-				menuTwo={"회원가입"} /*chooseMenu={handleMenuChange}*/
-				menuTwoLink={"/register"}
-			></Menu>
-			<div className="col-md-6 m-0 mt-4">
-				<Card className="border-0 m-0 p-0">
-					<Card.Body>
-						{/* 에러 메시지 표시 - ErrorAlert 컴포넌트 사용 */}
-						{error && <ErrorAlert message={error} variant="danger" onRetry={handleRetry} />}
+    return (
+        <div className="row justify-content-center m-0 p-0">
+            <div className="justify-content-center d-flex align-items-center">
+                <div className="" xs={1}>
+                    <Image src={SmileFace} />
+                </div>
+                <div className="">
+                    <h2 className=""></h2>
+                </div>
+            </div>
+            <Menu
+                menuOne={"로그인"}
+                menuOneLink={"/login"}
+                menuTwo={"회원가입"} /*chooseMenu={handleMenuChange}*/
+                menuTwoLink={"/register"}
+            ></Menu>
+            <div className="col-md-6 m-0 mt-4">
+                <Card className="border-0 m-0 p-0">
+                    <Card.Body>
+                        {/* 에러 메시지 표시 - ErrorAlert 컴포넌트 사용 */}
+                        {error && (
+                            <ErrorAlert
+                                message={error}
+                                variant="danger"
+                                onRetry={handleRetry}
+                            />
+                        )}
 
-						<Form onSubmit={handleSubmit}>
-							{/* 아이디 입력 */}
-							<Form.Group className="mb-3">
-								<LoginInput
-									title="이메일"
-									type="text"
-									name="email"
-									value={formData.email}
-									onChange={handleChange}
-								/>
-							</Form.Group>
+                        <Form onSubmit={handleSubmit}>
+                            {/* 아이디 입력 */}
+                            <Form.Group className="mb-3">
+                                <LoginInput
+                                    title="이메일"
+                                    type="text"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
 
-							{/* 비밀번호 입력 */}
-							<Form.Group className="mb-3">
-								<LoginInput
-									title="비밀번호"
-									type="password"
-									name="password"
-									value={formData.password}
-									onChange={handleChange}
-								/>
-							</Form.Group>
+                            {/* 비밀번호 입력 */}
+                            <Form.Group className="mb-3">
+                                <LoginInput
+                                    title="비밀번호"
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
 
-							{/* 로그인 버튼 */}
-							<CertificationButton
-								disabled={loading}
-								text={loading ? "로그인 중..." : "로그인"}
-								onClick={() => {
-									handleSubmit();
-								}}
-							/>
-						</Form>
-					</Card.Body>
-				</Card>
-			</div>
-		</div>
-	);
+                            {/* 로그인 버튼 */}
+                            <CertificationButton
+                                disabled={loading}
+                                text={loading ? "로그인 중..." : "로그인"}
+                                onClick={() => {
+                                    handleSubmit();
+                                }}
+                            />
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
+    );
 };
 
 export default LoginPage;

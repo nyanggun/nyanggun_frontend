@@ -37,6 +37,29 @@ const MyPage = () => {
         }
     };
 
+    const handleUser = async () => {
+        let isConfirmed = "";
+        if (userInfo.state === "DISABLED") {
+            isConfirmed = window.confirm("회원 제재를 철회하시겠습니까?");
+        } else {
+            isConfirmed = window.confirm("회원을 제재하시겠습니까?");
+        }
+
+        if (isConfirmed) {
+            try {
+                const response = await api.patch(
+                    `/admin/members/${userId.id}/state`
+                );
+                alert("회원 상태 변경이 완료되었습니다.");
+                navigate("/admin/users");
+            } catch (error) {
+                console.log("회원 제재 실패", error);
+            }
+        } else {
+            return;
+        }
+    };
+
     const handleUserInfo = async () => {
         try {
             const response = await api.get(`/mypage/${userId.id}`);
@@ -72,7 +95,7 @@ const MyPage = () => {
         }
         setUserPhoneNumber(value);
     };
-    const { setToken, refreshUser } = useContext(AuthContext);
+    //const { setToken, refreshUser } = useContext(AuthContext);
 
     const handleUpdateUserInfo = async () => {
         try {
@@ -170,25 +193,28 @@ const MyPage = () => {
                                     ></input>
                                 )}
                             </div>
-                            <div className="mypage-info">
-                                <h6 className="mypage-menu">전화번호</h6>
+                            {userId.id === String(user.id) && (
+                                <div className="mypage-info">
+                                    <h6 className="mypage-menu">전화번호</h6>
 
-                                {userUpdateOn ? (
-                                    <input
-                                        type={"text"}
-                                        className="mypage-input"
-                                        value={userPhoneNumber}
-                                        onChange={(e) => handlePhoneChange(e)}
-                                        maxLength={15} // 010-1234-5678까지
-                                    ></input>
-                                ) : (
-                                    <input
-                                        disabled
-                                        className="mypage-input"
-                                        value={userPhoneNumber}
-                                    ></input>
-                                )}
-                            </div>
+                                    {userUpdateOn ? (
+                                        <input
+                                            type="text"
+                                            className="mypage-input"
+                                            value={userPhoneNumber}
+                                            onChange={handlePhoneChange}
+                                            maxLength={15} // 010-1234-5678까지
+                                        />
+                                    ) : (
+                                        <input
+                                            disabled
+                                            className="mypage-input"
+                                            value={userPhoneNumber}
+                                        />
+                                    )}
+                                </div>
+                            )}
+
                             {userUpdateOn ? (
                                 <div className="mypage-info">
                                     <h6 className="mypage-menu">
@@ -217,7 +243,8 @@ const MyPage = () => {
                                 <div></div>
                             )}
                         </div>
-                        {userId.id === String(user.id) && (
+                        {userId.id === String(user.id) ? (
+                            // 본인인 경우
                             <div className="mypage-button">
                                 {userUpdateOn ? (
                                     <>
@@ -251,7 +278,24 @@ const MyPage = () => {
                                     </>
                                 )}
                             </div>
-                        )}
+                        ) : user.role === "ROLE_ADMIN" ? (
+                            // 관리자일 경우 → 정보 수정 없음
+                            <div className="mypage-button">
+                                {userInfo.state == "DISABLED" ? (
+                                    <BorderButton
+                                        clickBtn={handleUser}
+                                        btnName="회원제재 철회"
+                                        buttonColor="red"
+                                    />
+                                ) : (
+                                    <BorderButton
+                                        clickBtn={handleUser}
+                                        btnName="회원제재"
+                                        buttonColor="red"
+                                    />
+                                )}
+                            </div>
+                        ) : null}
                     </Col>
                 </Row>
             )}
