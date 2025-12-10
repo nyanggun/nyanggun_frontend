@@ -73,10 +73,7 @@ const MyPageDoranDoranComment = () => {
                         {userComment.length > 0 ? (
                             <div>
                                 {userComment.map((comment) => (
-                                    <Comment
-                                        content={comment.content}
-                                        nickname={comment.nickname}
-                                        createdAt={comment.createdAt}
+                                    <div
                                         onClick={() =>
                                             navigate(
                                                 comment.category === "TALK"
@@ -84,7 +81,15 @@ const MyPageDoranDoranComment = () => {
                                                     : `/dorandoran/explorations/${comment.postId}`
                                             )
                                         }
-                                    ></Comment>
+                                    >
+                                        <div style={{ pointerEvents: "none" }}>
+                                            <Comment
+                                                content={comment.content}
+                                                nickname={comment.nickname}
+                                                createdAt={comment.createdAt}
+                                            ></Comment>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         ) : (
