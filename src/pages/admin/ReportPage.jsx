@@ -20,10 +20,12 @@ const ReportPage = () => {
     //시간 데이터(LocalDateTime)을 변환하여 1분 전 <-과 같은 형식으로 만들기
     //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
     const formatTimeAgo = (time) => {
-        const utcTimeStr = time.replace(" ", "T") + "Z";
-        const past = new Date(utcTimeStr);
+        const past = new Date(time);
+        const pastKST = new Date(past.getTime() + 9 * 60 * 60 * 1000);
+
         const now = new Date();
-        const diff = Math.floor((now.getTime() - past.getTime()) / 1000); // 초 단위 차이
+        const diff = Math.floor((now - pastKST) / 1000);
+
         if (diff < 60) return "방금 전";
         if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
         if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;

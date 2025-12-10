@@ -35,15 +35,18 @@ const Comment = ({
     //서버에서는 2025-10-02T15:32:00 로 받아올 때 사용 가능하다.
     const [timeAgo, setTimeAgo] = useState("");
     const formatTimeAgo = (time) => {
-        const utcTimeStr = time.replace(" ", "T") + "Z";
-        const past = new Date(utcTimeStr);
+        const past = new Date(time);
+        const pastKST = new Date(past.getTime() + 9 * 60 * 60 * 1000);
+
         const now = new Date();
-        const diff = Math.floor((now.getTime() - past.getTime()) / 1000); // 초 단위 차이
+        const diff = Math.floor((now - pastKST) / 1000);
+
         if (diff < 60) return "방금 전";
         if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
         if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
         return `${Math.floor(diff / 86400)}일 전`;
     };
+
     useEffect(() => {
         // 처음 렌더링 시 계산
         setTimeAgo(formatTimeAgo(createdAt));
