@@ -86,9 +86,7 @@ const MyPageDoranDoranBookmark = () => {
                 {userBookmark.length > 0 ? (
                     <div>
                         {userBookmark.map((bookmarks) => (
-                            <TalkDetail
-                                key={bookmarks.postId}
-                                talk={bookmarks}
+                            <div
                                 onClick={() =>
                                     navigate(
                                         bookmarks.category === "TALK"
@@ -96,7 +94,14 @@ const MyPageDoranDoranBookmark = () => {
                                             : `/dorandoran/explorations/${bookmarks.postId}`
                                     )
                                 }
-                            />
+                            >
+                                <div style={{ pointerEvents: "none" }}>
+                                    <TalkDetail
+                                        key={bookmarks.postId}
+                                        talk={bookmarks}
+                                    />
+                                </div>
+                            </div>
                         ))}
                     </div>
                 ) : (

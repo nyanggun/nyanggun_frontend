@@ -38,6 +38,7 @@ const MyPageDoranDoran = () => {
                         : undefined
                 }
             ></SubMenu>
+            <div className="mypage-dorandoran-bottom"></div>
             <main>
                 <Outlet></Outlet>
             </main>

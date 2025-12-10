@@ -82,9 +82,7 @@ const MyPageDoranDoranPost = () => {
                 {userPost.length > 0 ? (
                     <div>
                         {userPost.map((talks) => (
-                            <TalkDetail
-                                key={talks.postId}
-                                talk={talks}
+                            <div
                                 onClick={() =>
                                     navigate(
                                         talks.category === "TALK"
@@ -92,7 +90,14 @@ const MyPageDoranDoranPost = () => {
                                             : `/dorandoran/explorations/${talks.postId}`
                                     )
                                 }
-                            />
+                            >
+                                <div style={{ pointerEvents: "none" }}>
+                                    <TalkDetail
+                                        key={talks.postId}
+                                        talk={talks}
+                                    />
+                                </div>
+                            </div>
                         ))}
                     </div>
                 ) : (

@@ -311,6 +311,7 @@ const MyPage = () => {
             <main>
                 <Outlet />
             </main>
+            <div className="mypage-bottom"></div>
         </div>
     );
 };
