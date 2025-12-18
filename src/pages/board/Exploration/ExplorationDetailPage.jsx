@@ -75,7 +75,7 @@ const ExplorationDetailPage = () => {
 
 	const onSubmit = async (comment, parentCommentId) => {
 		try {
-			const response = await api.post(`http://localhost:8080/exploration-comments`, {
+			const response = await api.post(`/exploration-comments`, {
 				content: comment,
 				memberId: user.id,
 				explorationId: id,

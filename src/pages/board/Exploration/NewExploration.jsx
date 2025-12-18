@@ -57,7 +57,7 @@ const NewExploration = () => {
 		}
 
 		try {
-			const response = await api.post("http://localhost:8080/explorations", formData, {
+			const response = await api.post("/explorations", formData, {
 				// ✨ 세 번째 인자로 headers 옵션을 추가하여 재정의
 				headers: {
 					"Content-Type": "multipart/form-data",

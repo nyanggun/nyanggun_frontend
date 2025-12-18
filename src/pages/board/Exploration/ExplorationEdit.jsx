@@ -81,7 +81,7 @@ const ExplorationDetailPageEdit = () => {
 
 		try {
 			// FormData를 서버로 전송 (api.patch는 직접 만드신 모듈 사용)
-			const response = await api.patch(`http://localhost:8080/explorations/${id}`, formData, {
+			const response = await api.patch(`/explorations/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
