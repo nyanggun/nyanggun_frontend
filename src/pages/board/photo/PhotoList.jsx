@@ -115,10 +115,7 @@ const PhotoList = () => {
                   key={item.photoBoxId}
                   className="masonry-item"
                 >
-                  <img
-                    src={`http://localhost:8080${item.path}`}
-                    alt={`${item.photoBoxId}`}
-                  />
+                  <img src={`${item.path}`} alt={`${item.photoBoxId}`} />
                 </div>
               ))}
             </MasonryInfiniteGrid>

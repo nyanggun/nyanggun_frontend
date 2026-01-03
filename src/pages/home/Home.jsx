@@ -128,7 +128,7 @@ const Home = () => {
               <div>
                 <div className="home-img-box">
                   <img
-                    src={`http://localhost:8080${photoBox.photoBoxPicturePath}`}
+                    src={`${photoBox.photoBoxPicturePath}`}
                     className="home-img"
                   ></img>
                 </div>

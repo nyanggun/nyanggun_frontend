@@ -152,7 +152,7 @@ const PhotoUpdate = () => {
                   className="photo-imgsize"
                   src={
                     uploadImg.startsWith("/uploads/")
-                      ? `http://localhost:8080${uploadImg}` // 서버 이미지
+                      ? `${uploadImg}` // 서버 이미지
                       : uploadImg // 새로 선택한 이미지 (blob URL)
                   }
                   alt="업로드된 이미지"

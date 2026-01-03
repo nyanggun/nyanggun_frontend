@@ -3,7 +3,7 @@
   position: sticky;
   top: 0;
   z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 설정 */
-  margin: 10px 10px;
+  margin: 7px 5px;
   /* 배경은 투명, 아래쪽에 얇은 구분선 */
   background-color: white;
   box-shadow: none;

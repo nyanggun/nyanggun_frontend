@@ -9,6 +9,7 @@ import WritingEditor from "../../../components/board/WritingEditor";
 import BorderButton from "../../../components/board/BorderButton";
 import "./PhotoNew.css";
 import { X } from "react-bootstrap-icons";
+import axios from "axios";
 
 const PhotoNew = () => {
   const navigate = useNavigate();
@@ -21,14 +22,16 @@ const PhotoNew = () => {
   const [file, setFile] = useState(null);
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
-  //보낼 파일 객체
-  const photoData = {
-    title,
-    relatedHeritage,
-    tags,
-  };
-
   // 사진함 게시글을 생성하는 메소드 입니다.
+  //s3 업로드
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
+  let uploadedUrl = useRef("");
+  // S3 버킷 정보
+  const S3_BUCKET = "nyanggoon-bucket"; // 여기에 자신의 실제 버킷 이름 입력
+  const S3_REGION = "ap-northeast-2";
+  const S3_URL = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com`;
 
   const handlePhotoBox = async () => {
     if (
@@ -41,23 +44,44 @@ const PhotoNew = () => {
       return;
     }
 
-    // FormData 생성
-    const formData = new FormData();
-    formData.append(
-      "photoData",
-      new Blob([JSON.stringify(photoData)], { type: "application/json" })
-    );
-    if (file) {
-      formData.append("file", file);
-    }
+    setUploading(true);
+    setProgress(0);
+    setError("");
+
     try {
-      const response = await api.post("/photobox", formData, {
+      // 고유한 파일명 생성
+      const timestamp = Date.now();
+      const fileName = `uploads/${timestamp}_${file.name}`;
+
+      // S3로 직접 업로드
+      await axios.put(`${S3_URL}/${fileName}`, file, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setProgress(percent);
         },
       });
+
+      // 게시글 업로드 성공
+      uploadedUrl = `${S3_URL}/${fileName}`;
+
+      //보낼 파일 객체
+      const photoData = {
+        title,
+        relatedHeritage,
+        tags,
+        path: uploadedUrl,
+      };
+
+      const response = await api.post("/photobox", photoData);
+
       alert("게시글을 작성했습니다.");
       console.log("사진함 게시글을 작성했습니다.", response.data);
+      console.log("사진 경로:", uploadedUrl);
       navigate("/photobox");
     } catch (error) {
       console.error("사진함 게시글을 작성하는 데 문제 발생", error.message);
