@@ -21,13 +21,19 @@
   margin-top: 4%;
   margin-bottom: 4%;
 }
-.home-heritage-text.h6 {
+.home-heritage-text-h6 {
   margin: 10% 0%;
   display: -webkit-box; /* flex처럼 동작 */
   -webkit-line-clamp: 5; /* 최대 5줄까지만 표시 */
   -webkit-box-orient: vertical; /* 세로 방향 */
   overflow: hidden; /* 넘치는 부분 숨김 */
   text-overflow: ellipsis; /* ... 표시 */
+}
+
+.home-heritage-address {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 @media (max-width: 1200px) {
@@ -39,8 +45,12 @@
   }
 
   .home-heritage-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: auto;
     margin: 0% 4%;
+    height: 39vh;
   }
 
   .home-heritage-img {

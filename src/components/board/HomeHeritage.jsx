@@ -12,10 +12,15 @@ const HomeHeritage = ({ heritage, onClick }) => {
       </div>
 
       <div className="home-heritage-text">
-        <h4>{heritage.name}</h4>
-        <h6 className="home-heritage-text h6">{heritage.content}</h6>
-        <h6>{heritage.period}</h6>
-        <h6>{heritage.address}</h6>
+        <div className="home-heritage-flex">
+          <h4>{heritage.name}</h4>
+          <h6 className="home-heritage-text-h6">{heritage.content}</h6>
+        </div>
+
+        <div className="home-heritage-nickname">
+          <h6>{heritage.period}</h6>
+          <h6>{heritage.address}</h6>
+        </div>
       </div>
     </div>
   );
