@@ -116,7 +116,7 @@ const NavigationBar = () => {
         </Nav>
       </Navbar>
       {/* 동적으로 계산된 높이만큼 Spacer */}
-      <div style={{ height: "60px" }} />
+      <div style={{ height: "63px" }} />
     </>
   );
 };
