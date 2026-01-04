@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import BorderButton from "../../../components/board/BorderButton";
 import { Button, Col, Row } from "react-bootstrap";
 import { AuthContext } from "../../../contexts/AuthContext";
+import axios from "axios";
 
 //새로운 담소 게시글을 작성할 수 있는 페이지 입니다.
 const TalkNew = () => {
@@ -22,36 +23,61 @@ const TalkNew = () => {
 
   const userData = useContext(AuthContext);
 
-  const talkData = {
-    title,
-    content,
-  };
-
   //담소 게시글을 작성하는 메소드 입니다.
-  //서버로 요청을 보냅니다.
+
+  //s3 업로드
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
+  let uploadedUrl = useRef("");
+  // S3 버킷 정보
+  const S3_BUCKET = "nyanggoon-bucket"; // 여기에 자신의 실제 버킷 이름 입력
+  const S3_REGION = "ap-northeast-2";
+  const S3_URL = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com`;
+
   const handleTalkNew = async (title, content) => {
     // 유효성 검사
     if (!title.trim() || !content.trim()) {
       alert("모든 내용을 입력해주세요");
       return;
     }
-    // FormData 생성
-    const formData = new FormData();
-    formData.append(
-      "talkData",
-      new Blob([JSON.stringify(talkData)], { type: "application/json" })
-    );
-    // 파일 여러 개 추가
-    if (uploadFiles && uploadFiles.length > 0) {
-      uploadFiles.forEach((file) => formData.append("files", file));
-      // 서버에서 "files"를 배열로 받도록 해야 함
-    }
+
+    setUploading(true);
+    setProgress(0);
+    setError("");
+
     try {
-      const response = await api.post("/talks", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // 고유한 파일명 생성
+
+      const uploadedUrls = [];
+
+      for (let i = 0; i < uploadFiles.length; i++) {
+        const file = uploadFiles[i]; // 추가
+        const timestamp = Date.now() + i;
+        const fileName = `uploads/${timestamp}_${file.name}`;
+
+        await axios.put(`${S3_URL}/${fileName}`, file, {
+          headers: { "Content-Type": file.type },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percent);
+          },
+        });
+
+        uploadedUrls.push(`${S3_URL}/${fileName}`);
+      }
+
+      //보낼 객체
+      const talkData = {
+        title,
+        content,
+        path: uploadedUrls,
+      };
+
+      const response = await api.post("/talks", talkData);
+
       alert("게시글을 작성했습니다.");
       console.log("담소 게시글을 작성했습니다.", response.data);
       navigate(`/dorandoran/talks/detail/${response.data.data}`);
