@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import BorderButton from "../../../components/board/BorderButton";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Row, Col, Button } from "react-bootstrap";
+import axios from "axios";
 
 const TalkUpdate = () => {
   const location = useLocation();
@@ -33,11 +34,8 @@ const TalkUpdate = () => {
   // 초기 이미지 세팅
   useEffect(() => {
     if (initialTalkPictureList && initialTalkPictureList.length > 0) {
-      const existingUrls = initialTalkPictureList.map(
-        (pic) => `http://localhost:8080${pic.path}`
-      );
-      setExistingImages(initialTalkPictureList);
-      setPreviewImgs(existingUrls);
+      setExistingImages(initialTalkPictureList); // 서버 이미지 DTO
+      setPreviewImgs(initialTalkPictureList.map((pic) => pic.path)); // 기존 path 배열 그대로 미리보기용으로
     }
   }, [initialTalkPictureList]);
 
@@ -81,33 +79,57 @@ const TalkUpdate = () => {
     setPreviewImgs((prev) => prev.filter((_, i) => i !== index));
   };
 
+  //s3 업로드
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
+  let uploadedUrl = useRef("");
+  // S3 버킷 정보
+  const S3_BUCKET = "nyanggoon-bucket"; // 여기에 자신의 실제 버킷 이름 입력
+  const S3_REGION = "ap-northeast-2";
+  const S3_URL = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com`;
+
   // 게시글 수정
   const handleTalkUpdate = async () => {
     if (!title.trim() || !content.trim()) {
       alert("모든 내용을 입력해주세요.");
       return;
     }
-
-    const talkData = {
-      title,
-      content,
-      remainingImages: existingImages.map((img) => img.talkPictureId), // 서버에 남길 이미지 ID
-    };
-
-    const formData = new FormData();
-    formData.append(
-      "talkData",
-      new Blob([JSON.stringify(talkData)], { type: "application/json" })
-    );
-
-    newFiles.forEach((file) => formData.append("files", file));
+    setUploading(true);
+    setProgress(0);
+    setError("");
 
     try {
-      const response = await api.put(`/talks/${talkId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // 고유한 파일명 생성
+
+      const uploadedUrls = [];
+
+      for (let i = 0; i < newFiles.length; i++) {
+        const file = newFiles[i]; // 추가
+        const timestamp = Date.now() + i;
+        const fileName = `uploads/${timestamp}_${file.name}`;
+
+        await axios.put(`${S3_URL}/${fileName}`, file, {
+          headers: { "Content-Type": file.type },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percent);
+          },
+        });
+
+        uploadedUrls.push(`${S3_URL}/${fileName}`);
+      }
+
+      //보낼 객체
+      const talkData = {
+        title,
+        content,
+        path: [...existingImages.map((img) => img.path), ...uploadedUrls],
+      };
+
+      const response = await api.put(`/talks/${talkId}`, talkData);
       alert("게시글이 수정되었습니다.");
       navigate(`/dorandoran/talks/detail/${talkId}`);
     } catch (error) {
