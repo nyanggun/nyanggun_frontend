@@ -13,7 +13,7 @@ import axios from "axios";
 
 // 1. axios 인스턴스 생성 및 기본 설정
 const api = axios.create({
-  baseURL: "https://nyanggoon.store", //ec2 서버주소
+  baseURL: "http://localhost:8080", //ec2 서버주소
   headers: { "Content-Type": "application/json" }, //전송 컨텐트 타입
 });
 // 2. request 요청 인터셉터 설정
