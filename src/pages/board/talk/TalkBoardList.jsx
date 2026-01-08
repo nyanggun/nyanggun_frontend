@@ -40,9 +40,9 @@ const TalkBoardList = () => {
 
       setTalkBoard((prev) => [
         ...prev,
-        ...contents.filter(
-          (item) => !prev.some((p) => p.talkId === item.talkId)
-        ),
+        ...contents
+          .filter((item) => item.contentState === "ACTIVE")
+          .filter((item) => !prev.some((p) => p.talkId === item.talkId)),
       ]);
 
       console.log("담소 게시글을 가져왔습니다.", response.data);
@@ -96,7 +96,7 @@ const TalkBoardList = () => {
       )}
       {isScrollLoading && (
         <div className="loading-overlay">
-          <LoadingSpinner message="사진 불러오는 중..." />
+          <LoadingSpinner message="게시글 불러오는 중..." />
         </div>
       )}
     </div>

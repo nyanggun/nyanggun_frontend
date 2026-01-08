@@ -18,7 +18,7 @@ const TalkNew = () => {
   const [uploadImg, setUploadImg] = useState([]); // 배열로 관리
 
   const fileInputRef = useRef(null);
-  const [uploadFiles, setUploadFiles] = useState(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
   const userData = useContext(AuthContext);

@@ -228,6 +228,7 @@ const TalkBoardDetail = () => {
                     reportComment={reportComment}
                     reportedPostId={comment.talkCommentId}
                     reportedMemberId={userData.user?.id}
+                    contentState={comment.contentState}
                   />
 
                   {/* 대댓글 */}
@@ -251,6 +252,7 @@ const TalkBoardDetail = () => {
                           reportComment={reportComment}
                           reportedPostId={reply.talkCommentId}
                           reportedMemberId={userData.user?.id}
+                          contentState={reply.contentState}
                         />
                       </div>
                     ))}

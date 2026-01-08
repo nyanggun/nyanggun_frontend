@@ -43,9 +43,9 @@ const TalkSearchResult = () => {
 
       setTalkBoard((prev) => [
         ...prev,
-        ...contents.filter(
-          (item) => !prev.some((p) => p.talkId === item.talkId)
-        ),
+        ...contents
+          .filter((item) => item.contentState === "ACTIVE")
+          .filter((item) => !prev.some((p) => p.talkId === item.talkId)),
       ]);
 
       console.log("담소 게시글을 가져왔습니다.", response.data);
