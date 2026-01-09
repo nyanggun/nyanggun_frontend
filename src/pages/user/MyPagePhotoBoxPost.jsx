@@ -66,9 +66,11 @@ const MyPagePhotoBoxPost = () => {
 
       setPhotoBoard((prev) => [
         ...prev,
-        ...contents.filter(
-          (item) => !prev.some((p) => p.photoBoxId === item.photoBoxId)
-        ),
+        ...contents
+          .filter((item) => item.contentState === "ACTIVE")
+          .filter(
+            (item) => !prev.some((p) => p.photoBoxId === item.photoBoxId)
+          ),
       ]);
 
       //setPhotoBoard(sortedData);
