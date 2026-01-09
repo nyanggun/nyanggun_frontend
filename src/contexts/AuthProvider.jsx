@@ -10,8 +10,40 @@ export const AuthProvider = ({ children }) => {
   // loading 상태는 앱이 localstorage에서 사용자 인증 정보를 확인하고 복원하는 비동기 작업이 완료했는지 여부를 저장
   // loading 상태를 관리하지 않는다면 user(인증정보)가 null이므로 앱이 사용자에게 로그아웃된 화면을 보여주다가 useEffect 실행 후 user 정보가 발견되면 갑자기 로그인된 화면으로 바뀌는 상황이 벌어질 수도 있음
 
+
+  // 만료 토큰 삭제
+  function parseJwt(token) {
+    try {
+      if (!token) return null;
+      const base64Url = token.split(".")[1];
+      if (!base64Url) return null;
+
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(atob(base64));
+    } catch {
+      return null;
+    }
+  }
+
+  function isExpired(token) {
+    const payload = parseJwt(token);
+    if (!payload?.exp) return true;
+
+    const now = Math.floor(Date.now() / 1000);
+    return payload.exp <= now;
+  }
+
   // 앱 시작시 localStorage에서 사용자 인증 정보 복원
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if(!token || isExpired(token)){
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
