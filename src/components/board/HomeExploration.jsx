@@ -39,14 +39,15 @@ const HomeExploration = ({ exploration, onClick }) => {
     <div className="home-exploration-container">
       <div className="home-exploration-img-box" onClick={onClick}>
         {/* 사진이 없는 탐방기이면 기본 이미지 띄우기 */}
-        {exploration.imageNameList.length == 0 ? (
+        <img src={sampleImg} className="home-exploration-img"></img>
+        {/* {exploration.imageNameList.length == 0 ? (
           <img src={sampleImg} className="home-exploration-img"></img>
         ) : (
           <img
             src={`http://localhost:8080/explorations/images/${exploration.imageNameList[0]}`}
             className="home-exploration-img"
           ></img>
-        )}
+        )} */}
       </div>
 
       <div className="home-exploration-text">
