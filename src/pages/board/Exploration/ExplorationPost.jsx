@@ -215,12 +215,13 @@ const TalkDetail = ({
                                 </Col>
                             )}
                         </Row>
-                        <Carousel
+                        
+                        {/* <Carousel
                             interval={null}
                             className="my-3 bg-light rounded p-0 m-0"
-                        >
+                        > */}
                             {/* 1. imagePathList 배열을 .map() 함수로 순회합니다. */}
-                            {imageNameList.map((imageName, index) => (
+                            {/* {imageNameList.map((imageName, index) => (
                                 // 2. 각 이미지마다 Carousel.Item을 생성합니다.
                                 //    React가 각 항목을 식별할 수 있도록 고유한 'key'를 꼭 넣어주어야 합니다.
                                 <Carousel.Item key={index} className="bg-dark">
@@ -240,7 +241,7 @@ const TalkDetail = ({
                                     />
                                 </Carousel.Item>
                             ))}
-                        </Carousel>
+                        </Carousel> */}
                         <Card.Text as="div" className="">
                             <div
                                 dangerouslySetInnerHTML={{
