@@ -112,8 +112,7 @@ const TalkDetail = ({
                 {/* 현재 페이지가 상세 페이지일때만 버튼 노출 */}
                 {currentPath.startsWith("/dorandoran/talks/detail") ||
                 currentPath.startsWith("/photobox/detail") ? (
-                  talk.memberId === userData.user?.id ||
-                  userData.user?.role === "ROLE_ADMIN" ? (
+                  talk.memberId === userData.user?.id ? (
                     <div className="comment-btn-delete">
                       <BorderButton
                         btnName="수정"
