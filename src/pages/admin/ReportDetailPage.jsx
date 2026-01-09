@@ -34,9 +34,15 @@ const ReportDetailPage = () => {
 
   const changeState = async () => {
     try {
-      const response = await api.patch(`/admin/reports/${id}/state`);
+      const response = await api.patch(`/admin/reports/${id}/content/state`);
       setReport(response.data.data);
       console.log(response.data.data);
+      //변경 이후에 뜨는 alert이므로 반대로 작성
+      if (response.data.data.reportState === "PENDING") {
+        alert("해당 콘텐츠 블라인드를 취소했습니다.");
+      } else if (response.data.data.reportState === "PROCESSED") {
+        alert("해당 콘텐츠를 블라인드했습니다.");
+      }
     } catch (e) {
       console.error("에러가 발생하였습니다", e);
     }
@@ -47,6 +53,11 @@ const ReportDetailPage = () => {
       navigate(`/dorandoran/explorations/${report.contentId}`);
     else if (report.contentType == "TALK")
       navigate(`/dorandoran/talks/detail/${report.contentId}`);
+    else if (report.contentType == "PHOTO_BOX")
+      navigate(`/photobox/detail/${report.contentId}`);
+    //댓글 위치 걸기
+    else if (report.contentType == "TALK_COMMENT") navigate();
+    else if (report.contentType == "EXPLORATION_COMMENT") navigate();
   };
 
   return (
@@ -90,7 +101,7 @@ const ReportDetailPage = () => {
             ></BorderButton>
             {report && report.reportState == "PENDING" ? (
               <BorderButton
-                btnName={"처리중"}
+                btnName={"콘텐츠 숨기기"}
                 buttonColor="red"
                 clickBtn={() => {
                   changeState();
@@ -98,7 +109,7 @@ const ReportDetailPage = () => {
               />
             ) : (
               <BorderButton
-                btnName={"처리완료"}
+                btnName={"콘텐츠 숨김 완료"}
                 buttonColor="black"
                 clickBtn={() => {
                   changeState();
