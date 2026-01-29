@@ -59,13 +59,13 @@ const HomeExploration = ({ exploration, onClick }) => {
 
         <div className="home-exploration-nickname">
           <Image
-            src={`https://picsum.photos/400/300?random=${exploration.member.id}`}
+            src={`https://picsum.photos/400/300?random=${exploration.memberId}`}
             roundedCircle
             fluid
             className="talk-profile-pic-icon border "
           />
           <h6 className="home-exploration-nickname-h6">
-            {exploration.member.nickname}
+            {exploration.nickname}
           </h6>
         </div>
       </div>
