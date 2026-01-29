@@ -50,8 +50,8 @@ const Home = () => {
   const goToPhotoBox = (photoBox) => {
     navigate(`/photobox/detail/${photoBox.id}`);
   };
-
-  const handleExploration = async () => {
+  //담소로 변경
+  const handleTalk = async () => {
     try {
       const response = await api.get("/home/talk");
       setExplorationList(response.data.data);
@@ -63,13 +63,13 @@ const Home = () => {
   };
 
   const goToExploration = (exploration) => {
-    navigate(`/dorandoran/talks/${exploration.id}`);
+    navigate(`/dorandoran/talks/${exploration.talkId}`);
   };
 
   useEffect(() => {
     handleHeritage();
     handlePhotoBox();
-    handleExploration();
+    handleTalk();
   }, []);
 
   return (
