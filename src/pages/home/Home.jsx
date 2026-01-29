@@ -53,7 +53,7 @@ const Home = () => {
 
   const handleExploration = async () => {
     try {
-      const response = await api.get("/home/exploration");
+      const response = await api.get("/home/talk");
       setExplorationList(response.data.data);
 
       console.log("문화재 탐방기를 북마크 순으로 가져왔습니다.", response.data);
@@ -63,7 +63,7 @@ const Home = () => {
   };
 
   const goToExploration = (exploration) => {
-    navigate(`/dorandoran/explorations/${exploration.id}`);
+    navigate(`/dorandoran/talks/${exploration.id}`);
   };
 
   useEffect(() => {
