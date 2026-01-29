@@ -63,7 +63,7 @@ const Home = () => {
   };
 
   const goToExploration = (exploration) => {
-    navigate(`/dorandoran/talks/${exploration.talkId}`);
+    navigate(`/dorandoran/talks/detail/${exploration.talkId}`);
   };
 
   useEffect(() => {
