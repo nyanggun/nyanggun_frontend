@@ -51,7 +51,7 @@ const Home = () => {
     navigate(`/photobox/detail/${photoBox.id}`);
   };
   //담소로 변경
-  const handleExploration = async () => {
+  const handleTalk = async () => {
     try {
       const response = await api.get("/home/talk");
       setExplorationList(response.data.data);
@@ -69,7 +69,7 @@ const Home = () => {
   useEffect(() => {
     handleHeritage();
     handlePhotoBox();
-    handleExploration();
+    handleTalk();
   }, []);
 
   return (
