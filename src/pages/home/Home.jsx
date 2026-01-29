@@ -50,7 +50,7 @@ const Home = () => {
   const goToPhotoBox = (photoBox) => {
     navigate(`/photobox/detail/${photoBox.id}`);
   };
-
+  //담소로 변경
   const handleExploration = async () => {
     try {
       const response = await api.get("/home/talk");
@@ -63,7 +63,7 @@ const Home = () => {
   };
 
   const goToExploration = (exploration) => {
-    navigate(`/dorandoran/talks/${exploration.id}`);
+    navigate(`/dorandoran/talks/${exploration.talkId}`);
   };
 
   useEffect(() => {
