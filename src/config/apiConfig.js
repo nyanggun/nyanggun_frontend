@@ -13,7 +13,7 @@ import axios from "axios";
 
 // 1. axios 인스턴스 생성 및 기본 설정
 const api = axios.create({
-  baseURL: "https://nyanggoon.store", //ec2 서버주소
+  baseURL: "https://khgeung.store", //ec2 서버주소
   headers: { "Content-Type": "application/json" }, //전송 컨텐트 타입
 });
 // 2. request 요청 인터셉터 설정
@@ -35,7 +35,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  } // 오류를 프로미스 객체로 반환해서 API 호출 코드의 catch 블록으로 전달
+  }, // 오류를 프로미스 객체로 반환해서 API 호출 코드의 catch 블록으로 전달
 );
 /*
     response 응답 인터셉터 - http response status error code 401 인증 / 403 인가 에러 처리
@@ -54,6 +54,6 @@ api.interceptors.response.use(
       window.location.href = "/login"; // 인증/인가 오류시에는 로그인 페이지로 이동시킨다
     }
     return Promise.reject(error); //API 실행 코드의 catch가 실행되도록 한다 java의 throw new XXXException() 과 유사
-  }
+  },
 );
 export default api;
